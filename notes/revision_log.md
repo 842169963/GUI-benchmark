@@ -24,7 +24,7 @@
 - Restored [thesis_proposal.tex](D:/master_thesis/thesis_proposal.tex) after an accidental overwrite from an older local version during a failed local build attempt.
 - Reinstated the agreed title, abstract wording, benchmark/leaderboard extension, dynamic computer-use-agent extension, and the subsection-based `Planned Approach` structure.
 - Removed stale front-matter content from the overwritten version, including the old email-driven author block and outdated abstract text.
-- Added [thesis_progress.md](D:/master_thesis/thesis_progress.md) as a separate project-level progress record to track current scope, completed decisions, supervisor feedback already addressed, and next tasks.
+- Added [thesis_progress.md](D:/master_thesis/notes/thesis_progress.md) as a separate project-level progress record to track current scope, completed decisions, supervisor feedback already addressed, and next tasks.
 - Created a dated backup snapshot in `D:\master_thesis\backup\` covering the current source, PDF, bibliography, revision log, and progress log.
 - Revised the final paragraph of the introduction so that it now reflects the two-track benchmark design more accurately, rather than describing the project as primarily screenshot-based.
 - Revised the requirement-driven track description in `Datasets and Evaluation Material` to make the generation scope smaller and clearer.

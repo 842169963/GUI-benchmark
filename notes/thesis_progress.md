@@ -6,7 +6,7 @@
 - Main source file: `D:\master_thesis\thesis_proposal.tex`
 - Reference file: `D:\master_thesis\references.bib`
 - PDF output: `D:\master_thesis\thesis_proposal.pdf`
-- Detailed edit history: `D:\master_thesis\revision_log.md`
+- Detailed edit history: `D:\master_thesis\notes\revision_log.md`
 
 ## 2026-04-10
 
@@ -49,7 +49,7 @@
 - Review remaining supervisor comments one by one.
 - Check whether the benchmark / leaderboard wording should be tightened further.
 - Decide whether the dynamic evaluation description should stay at its current level or be narrowed further.
-- Continue recording every confirmed change in `revision_log.md`.
+- Continue recording every confirmed change in `notes/revision_log.md`.
 
 ### Lessons learned
 

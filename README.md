@@ -2,19 +2,22 @@
 
 Master's thesis proposal workspace for GUI quality evaluation with multimodal LLMs.
 
-## Main files
+## Repository layout
 
 - `thesis_proposal.tex`: main LaTeX source of the proposal
 - `thesis_proposal.pdf`: latest compiled PDF
 - `thesis_proposal.docx`: Word export of the proposal
 - `references.bib`: bibliography database
-
-## Supporting files
-
-- `revision_log.md`: detailed record of edits and decisions
-- `thesis_progress.md`: short progress summary
-- `make_docx.py`: helper script for generating the `.docx` version
+- `thesis_proposal annotation.pdf`: supervisor-annotated review copy
 - `backup/`: dated snapshots of previous proposal versions and notes
+- `notes/`: progress notes and revision history
+- `scripts/`: helper scripts
+
+## Notes and scripts
+
+- `notes/revision_log.md`: detailed record of edits and decisions
+- `notes/thesis_progress.md`: short progress summary
+- `scripts/make_docx.py`: helper script for generating the `.docx` version
 
 ## Template files
 
@@ -24,22 +27,6 @@ The following files come from the journal/template setup and are kept in the rep
 - `*.bst`
 - `*.sty`
 
-## Notes on repository layout
+## Why some files stay in the root
 
-This repository currently uses a simple flat layout:
-
-- core writing files stay in the root directory
-- historical snapshots stay in `backup/`
-- LaTeX build artifacts such as `.aux`, `.log`, and `.out` are ignored via `.gitignore`
-
-This is intentionally conservative so the LaTeX build keeps working without extra path configuration.
-
-## Suggested future cleanup
-
-If the repository grows, a light reorganization would be reasonable:
-
-- keep `thesis_proposal.tex`, `references.bib`, and the latest output files in the root
-- move progress notes into a `notes/` folder
-- move helper scripts into a `scripts/` folder
-- remove unused template sample files if they are confirmed unnecessary
-
+The repository keeps the main writing and LaTeX template files in the root on purpose. This makes the project easier to compile without extra path configuration. Build artifacts such as `.aux`, `.log`, and `.out` are ignored via `.gitignore`.

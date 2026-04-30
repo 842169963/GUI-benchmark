@@ -1,0 +1,406 @@
+% ============================================================
+% Chapter 3 — Research Questions and Methodology
+% Draft for master thesis body
+% ============================================================
+%
+% Usage: paste into thesis main .tex as \chapter{Research Questions and Methodology}
+% Dependencies: booktabs, multirow, array, graphicx (all in template)
+% Estimated length: 8–10 pages
+% ============================================================
+
+\chapter{Research Questions and Methodology}
+\label{chap:methodology}
+
+This chapter translates the motivation established in Chapter~\ref{chap:background}
+into four precise research questions and describes the experimental design
+through which each question is answered.
+Section~\ref{sec:rqs} states the research questions.
+Section~\ref{sec:design} outlines the overall study design.
+Sections~\ref{sec:track-a}--\ref{sec:dynamic-method} detail the
+two dataset tracks and the static and dynamic evaluation methodologies.
+Section~\ref{sec:metrics} defines all evaluation metrics.
+Section~\ref{sec:rq-map} maps each research question to the corresponding
+dataset, tasks, metrics, and expected outputs.
+
+% ----------------------------------------------------------------
+\section{Research Questions}
+\label{sec:rqs}
+% ----------------------------------------------------------------
+
+The central concern of this thesis is whether modern multimodal large language
+models can serve as reliable judges of GUI quality, and whether the quality
+signals they produce carry meaning beyond the visual surface of a screenshot.
+Four research questions operationalise this concern.
+
+\paragraph{RQ1 — Modern models as pairwise GUI judges.}
+\begin{quote}
+\textit{How well do modern multimodal large language models align with
+human pairwise judgements of GUI quality, and how does their performance
+compare to the models used in UIClip~\cite{uiclip}?}
+\end{quote}
+This question targets the reproduction aspect of the study
+(Track~A, Section~\ref{sec:track-a}).
+It asks whether progress in multimodal modelling has translated into
+better GUI preference judgements, using the UIClip dataset as an anchor
+that allows direct numerical comparison with published results.
+
+\paragraph{RQ2 — Multi-dimensional rubric alignment.}
+\begin{quote}
+\textit{When evaluation moves from binary pairwise comparison to
+multi-dimensional rubric scoring, how well do modern multimodal LLMs
+align with human ratings per dimension, and which rubric dimensions are
+most and least reliably judged?}
+\end{quote}
+This question applies to both Track~A and Track~B
+(Section~\ref{sec:track-b}).
+It examines whether LLMs can assign human-aligned scores along specific
+quality axes — visual structure, information clarity, requirement
+fidelity, and interaction quality — rather than returning only a
+binary preference.
+
+\paragraph{RQ3 — Judging strategies and reliability.}
+\begin{quote}
+\textit{Among the tested judging strategies — zero-shot prompting,
+rubric-guided prompting, order-swapped pairwise comparisons, and
+repeated sampling — which configurations achieve the best trade-off
+between alignment with human labels and API cost?}
+\end{quote}
+This question is answered across both tracks.
+It draws on the LLM-as-a-judge literature~\cite{llm_judge,
+li-etal-2025-generation,shi-etal-2025-judging} to select strategies
+known to affect judge reliability, and applies them systematically
+to the GUI evaluation setting.
+
+\paragraph{RQ4 — Static judgements and dynamic interaction outcomes.}
+\begin{quote}
+\textit{For the same set of executable Track~B interfaces,
+do static LLM rubric scores predict the success rate of
+LLM-derived interaction plans on derived tasks,
+and which rubric dimensions are most predictive of dynamic outcomes?}
+\end{quote}
+This is the core novel question of the thesis.
+Prior work has evaluated GUI quality from screenshots
+or evaluated agents on web tasks, but the two lines of research
+have not been connected on the same set of interfaces.
+RQ4 addresses this gap by pairing a static rubric score vector
+with a dynamic plan-success rate for every Track~B item
+and measuring their correlation.
+
+% ----------------------------------------------------------------
+\section{Overall Study Design}
+\label{sec:design}
+% ----------------------------------------------------------------
+
+Figure~\ref{fig:pipeline} illustrates the end-to-end study design.
+The evaluation is organised around two complementary dataset tracks.
+
+\textbf{Track~A} consists of GUI screenshot pairs drawn from the UIClip
+dataset.
+Its primary function is reproduction and anchoring: by running modern
+multimodal LLMs on the same pairwise task that UIClip used, Track~A
+enables a direct numerical comparison that establishes whether
+contemporary models represent a measurable advance.
+Track~A items undergo static evaluation only.
+
+\textbf{Track~B} consists of graphical user interfaces generated from
+natural language requirements.
+Every Track~B interface is kept in executable form so that it can be
+assessed both statically — through rubric-based scoring — and
+dynamically, through LLM-derived interaction plans that are validated
+against the rendered DOM.
+The key design principle is that the same interface receives both a
+static rubric score vector and a dynamic plan-success measurement,
+forming the paired data needed to answer RQ4.
+
+Human annotations provide the reference labels for both tracks.
+Track~A reuses the preference labels published with the UIClip dataset,
+so no new annotation is required for pairwise tasks on that track.
+Track~B requires fresh human rubric scores, collected according to the
+annotation protocol described in Chapter~\ref{chap:benchmark}.
+
+All experiments are documented with exact model identifiers, API version
+dates, prompt text, random seeds, and output files to support
+reproducibility.
+
+% ---- placeholder for figure ----
+\begin{figure}[t]
+  \centering
+  % \includegraphics[width=\linewidth]{figs/pipeline.pdf}
+  \fbox{\parbox{0.95\linewidth}{\centering\vspace{2cm}
+    [Figure 3.1: End-to-end pipeline. \\
+    Left: Track A (UIClip pairs → pairwise judging → RQ1). \\
+    Centre: Track B (requirements → generation → rendering →
+    static rubric judging → RQ2, RQ3). \\
+    Right: Track B dynamic branch (executable HTML → task derivation →
+    action plan elicitation → DOM validation → RQ4). \\
+    Bottom: leaderboard artifact.]
+  \vspace{2cm}}}
+  \caption{End-to-end evaluation pipeline.
+           Track~A supports reproduction (RQ1).
+           Track~B supports rubric-based assessment (RQ2, RQ3)
+           and dynamic plan validation (RQ4).}
+  \label{fig:pipeline}
+\end{figure}
+% --------------------------------
+
+% ----------------------------------------------------------------
+\section{Track A: Screenshot-based Reproduction}
+\label{sec:track-a}
+% ----------------------------------------------------------------
+
+Track~A draws on the publicly available UIClip dataset~\cite{uiclip},
+which contains pairs of GUI screenshots each labelled with a human
+preference indicating which interface is visually superior.
+A random sample of 50 to 100 pairs is selected, stratified to cover
+the range of quality contrasts present in the original dataset.
+
+No new human annotation is collected for Track~A.
+The original UIClip preference labels serve as ground-truth reference,
+and agreement between each judge model and those labels constitutes
+the alignment measure.
+This design makes Track~A lightweight and directly comparable to
+the UIClip publication while still allowing the main novel
+contributions — multi-dimensional rubric assessment and dynamic
+evaluation — to be concentrated in Track~B.
+
+% ----------------------------------------------------------------
+\section{Track B: Requirement-driven Generated Interfaces}
+\label{sec:track-b}
+% ----------------------------------------------------------------
+
+\subsection{Requirement Sources}
+
+Track~B requirements are collected from two sources.
+The primary source is the Design2Code-HARD subset~\cite{design2code},
+which contains 80 challenging real-world webpages.
+For each selected page, the corresponding HTML reference is used to
+derive a concise natural language requirement that describes the
+intended layout, content, and functionality without specifying
+implementation details.
+Approximately 50 to 60 pages are selected after filtering out items
+whose interactive functionality cannot be meaningfully assessed
+through DOM inspection alone.
+
+A secondary set of 5 to 10 requirements is written manually to cover
+scenarios underrepresented in Design2Code-HARD, specifically
+form-heavy interfaces and simplified mobile-style layouts.
+These types support more tractable dynamic task derivation
+(Section~\ref{sec:dynamic-method}) and reduce reliance on a single
+source.
+
+\subsection{Interface Generation}
+
+Each requirement is submitted to two or three generator models,
+producing a set of generated HTML implementations per requirement.
+The generator models are drawn from the same pool as the judge models
+(Section~\ref{sec:static-method}) to allow analysis of whether a
+model judges its own outputs differently from those of other generators.
+
+\subsection{Rendering Pipeline}
+
+Generated HTML files are rendered using a headless browser
+(Playwright) at a fixed viewport resolution.
+For each item, the pipeline saves a PNG screenshot and a serialised
+DOM snapshot.
+Items whose rendering produces a blank page or a JavaScript console
+error that prevents visible content from loading are excluded and
+replaced.
+The rendered screenshot and the DOM snapshot together constitute
+the input to both the static and dynamic evaluation modules.
+
+% ----------------------------------------------------------------
+\section{Static Evaluation Methodology}
+\label{sec:static-method}
+% ----------------------------------------------------------------
+
+\subsection{Model Selection}
+
+Four judge models are tested to span a range of capability levels.
+Two closed-source multimodal models represent the current
+state of the art; one open-weight multimodal model is included to
+allow reproducibility without API access; and one smaller or older
+multimodal model serves as a weaker baseline that makes the
+relationship between model capability and judge quality visible.
+Exact model identifiers and access dates are recorded in
+Appendix~\ref{app:reproducibility}.
+
+\subsection{Prompting Conditions}
+
+Two prompting conditions are applied to every model.
+
+\textit{Zero-shot} prompting presents the model with the interface
+screenshot and a minimal instruction to indicate which of two
+interfaces is better (pairwise) or to score the interface on the
+rubric dimensions.
+This condition establishes a baseline.
+
+\textit{Rubric-guided} prompting supplies the full rubric with
+dimension definitions and per-level score anchors, and requires the
+model to return a structured JSON response containing one integer score
+per dimension and a one-sentence rationale.
+This condition tests whether explicit guidance improves alignment with
+human ratings.
+
+\subsection{Reliability Conditions}
+
+Two reliability conditions are applied on top of the prompting conditions.
+
+\textit{Order-swapped pairwise comparison} repeats each pairwise
+judgement with the two interface screenshots presented in the reverse
+order~\cite{shi-etal-2025-judging}.
+If a model labels interface~A as better when it appears first but
+interface~B as better when it appears first, the judgement is
+classified as position-biased.
+The position-bias rate is computed per model and per prompting condition.
+
+\textit{Repeated sampling} submits each prompt three times with a
+non-zero sampling temperature.
+The self-consistency rate measures the proportion of items on which
+all three runs produce the same judgement.
+
+% ----------------------------------------------------------------
+\section{Dynamic Evaluation Methodology}
+\label{sec:dynamic-method}
+% ----------------------------------------------------------------
+
+\subsection{Approach}
+
+A computer-use agent that executes browser actions introduces two
+confounded sources of noise: failures caused by the interface itself
+and failures caused by the agent's own planning or grounding
+limitations.
+Disentangling these sources is difficult and adds substantial
+engineering overhead.
+
+Instead, this thesis uses \textit{action plan elicitation}:
+a judge model is given the rendered screenshot, the DOM snapshot,
+and a short task description derived from the original requirement,
+and is asked to produce an ordered action plan — a JSON list of
+steps, each specifying an action type, a CSS or ARIA target selector,
+and an optional value.
+A deterministic validation script then checks whether each step in
+the plan is feasible: whether the target element exists in the DOM,
+whether the selector resolves to a unique element, and whether a
+form-submission step reaches a plausible end state.
+This design isolates interface quality from agent execution variability
+and produces a binary feasibility verdict for each action step,
+giving a plan-success rate per item.
+
+Full computer-use agent execution — where an agent autonomously
+interacts with the live rendered page — is left as a future extension
+(Section~\ref{sec:future-work}).
+
+\subsection{Task Derivation}
+
+One to two tasks are derived from each Track~B requirement.
+A task is a single imperative sentence with an unambiguous success
+criterion that can be checked by inspecting the DOM or a screenshot
+of the expected end state.
+Example tasks include filling and submitting a contact form, selecting
+an item from a navigation menu, or entering a search query.
+Tasks are written by the author and cross-checked by one independent
+reviewer to confirm clarity and feasibility.
+
+\subsection{Failure Taxonomy}
+
+Action plan failures are classified into four categories to support
+interpretable analysis of RQ4.
+
+\textbf{F1 — Interface failure}: the target element is absent from
+the DOM, the layout prevents meaningful interaction, or a required
+interactive component is not implemented.
+
+\textbf{F2 — Plan failure}: the element exists but the model's selector
+does not resolve correctly, or the action sequence does not reach the
+target state despite the interface being technically functional.
+
+\textbf{F3 — Ambiguity}: the task description admits multiple valid
+interpretations and the model's plan addresses a different valid
+interpretation than the one used by the validator.
+
+\textbf{F4 — Tool failure}: the validation script itself produces
+an error unrelated to the interface or the plan.
+
+Cases in category~F3 and F4 are reviewed manually and excluded from
+the RQ4 correlation analysis if they cannot be resolved.
+
+% ----------------------------------------------------------------
+\section{Metrics}
+\label{sec:metrics}
+% ----------------------------------------------------------------
+
+\paragraph{Human-model agreement (pairwise).}
+Cohen's $\kappa$ measures agreement between a judge model's pairwise
+preference and the human majority label, correcting for chance.
+
+\paragraph{Human-model correlation (rubric).}
+Spearman's $\rho$ measures rank correlation between model rubric scores
+and human rubric scores, computed per rubric dimension and reported
+both individually and averaged.
+
+\paragraph{Position-bias rate.}
+The proportion of pairwise items on which the model's preference
+reverses between the original and order-swapped presentation.
+
+\paragraph{Self-consistency rate.}
+The proportion of items on which all three repeated-sampling runs
+produce the same judgement or score.
+
+\paragraph{Plan-success rate.}
+The proportion of action steps in a plan that pass all three
+feasibility checks (existence, unique resolution, state transition).
+Averaged across steps within an item to obtain an item-level score.
+
+\paragraph{Static-dynamic correlation.}
+Spearman's $\rho$ between the item-level static rubric score
+(aggregate and per-dimension) and the item-level plan-success rate,
+computed across all Track~B items.
+
+\paragraph{API cost.}
+Total token cost in USD per model per condition, computed from
+provider pricing at the time of the experiment and used to
+characterise the alignment-cost trade-off addressed in RQ3.
+
+% ----------------------------------------------------------------
+\section{Research Question -- Method Map}
+\label{sec:rq-map}
+% ----------------------------------------------------------------
+
+Table~\ref{tab:rq-map} summarises the relationship between each
+research question, the dataset track and task type used to answer it,
+the primary metrics, and the section of Chapter~\ref{chap:results}
+that reports the results.
+
+\begin{table*}[t]
+  \centering
+  \caption{Research question -- method mapping.}
+  \label{tab:rq-map}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{p{0.5cm} p{3.8cm} p{2.2cm} p{2.2cm} p{3.2cm} p{1.2cm}}
+    \toprule
+    \textbf{RQ} & \textbf{Question (short)} & \textbf{Track} & \textbf{Task type}
+      & \textbf{Primary metrics} & \textbf{Results} \\
+    \midrule
+    1 & Modern multimodal LLMs vs UIClip in pairwise GUI comparison
+      & Track~A & Pairwise judging
+      & Cohen's $\kappa$; accuracy vs UIClip labels
+      & \S\ref{sec:rq1-results} \\
+    \addlinespace
+    2 & Human--model alignment in multi-dim rubric scoring
+      & Track~A + B & Rubric scoring
+      & Spearman $\rho$ per dimension
+      & \S\ref{sec:rq2-results} \\
+    \addlinespace
+    3 & Best judging strategy for alignment--cost trade-off
+      & Track~A + B & Pairwise + rubric
+      & $\kappa$; $\rho$; position-bias rate; self-consistency rate; API cost
+      & \S\ref{sec:rq3-results} \\
+    \addlinespace
+    4 & Static rubric scores as predictors of dynamic task success
+      & Track~B & Rubric + action plan validation
+      & Spearman $\rho$ (static--dynamic); plan-success rate; failure categories
+      & \S\ref{sec:rq4-results} \\
+    \bottomrule
+  \end{tabular}
+\end{table*}

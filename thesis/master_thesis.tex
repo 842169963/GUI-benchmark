@@ -1,0 +1,80 @@
+% !TEX program = pdflatex
+\documentclass[12pt,a4paper,oneside]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{pdflscape}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[numbers]{natbib}
+
+\geometry{
+  left=3.0cm,
+  right=2.5cm,
+  top=2.5cm,
+  bottom=2.5cm
+}
+
+\raggedbottom
+\emergencystretch=3em
+\onehalfspacing
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+
+\newcommand{\placeholderfigure}[1]{%
+  \fbox{%
+    \parbox{0.95\linewidth}{%
+      \centering
+      \vspace{2cm}
+      #1
+      \vspace{2cm}
+    }%
+  }%
+}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \centering
+  {\Large Technische Universitaet Clausthal\par}
+  \vspace{0.5cm}
+  {\large Department of Informatics\par}
+  \vfill
+  {\LARGE\bfseries Beyond Pairwise GUI Quality Judgments\par}
+  \vspace{0.4cm}
+  {\Large Multi-Dimensional Evaluation with Modern Multimodal LLMs\par}
+  \vfill
+  {\large Master's Thesis\par}
+  \vspace{1.5cm}
+  {\large Xinyang Xie\par}
+  \vspace{0.5cm}
+  {\large \today\par}
+\end{titlepage}
+
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+
+\include{chapters/chapter1_introduction}
+\include{chapters/chapter2_background_related_work}
+\include{chapters/chapter3_methodology}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

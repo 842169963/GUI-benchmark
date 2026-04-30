@@ -1,0 +1,22 @@
+Re-evaluation with modern models
+The models used in UIClip are now outdated. A valuable contribution would already be to reproduce (parts of) the original setup and compare it against current state-of-the-art multimodal LLMs (e.g., recent GPT, Gemini, Claude models).
+Moving beyond pairwise comparisons
+UIClip is limited to simple “which UI is better?” judgments. A key extension would be to move toward multi-dimensional evaluation, where you assess GUIs along specific aspects such as layout quality, visual hierarchy, information organization, usability, etc. This would provide a much richer and more informative evaluation than binary preferences.
+Improving LLM-based evaluation methods
+The original work relies on very simple zero-shot prompting. You could explore more advanced approaches inspired by the “LLM-as-a-judge” literature, such as:
+using multiple models and aggregating results (e.g., majority voting),
+consistency checks,
+improved prompting strategies.
+This line of work is largely unexplored in the UI domain and could lead to significantly better evaluation performance.
+Extending to dynamic and interactive UIs
+UIClip only considers static screenshots. A more advanced direction would be to evaluate interactive applications (e.g., web apps). This includes:
+navigation quality,
+task completion ability,
+dynamic behavior and potential errors.
+Here, GUI agents could be used to execute tasks and measure how well an interface supports real interaction scenarios.
+Benchmark and leaderboard development
+Beyond methodology, a strong contribution would be to design a benchmark dataset and evaluation pipeline, and potentially even a simple leaderboard system. This could include:
+defined tasks or requirements,
+generated GUIs from different models,
+automated evaluation using your proposed methods.
+A lightweight web interface or dashboard to visualize results would further strengthen the practical impact of your work.

@@ -177,3 +177,58 @@
 
 **Compile**: Successful, 6 pages, no errors.
 - Backup: `backup/thesis_proposal_2026-04-10_abstract-sync.tex/.pdf`.
+
+## 2026-04-29
+
+- Added [thesis_outline.md](D:/master_thesis/notes/thesis_outline.md) as the canonical 8-chapter thesis outline for the full master thesis (supersedes the GPT-generated `thesis_summary_outline.md` for execution; that file is kept as reference).
+- Outline integrates: teacher's 5 suggestions (Teacher's suggestion.txt), the proposal's two-track design, Design2Code methodology (reference/), and a critical review of which suggestions to keep, downsize, or reframe.
+- Key design decisions captured in the outline:
+  - 8 chapters (was 10 in GPT version): merged Dataset+Annotation into Ch4; merged Discussion+Conclusion into Ch8.
+  - 4 RQs (was 6): static-dynamic correlation (RQ4) elevated as core novelty.
+  - Track A retained but reduced: 50–100 UIClip pairs reused, no new annotation.
+  - Track B: Design2Code-HARD ~50 + 5–10 self-built requirements (form-heavy / mobile UI).
+  - Rubric reduced from 6 to 4 starting dimensions: Visual Structure, Information Clarity, Requirement Fidelity, Interaction Quality (subject to pilot).
+  - Model lineup: 2 closed-source + 1 open + 1 weaker baseline.
+  - Prompting strategies must-do: rubric-guided + order-swap; few-shot/aggregation deferred.
+  - Dynamic evaluation uses Plan B (LLM action plan elicitation + script validation) instead of full computer-use agent execution. Plan A listed as future work to keep noise sources separable.
+  - HF Space leaderboard: minimal Gradio dashboard reading `results.json`, submission via PR. No online inference.
+- Backup: `backup/thesis_outline_2026-04-29_initial.md`.
+
+## 2026-04-30
+
+### references.bib — Added usability theory and web agent references
+
+Added 6 new BibTeX entries to support Ch2 of the full thesis, organized under section comments:
+
+**Ch2.1 — GUI Quality & Usability Theory** (was completely missing):
+- `nielsen1994usability` — Nielsen, *Usability Engineering*, Morgan Kaufmann, 1994. Grounds the rubric in established HCI theory.
+- `nielsen1990heuristic` — Nielsen & Molich, *Heuristic Evaluation of User Interfaces*, CHI 1990. Original 10 heuristics paper.
+- `iso9241-11` — ISO 9241-11:2018, *Ergonomics of Human-System Interaction: Usability: Definitions and Concepts*. Formal usability definition.
+- `norman2013design` — Norman, *The Design of Everyday Things*, Basic Books, 2013 (revised ed.). Optional supporting reference.
+
+**Ch2.5 — Multimodal Web Agents** (was missing non-VisualWebArena references):
+- `webarena` — Zhou et al., *WebArena*, ICLR 2024. Foundational web-agent benchmark.
+- `mind2web` — Deng et al., *Mind2Web*, NeurIPS 2023. Generalist web agent with element-level annotations.
+
+BibTeX compile: clean (no errors). Backup: `backup/references_2026-04-30_before-usability-refs.bib`.
+
+### 2026-04-30 — Draft Ch2.6 Research Gap Matrix
+
+Created `notes/draft_ch2_gap_matrix.tex`: LaTeX draft of §2.6 (Research Gap).
+Includes:
+- Three-paragraph narrative identifying the three main gaps (no modern LLM judge for UI / no rubric-based UI assessment / static vs dynamic never validated)
+- Comparison table (8 prior works × 7 dimensions): multi-dim rubric / modern LLM judge / bias analysis / human labels / requirement fidelity / dynamic eval / benchmark artifact
+- All 13 references.bib keys correctly cited
+
+### 2026-04-30 — Draft Ch3 Methodology
+
+Created `notes/draft_ch3_methodology.tex`: complete LaTeX draft of Chapter 3 (Research Questions and Methodology).
+Contents:
+- §3.1: 4 RQs with formal English wording and rationale
+- §3.2: Overall study design (two-track architecture, static-dynamic pairing principle)
+- §3.3: Track A (UIClip 50–100 pairs, no new annotation)
+- §3.4: Track B (Design2Code-HARD ~50 + 5–10 self-built, generation + rendering pipeline)
+- §3.5: Static evaluation methodology (model selection, zero-shot vs rubric-guided, order-swap, repeated sampling)
+- §3.6: Dynamic evaluation methodology (Plan B: action plan elicitation + DOM validation, failure taxonomy F1–F4)
+- §3.7: Metrics (κ, Spearman ρ, position-bias rate, self-consistency, plan-success rate, static-dynamic correlation, API cost)
+- §3.8: RQ↔method mapping table

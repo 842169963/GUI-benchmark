@@ -1,0 +1,99 @@
+% ============================================================
+% Chapter 2 — Section 2.6: Research Gap
+% Draft for master thesis body (not the proposal)
+% ============================================================
+%
+% Usage: paste into thesis main .tex, inside \section{Background and Related Work}
+% Dependencies: \usepackage{booktabs}, \usepackage{multirow}, \usepackage{array}
+%               (all already present in thesis_proposal.tex template)
+% ============================================================
+
+\subsection{Research Gap}
+\label{sec:gap}
+
+The preceding sections have reviewed GUI quality assessment, LLM-generated
+interfaces, LLM-as-a-judge methodology, and multimodal web agents.
+Table~\ref{tab:related-work} places the most relevant prior works along
+seven dimensions that together characterise a comprehensive GUI quality
+evaluation framework.
+Taken together, three observations motivate the present thesis.
+
+\paragraph{No prior work applies modern multimodal LLMs as multi-dimensional GUI judges.}
+UIClip~\cite{uiclip} demonstrated that vision-language models can perform
+pairwise UI comparison, but it relies on models that predate the current
+generation of multimodal LLMs and limits evaluation to a binary preference.
+The LLM-as-a-judge literature~\cite{llm_judge,li-etal-2025-generation}
+has established systematic judge evaluation for text, yet this methodology
+has not been transferred to the UI domain.
+
+\paragraph{Requirement fidelity and rubric-based assessment are largely absent from GUI evaluation.}
+Design2Code~\cite{design2code} evaluates how faithfully generated code
+reproduces a visual reference, but does not assess richer quality dimensions
+such as visual hierarchy, information clarity, or perceived usability.
+The Designer Feedback study~\cite{designer_feedback} found that simple
+pairwise rankings among evaluators agreed at only around 50\%, suggesting
+that coarse binary judgements are insufficient for reliable GUI assessment.
+A structured rubric grounded in established usability
+theory~\cite{nielsen1990heuristic,iso9241-11} can provide finer-grained and
+more reproducible quality signals.
+
+\paragraph{Static visual judgements have never been validated against dynamic interaction outcomes.}
+VisualWebArena~\cite{visualwebarena} and WebArena~\cite{webarena}
+evaluate multimodal agents on goal-directed web tasks, but do not assess
+the GUI quality of the interfaces themselves.
+Whether a high static quality score predicts successful task completion
+by a computer-use agent remains an open empirical question.
+Answering this question requires a benchmark that keeps generated interfaces
+executable so that static and dynamic evaluations can be performed on the
+same set of items.
+
+The present thesis addresses all three gaps simultaneously by combining
+a two-track benchmark, a rubric-based human annotation protocol, a systematic
+comparison of modern multimodal LLM judges with bias and reliability analysis,
+and a dynamic evaluation module that links static scores to interaction outcomes.
+
+% ----------------------------------------------------------------
+\begin{table*}[t]
+  \centering
+  \caption{Comparison of related work across seven evaluation dimensions.
+           \checkmark~= fully addressed;
+           $\triangle$~= partially addressed;
+           $\times$~= not addressed;
+           ---~= not applicable to this line of work.}
+  \label{tab:related-work}
+  \small
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{lccccccc}
+    \toprule
+    \textbf{Work}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Multi-}\\\textbf{dimensional}\\\textbf{rubric}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Modern}\\\textbf{multimodal}\\\textbf{LLM judge}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Bias \&}\\\textbf{reliability}\\\textbf{analysis}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Human}\\\textbf{reference}\\\textbf{labels}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Requirement}\\\textbf{fidelity}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Dynamic}\\\textbf{interaction}\\\textbf{eval}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Benchmark}\\\textbf{artifact}\end{tabular} \\
+    \midrule
+    UIClip~\cite{uiclip}
+      & $\times$ & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ \\
+    Designer Feedback~\cite{designer_feedback}
+      & $\times$ & $\times$ & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ \\
+    Design2Code~\cite{design2code}
+      & $\triangle$ & \checkmark & $\times$ & \checkmark & \checkmark & $\times$ & \checkmark \\
+    MT-Bench / Chatbot Arena~\cite{llm_judge}
+      & $\triangle$ & \checkmark & $\triangle$ & \checkmark & --- & --- & $\triangle$ \\
+    LLM-as-a-Judge survey~\cite{li-etal-2025-generation}
+      & \checkmark & \checkmark & \checkmark & --- & --- & --- & $\times$ \\
+    Position Bias Study~\cite{shi-etal-2025-judging}
+      & $\times$ & \checkmark & \checkmark & \checkmark & --- & --- & $\times$ \\
+    WebArena~\cite{webarena}
+      & $\times$ & $\triangle$ & $\times$ & \checkmark & $\triangle$ & \checkmark & \checkmark \\
+    VisualWebArena~\cite{visualwebarena}
+      & $\times$ & \checkmark & $\times$ & \checkmark & $\triangle$ & \checkmark & \checkmark \\
+    \midrule
+    \textbf{This thesis}
+      & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+% ----------------------------------------------------------------

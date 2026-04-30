@@ -1,32 +1,30 @@
-# GUI-benchmark
+# Master Thesis Workspace
 
-Master's thesis proposal workspace for GUI quality evaluation with multimodal LLMs.
+This repository is organized as two separate LaTeX writing projects:
+the finished thesis proposal and the developing thesis manuscript.
 
-## Repository layout
+## Main Folders
 
-- `thesis_proposal.tex`: main LaTeX source of the proposal
-- `thesis_proposal.pdf`: latest compiled PDF
-- `thesis_proposal.docx`: Word export of the proposal
-- `references.bib`: bibliography database
-- `thesis_proposal annotation.pdf`: supervisor-annotated review copy
-- `backup/`: dated snapshots of previous proposal versions and notes
-- `notes/`: progress notes and revision history
-- `scripts/`: helper scripts
+- `proposal/`: proposal source, proposal PDF, Word export, annotated PDF, bibliography, and the Springer template files needed to compile the proposal.
+- `thesis/`: formal thesis manuscript source, compiled thesis PDF, chapter files, and thesis bibliography.
+- `notes/`: outlines, revision logs, supervisor feedback, progress notes, and original draft snippets.
+- `literature/`: paper PDFs and reading material.
+- `archive/`: dated backups and previous snapshots.
+- `scripts/`: helper scripts.
 
-## Notes and scripts
+## Compile Targets
 
-- `notes/revision_log.md`: detailed record of edits and decisions
-- `notes/thesis_progress.md`: short progress summary
-- `scripts/make_docx.py`: helper script for generating the `.docx` version
+- Proposal: open `proposal/thesis_proposal.tex` and build it in VS Code.
+- Thesis body: open `thesis/master_thesis.tex` and build it in VS Code.
 
-## Template files
+The chapter files under `thesis/chapters/` contain root-file comments, so building from a chapter file should still compile `thesis/master_thesis.tex`.
 
-The following files come from the journal/template setup and are kept in the repository so the project can compile reproducibly:
+## Current Thesis Draft
 
-- `sn-jnl.cls`
-- `*.bst`
-- `*.sty`
+The thesis body currently contains:
 
-## Why some files stay in the root
+- `thesis/chapters/chapter1_introduction.tex`: placeholder introduction.
+- `thesis/chapters/chapter2_background_related_work.tex`: integrated research-gap draft.
+- `thesis/chapters/chapter3_methodology.tex`: integrated methodology draft.
 
-The repository keeps the main writing and LaTeX template files in the root on purpose. This makes the project easier to compile without extra path configuration. Build artifacts such as `.aux`, `.log`, and `.out` are ignored via `.gitignore`.
+The original generated draft snippets are preserved under `notes/drafts/`.

@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "model": "gpt-4o",
+    "dataset": "biglab/jitteredwebsites-merged-224-paraphrased-paired",
+    "n_pairs": 20,
+    "seed": 42,
+    "date": "2026-05-04T14:59:41.494321",
+    "prompt": "You are evaluating two user interface screenshots for visual design quality.\n\nImage A is shown first, Image B is shown second.\n\nWhich interface has better visual design overall? Consider layout, visual hierarchy, clarity, and aesthetic quality.\n\nReply with ONLY the letter A or B. Nothing else."
+  },
+  "summary": {
+    "accuracy": 0.65,
+    "correct": 13,
+    "total": 20,
+    "chose_a": 2,
+    "chose_b": 18,
+    "pos_bias": 0.8
+  },
+  "results": [
+    {
+      "pair_id": 0,
+      "caption": "ui screenshot. well-designed. screen shows a movie in a news app",
+      "ground_truth": "A",
+      "model_choice": "A",
+      "raw_response": "A",
+      "correct": true
+    },
+    {
+      "pair_id": 1,
+      "caption": "ui screenshot. well-designed. screen shows a movie in a news app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 2,
+      "caption": "ui screenshot. well-designed. screen shows a movie in a news app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 3,
+      "caption": "ui screenshot. well-designed. page displaying information about a farm",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 4,
+      "caption": "ui screenshot. well-designed. page displaying information about a farm",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 5,
+      "caption": "ui screenshot. well-designed. page displaying information about a farm",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 6,
+      "caption": "ui screenshot. well-designed. screen shows about a sports app",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 7,
+      "caption": "ui screenshot. well-designed. screen shows about a sports app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 8,
+      "caption": "ui screenshot. well-designed. screen shows about a sports app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 9,
+      "caption": "ui screenshot. well-designed. page displaying information about a product",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 10,
+      "caption": "ui screenshot. well-designed. page displaying information about a product",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 11,
+      "caption": "ui screenshot. well-designed. page displaying information about a product",
+      "ground_truth": "A",
+      "model_choice": "A",
+      "raw_response": "A",
+      "correct": true
+    },
+    {
+      "pair_id": 12,
+      "caption": "ui screenshot. well-designed. page displaying menu of a health care app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 13,
+      "caption": "ui screenshot. well-designed. page displaying menu of a health care app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 14,
+      "caption": "ui screenshot. well-designed. page displaying menu of a health care app",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 15,
+      "caption": "ui screenshot. well-designed. page displaying text testimonies in a news app",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 16,
+      "caption": "ui screenshot. well-designed. page displaying text testimonies in a news app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    },
+    {
+      "pair_id": 17,
+      "caption": "ui screenshot. well-designed. page displaying text testimonies in a news app",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 18,
+      "caption": "ui screenshot. well-designed. page displaying news in a news app",
+      "ground_truth": "A",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": false
+    },
+    {
+      "pair_id": 19,
+      "caption": "ui screenshot. well-designed. page displaying news in a news app",
+      "ground_truth": "B",
+      "model_choice": "B",
+      "raw_response": "B",
+      "correct": true
+    }
+  ]
+}

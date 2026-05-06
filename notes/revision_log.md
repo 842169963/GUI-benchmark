@@ -232,3 +232,79 @@ Contents:
 - §3.6: Dynamic evaluation methodology (Plan B: action plan elicitation + DOM validation, failure taxonomy F1–F4)
 - §3.7: Metrics (κ, Spearman ρ, position-bias rate, self-consistency, plan-success rate, static-dynamic correlation, API cost)
 - §3.8: RQ↔method mapping table
+
+## 2026-05-04
+
+### Track A — Order-Swap Experiment: GPT-4o, 20 pairs
+
+**Script**: `scripts/track_a_order_swap.py`
+**Dataset**: `biglab/jitteredwebsites-merged-224-paraphrased-paired` (algorithmically labelled pairs)
+**Result file**: `scripts/results/track_a_orderswap_gpt-4o_20260504_153247.json`
+
+**Methodology**: Each pair judged twice.
+- Run 1: good image shown as A (position 1), bad image shown as B (position 2) → correct answer = "A"
+- Run 2: bad image shown as A, good image shown as B → correct answer = "B"
+- Consistent = model picks the same underlying image both times
+
+**Results**:
+
+| Metric | Value |
+|--------|-------|
+| Accuracy Run1 (good=A) | 8/20 = **40.0%** |
+| Accuracy Run2 (good=B) | 19/20 = **95.0%** |
+| Consistency rate | 9/20 = **45.0%** |
+| Position bias rate | 11/20 = **55.0%** |
+| Corrected accuracy (consistent pairs only) | 8/9 = **88.9%** |
+
+**Per-pair breakdown of the 11 biased pairs** (pairs 3–7, 13, 15–19):
+- All 11 showed the identical pattern: Run1=B (wrong, good was A), Run2=B (correct, good was B)
+- Model chose the *second image* in every single case — pure recency/position-B bias
+
+**Pair 2 anomaly**: Consistent but *wrong* — model chose A both times when good was A in Run1 (wrong) and good was B in Run2 (also wrong). The model preferred the bad image consistently, not biased by position.
+
+**Interpretation**:
+1. **Severe B-position (recency) bias**: GPT-4o overwhelmingly prefers the second image shown. Run2 accuracy (95%) vs Run1 accuracy (40%) — a 55-percentage-point gap driven entirely by which position holds the good image.
+2. **Consistency rate 45%**: Only 9 of 20 pairs elicit the same underlying image choice when order is flipped — more than half are position-driven.
+3. **Corrected accuracy 88.9%**: When the model IS consistent, it almost always picks the good image. This shows genuine visual discrimination ability that is masked by positional preference.
+4. **Implication for raw pilot accuracy (65%)**: The earlier pilot randomly assigned images to A/B positions (seed=42). About half the time the good image was in position B, giving partial credit. The 65% figure is therefore a mix of real discrimination and position luck — not a reliable accuracy estimate.
+
+**Thesis relevance**:
+- Directly supports **RQ3** (judging strategies): quantifies why order-swap is a necessary debiasing step.
+- The 40%/95% asymmetry is the clearest possible demonstration that single-order pairwise evaluation is unreliable for GPT-4o.
+- The corrected accuracy (88.9%) will be used as the debiased capability estimate in §7.4 (Strategy Ablation).
+- This pattern — strong recency bias, but high corrected accuracy — is consistent with the position bias literature cited in the thesis (shi-etal-2025-judging).
+
+## 2026-05-04
+
+### Track A — Formalized Evaluation Script and UIClip Human Caption-Matched Run
+
+**Script**: `scripts/track_a_eval.py`  
+**Dataset**: `biglab/uiclip_human_data_hf`  
+**Result file**: `scripts/results/track_a_eval_gpt-4o_20260504_161730.json`  
+**Model call route**: `OPENAI_BASE_URL=https://api.chatanywhere.tech/v1` recorded in result metadata
+
+**Important data note**: `biglab/uiclip_human_data_hf` contains single images with captions, not explicit `img_good/img_bad` pair columns. The script constructs derived pairs by matching screenshots with the same normalized page description where one caption contains `well-designed` and the other contains `poor design`, `bad contrast`, or `bad proximity`. This should be described as **caption-matched derived pairs**, not as raw pairwise human preference labels.
+
+**Run setup**:
+- 50 matched pairs
+- Order-swap enabled
+- 100 total multimodal judge calls
+- Prompt: zero-shot pairwise visual design preference
+
+**Results**:
+
+| Metric | Value |
+|--------|-------|
+| Raw accuracy | 59/100 = **59.0%** |
+| Accuracy Run1 (good=A) | 20/50 = **40.0%** |
+| Accuracy Run2 (good=B) | 39/50 = **78.0%** |
+| Consistency rate | 29/50 = **58.0%** |
+| Position bias rate | 21/50 = **42.0%** |
+| Corrected accuracy (consistent pairs only) | 19/29 = **65.5%** |
+| Chose A / Chose B | 31 / 69 |
+
+**Interpretation**:
+1. The second-image preference remains visible in a larger UIClip-human-derived sample: GPT-4o chose B in 69% of the 100 calls.
+2. The Run1/Run2 asymmetry persists: 40% when the good image is first, 78% when the good image is second.
+3. Unlike the earlier 20-pair jittered pilot, corrected accuracy is only moderate (65.5%). This suggests that caption-matched UIClip human pairs are harder/noisier, and the stronger 88.9% pilot result should be treated as preliminary rather than a stable capability estimate.
+4. Next step: manually inspect the 50 derived pairs and improve matching if needed before scaling to 100 pairs or adding more models.

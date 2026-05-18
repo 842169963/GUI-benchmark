@@ -233,6 +233,24 @@ Contents:
 - §3.7: Metrics (κ, Spearman ρ, position-bias rate, self-consistency, plan-success rate, static-dynamic correlation, API cost)
 - §3.8: RQ↔method mapping table
 
+### 2026-05-06 — Draft Ch4 Benchmark Construction
+
+Created `notes/drafts/draft_ch4_benchmark.tex`: complete LaTeX draft of Chapter 4 (Benchmark Construction and Human Annotation Protocol). Estimated 12–15 pages.
+
+Sections:
+- §4.1 Benchmark Design Goals (reproducibility, extensibility, track separation, leaderboard compatibility)
+- §4.2 Track A: UIClip Reproduction Subset — documents caption-matched derived pair construction, the manual cleaning that yielded the 43-pair canonical set (excluding ids 0, 15, 31, 33, 35, 41, 48), and the on-disk item layout
+- §4.3 Track B: Requirement-Driven Generated Interfaces — Design2Code-HARD curation (~50) + 5–10 self-authored requirements; generation by 2–3 LLMs; Playwright headless rendering at fixed viewports (1280×800 desktop, 390×844 mobile)
+- §4.4 Item Schema and Result Submission Format — common schema + track-specific blocks; submission JSON consumed by HF Space leaderboard
+- §4.5 GUI Quality Rubric — 4 dimensions (D1 Visual Structure, D2 Information Clarity, D3 Requirement Fidelity, D4 Interaction Quality) grounded in Nielsen heuristics + ISO 9241-11; 1–5 ordinal scale; abbreviated anchor table for scores 1/3/5; post-pilot adjustment rule (α < 0.4 triggers redesign)
+- §4.6 Human Annotation Protocol — 3 peer annotators, 30-min calibration session, Track B rubric form + small Track B pairwise subset, escalation procedure
+- §4.7 Inter-Rater Reliability — Krippendorff α targets (≥0.7 good, ≥0.5 acceptable, <0.5 redesign); median across annotators as reference label
+- §4.8 Pilot Annotation — 10 items × 3 annotators × 4 dimensions = 120 ratings; placeholder table for post-pilot α
+
+Appendix references: full anchor table → Appendix B; JSON schema → Appendix C; leaderboard implementation → Appendix F.
+
+Cross-references: forward to §5.1 (model lineup), Chapter 5 (experiments), Chapter 6 (dynamic eval), Chapter 7 (results).
+
 ## 2026-05-04
 
 ### Track A — Order-Swap Experiment: GPT-4o, 20 pairs
@@ -308,3 +326,115 @@ Contents:
 2. The Run1/Run2 asymmetry persists: 40% when the good image is first, 78% when the good image is second.
 3. Unlike the earlier 20-pair jittered pilot, corrected accuracy is only moderate (65.5%). This suggests that caption-matched UIClip human pairs are harder/noisier, and the stronger 88.9% pilot result should be treated as preliminary rather than a stable capability estimate.
 4. Next step: manually inspect the 50 derived pairs and improve matching if needed before scaling to 100 pairs or adding more models.
+
+### Manual Pair Review — Clean 43-Pair Subset
+
+Manual review of the HTML pair-review page marked 7/50 pairs as mismatch / needs review:
+`pair_id` = 0, 15, 31, 33, 35, 41, 48.
+
+The filtered result file is:
+`scripts/results/track_a_eval_gpt-4o_20260504_161730_clean43.json`
+
+| Metric | Clean value |
+|--------|-------------|
+| Raw accuracy | 53/86 = **61.6%** |
+| Accuracy Run1 (good=A) | 17/43 = **39.5%** |
+| Accuracy Run2 (good=B) | 36/43 = **83.7%** |
+| Consistency rate | 24/43 = **55.8%** |
+| Position bias rate | 19/43 = **44.2%** |
+| Corrected accuracy (consistent pairs only) | 17/24 = **70.8%** |
+| Chose A / Chose B | 24 / 62 |
+
+After removing clear mismatches, the key finding remains: GPT-4o strongly favors the second image. The improved corrected accuracy suggests that some noise came from imperfect derived-pair construction, but the position-bias effect is not explained away by those mismatches.
+
+### Manual Pair Review — Clean 85-Pair Subset
+
+Manual review of the 100-pair HTML page marked 15/100 pairs as mismatch / needs review:
+`pair_id` = 0, 23, 33, 41, 56, 57, 58, 87, 90, 91, 92, 94, 95, 97, 98.
+
+The filtered result file is:
+`scripts/results/track_a_eval_gpt-4o_20260506_142748_clean85.json`
+
+| Metric | Clean value |
+|--------|-------------|
+| Raw accuracy | 106/170 = **62.4%** |
+| Accuracy Run1 (good=A) | 33/85 = **38.8%** |
+| Accuracy Run2 (good=B) | 73/85 = **85.9%** |
+| Consistency rate | 45/85 = **52.9%** |
+| Position bias rate | 40/85 = **47.1%** |
+| Corrected accuracy (consistent pairs only) | 33/45 = **73.3%** |
+| Chose A / Chose B | 45 / 125 |
+
+The clean 85-pair subset strengthens the Track A pattern: removing mismatches improves the capability estimate, but the B-position preference remains almost unchanged.
+
+### Track A — Rubric-Guided Prompt on Clean85
+
+**Script**: `scripts/track_a_eval.py`  
+**Result file**: `scripts/results/track_a_eval_openai_gpt-4o_rubric_20260506_162332.json`  
+**Pair set**: same clean85 subset as the zero-shot run  
+**Condition**: rubric-guided pairwise prompt with order-swap
+
+| Metric | Zero-shot clean85 | Rubric-guided clean85 |
+|--------|-------------------|-----------------------|
+| Raw accuracy | 62.4% | **57.1%** |
+| Accuracy Run1 (good=A) | 38.8% | **20.0%** |
+| Accuracy Run2 (good=B) | 85.9% | **94.1%** |
+| Consistency rate | 52.9% | **25.9%** |
+| Position bias rate | 47.1% | **74.1%** |
+| Corrected accuracy | 73.3% | **77.3%** |
+| Chose A / Chose B | 45 / 125 | **22 / 148** |
+
+**Interpretation**: the rubric-guided prompt worsened pairwise reliability despite giving more explicit evaluation criteria. It increased the B-position preference substantially. This is important for RQ3: prompt engineering is not monotonically beneficial, and GUI judge strategies require empirical validation.
+
+## 2026-05-06
+
+### Literature Update — Dynamic Usability Assessment with Computer Use Agents
+
+Read and summarized Gao et al., "Training Computer Use Agents to Assess the Usability of Graphical User Interfaces" (`literature/papers/Training Computer Use Agents to Assess the Usability of Graphical User Interfaces1.pdf`).
+
+Created note: `notes/paper_notes_dynamic_usability_cua.md`.
+
+Key finding for thesis direction:
+
+- The paper already proposes a large-scale CUA-based dynamic usability assessment system.
+- It builds `uxWeb` with 2,586 interactive UIs, injects usability defects, collects designer preferences, and trains `uxCUA`.
+- It reports uxCUA outperforming larger baselines on usability scoring, with AUC 0.632 on synthetic defect labels and 0.607 on human preferences.
+- Therefore, this thesis should not claim novelty for general CUA-based usability assessment.
+
+Direction adjustment:
+
+- Keep Track B, but reposition it as a lightweight benchmark linking static multimodal GUI rubric judgments with dynamic task-validation outcomes.
+- Do not train a CUA.
+- Use this paper as major related work and as justification for a smaller, methodology-focused thesis scope.
+
+## 2026-05-14
+
+- Repositioned [thesis_outline.md](D:/master_thesis/notes/thesis_outline.md) after re-reading uxCUA (Gao et al. 2026, arXiv:2604.26020) via the new compact summary in [notes/uxCUA_short_codex_note.md](D:/master_thesis/notes/uxCUA_short_codex_note.md).
+- Primary novelty axis confirmed as **benchmark + leaderboard for GUI judge evaluation** (Teacher suggestion #5), with **RQ4 static->dynamic correlation** as the empirical centerpiece. Recorded as Part 0 bullet 7.
+- Ch1.4 Contributions reordered: C1 = public benchmark + HF Space leaderboard (artifact contribution); C5 = static-dynamic linkage study (empirical centerpiece). Old C1-C5 demoted/merged.
+- Ch1.1 Motivation: added explicit "positioning vs uxCUA" paragraph (complementary, not competing — uxCUA = model, this thesis = benchmark infrastructure).
+- Ch2.1.2 / Ch4.5.1: added Shneiderman's 8 Golden Rules as a third theoretical grounding alongside Nielsen and ISO 9241-11; linked D4 Interaction Quality to Shneiderman's feedback / dialog closure / error prevention / reversal categories (same theoretical basis as uxCUA's defect taxonomy).
+- Ch2.5: added new sub 2.5.4 "Trained CUAs for usability assessment (uxCUA)" with uxWeb stats, training pipeline, reported AUC, and contrast statement.
+- Ch2.6 Research-gap matrix: added two new columns (public benchmark+leaderboard, judge-method comparison) and a new uxCUA row; highlighted the "This thesis" row's unique triple intersection.
+- Ch3.1 RQ4: rewrote with sharper wording carried over from [notes/paper_notes_dynamic_usability_cua.md](D:/master_thesis/notes/paper_notes_dynamic_usability_cua.md).
+- Ch3.6 + Ch6.2: added explicit Plan B vs Plan A (uxCUA-style) contrast paragraph with cost/noise-source justification.
+- Ch6: added new subsection 6.8 "Plan A Navigation Pilot (cross-check)" — 5-10 Track B items, uxCUA-inspired navigation metrics (unique-screen ratio, dead-click rate, loop count, etc.), 1 table + 1 scatter. Ch6 page estimate raised from 8-10 to 10-12.
+- Ch8.6 Limitations: added 3 new items (untrained judge / subjective human labels with alpha=0.308 reference / Plan B vs Plan A semantic gap).
+- Ch8.7 Future Work: rewrote with three uxCUA-aware directions starred (trained CUA judge for this benchmark / mobile+desktop GUI extension / full Plan A scale-up).
+- Decisions reconfirmed this session: web only (no mobile experiments); Plan B remains main dynamic approach; Plan A retained only as small §6.8 pilot.
+- Updated [proposal/references.bib](D:/master_thesis/proposal/references.bib): added entries `shneiderman2016designing` (book) and `uxcua2026` (arXiv).
+- Pre-edit snapshot saved at [notes/drafts/thesis_outline_pre_uxcua_repositioning_2026-05-14.md](D:/master_thesis/notes/drafts/thesis_outline_pre_uxcua_repositioning_2026-05-14.md).
+- Plan file: [.claude/plans/uxcua-short-codex-note-training-compute-mutable-parnas.md](C:/Users/stephenxxy/.claude/plans/uxcua-short-codex-note-training-compute-mutable-parnas.md).
+- Next steps (per plan §Verification): (1) cross-reference uxCUA mentions in the edited outline; (2) send updated Contributions block + RQ4 + §6.8 to supervisor for sign-off on the benchmark-novelty repositioning; (3) optionally locate the canonical arXiv id for uxCUA and replace placeholder `2604.26020` in references.bib if discrepancy is found.
+
+## 2026-05-14 (patch — 7 corrections from code-review feedback)
+
+Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline annotation feedback:
+
+1. **Part 0 #7** — Softened "uxCUA 已实质性覆盖建议 #1–#4" to a more accurate statement: uxCUA strongly overlaps with the *dynamic CUA usability assessment* direction only; UIClip reproduction, LLM-as-a-judge ablation, and judge-agnostic leaderboard (#5) remain open.
+2. **Ch2.6 matrix** — Fixed factual error: uxCUA *did* build uxWeb dataset/benchmark. Corrected to: "trained-CUA usability-assessment dataset/benchmark, but not a judge-agnostic GUI-evaluation leaderboard for comparing arbitrary multimodal LLM judge methods."
+3. **C5 (Ch1.4)** — Removed "First empirical study"; replaced with "A focused empirical study … To our knowledge …" to reduce claim risk.
+4. **Ch6 title** — Renamed from "Dynamic Evaluation with Computer-Use Agents" to "Dynamic Task Validation for Executable Generated Interfaces" to avoid framing collision with uxCUA and better reflect Plan B's approach.
+5. **§6.8** — Downgraded from committed section to "TIME-PERMITTING OPTIONAL cross-check"; added explicit status note to prevent scope inflation; page estimate adjusted to 9–11 pages.
+6. **Part 0 §"static and dynamic"** — Changed "dynamic agent 任务测试" to "dynamic task validation / action-plan validation" for terminology consistency with Plan B.
+7. **Part 3 item 4** — Updated "Dynamic agent 选择" open question to reflect current status: the only remaining decision is whether to run the optional §6.8 Plan A pilot.

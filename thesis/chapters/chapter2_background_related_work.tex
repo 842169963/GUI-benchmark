@@ -12,13 +12,15 @@ seven dimensions that together characterise a comprehensive GUI quality
 evaluation framework.
 Taken together, three observations motivate the present thesis.
 
-\paragraph{No prior work applies modern multimodal LLMs as multi-dimensional GUI judges.}
+\paragraph{No prior work provides a multi-metric leaderboard for LLM-generated GUIs.}
 UIClip~\cite{uiclip} demonstrated that vision-language models can perform
 pairwise UI comparison, but it relies on models that predate the current
 generation of multimodal LLMs and limits evaluation to a binary preference.
 The LLM-as-a-judge literature~\cite{llm_judge,li-etal-2025-generation}
 has established systematic judge evaluation for text, yet this methodology
-has not been transferred to the UI domain.
+has not been transferred into a reusable benchmark for comparing the
+quality of generated graphical user interfaces across static and dynamic
+metrics.
 
 \paragraph{Requirement fidelity and rubric-based assessment are largely absent from GUI evaluation.}
 Design2Code~\cite{design2code} evaluates how faithfully generated code
@@ -31,20 +33,20 @@ A structured rubric grounded in established usability
 theory~\cite{nielsen1990heuristic,iso9241-11} can provide finer-grained and
 more reproducible quality signals.
 
-\paragraph{Static visual judgements have never been validated against dynamic interaction outcomes.}
+\paragraph{Static visual metrics have rarely been related to dynamic interaction outcomes.}
 VisualWebArena~\cite{visualwebarena} and WebArena~\cite{webarena}
 evaluate multimodal agents on goal-directed web tasks, but do not assess
 the GUI quality of the interfaces themselves.
-Whether a high static quality score predicts successful task completion
-by a computer-use agent remains an open empirical question.
+How static quality scores relate to task completion, interaction feedback,
+and functional behaviour remains an open empirical question.
 Answering this question requires a benchmark that keeps generated interfaces
 executable so that static and dynamic evaluations can be performed on the
 same set of items.
 
 The present thesis addresses all three gaps simultaneously by combining
 a two-track benchmark, a rubric-based human annotation protocol, a systematic
-comparison of modern multimodal LLM judges with bias and reliability analysis,
-and a dynamic evaluation module that links static scores to interaction outcomes.
+evaluation methodology with bias and reliability analysis, and a static-plus-dynamic
+leaderboard for comparing the quality of LLM-generated GUIs.
 
 \begin{landscape}
 \begin{table}[p]
@@ -61,7 +63,7 @@ and a dynamic evaluation module that links static scores to interaction outcomes
     \toprule
     \textbf{Work}
       & \begin{tabular}[c]{@{}c@{}}\textbf{Multi-}\\\textbf{dimensional}\\\textbf{rubric}\end{tabular}
-      & \begin{tabular}[c]{@{}c@{}}\textbf{Modern}\\\textbf{multimodal}\\\textbf{LLM judge}\end{tabular}
+      & \begin{tabular}[c]{@{}c@{}}\textbf{Generated}\\\textbf{GUI}\\\textbf{quality}\end{tabular}
       & \begin{tabular}[c]{@{}c@{}}\textbf{Bias and}\\\textbf{reliability}\\\textbf{analysis}\end{tabular}
       & \begin{tabular}[c]{@{}c@{}}\textbf{Human}\\\textbf{reference}\\\textbf{labels}\end{tabular}
       & \begin{tabular}[c]{@{}c@{}}\textbf{Requirement}\\\textbf{fidelity}\end{tabular}
@@ -71,15 +73,15 @@ and a dynamic evaluation module that links static scores to interaction outcomes
     UIClip~\cite{uiclip}
       & $\times$ & $\times$ & $\times$ & \checkmark & $\times$ & $\times$ & $\times$ \\
     Designer Feedback~\cite{designer_feedback}
-      & $\times$ & $\times$ & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ \\
+      & $\times$ & \checkmark & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ \\
     Design2Code~\cite{design2code}
       & $\triangle$ & \checkmark & $\times$ & \checkmark & \checkmark & $\times$ & \checkmark \\
     MT-Bench / Chatbot Arena~\cite{llm_judge}
-      & $\triangle$ & \checkmark & $\triangle$ & \checkmark & --- & --- & $\triangle$ \\
+      & $\triangle$ & --- & $\triangle$ & \checkmark & --- & --- & $\triangle$ \\
     LLM-as-a-Judge survey~\cite{li-etal-2025-generation}
-      & \checkmark & \checkmark & \checkmark & --- & --- & --- & $\times$ \\
+      & \checkmark & --- & \checkmark & --- & --- & --- & $\times$ \\
     Position Bias Study~\cite{shi-etal-2025-judging}
-      & $\times$ & \checkmark & \checkmark & \checkmark & --- & --- & $\times$ \\
+      & $\times$ & --- & \checkmark & \checkmark & --- & --- & $\times$ \\
     WebArena~\cite{webarena}
       & $\times$ & $\triangle$ & $\times$ & \checkmark & $\triangle$ & \checkmark & \checkmark \\
     VisualWebArena~\cite{visualwebarena}

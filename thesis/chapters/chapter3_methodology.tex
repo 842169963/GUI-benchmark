@@ -16,64 +16,73 @@ dataset, tasks, metrics, and expected outputs.
 \section{Research Questions}
 \label{sec:rqs}
 
-The central concern of this thesis is whether modern multimodal large language
-models can serve as reliable judges of GUI quality, and whether the quality
-signals they produce carry meaning beyond the visual surface of a screenshot.
-Four research questions operationalise this concern.
+The central concern of this thesis is how the quality of LLM-generated
+graphical user interfaces can be evaluated with a reusable multi-metric
+benchmark and leaderboard. The evaluation combines static visual and
+requirement-based metrics with dynamic functionality signals, while using
+human annotations and LLM-based evaluators as measurement instruments rather
+than as the main object of the leaderboard. Four research questions
+operationalise this concern.
 
-\paragraph{RQ1 -- Modern models as pairwise GUI judges.}
+\paragraph{RQ1 -- UIClip-style baseline and pairwise evaluation limits.}
 \begin{quote}
-\textit{How well do modern multimodal large language models align with
-human pairwise judgements of GUI quality, and how does their performance
-compare to the models used in UIClip~\cite{uiclip}?}
+\textit{What does a reduced UIClip-style reproduction reveal about
+modern multimodal models in pairwise GUI-quality judgement, and which
+methodological controls are needed before such judgements can be used
+inside a GUI evaluation benchmark?}
 \end{quote}
 This question targets the reproduction aspect of the study
 (Track~A, Section~\ref{sec:track-a}).
-It asks whether progress in multimodal modelling has translated into
-better GUI preference judgements, using the UIClip dataset as an anchor
-that allows direct numerical comparison with published results.
+It uses the UIClip dataset as an anchor for pairwise screenshot
+evaluation, but its role is methodological: to establish a baseline,
+identify limitations such as position bias, and motivate the move from
+single binary preferences toward richer multi-metric GUI evaluation.
 
-\paragraph{RQ2 -- Multi-dimensional rubric alignment.}
+\paragraph{RQ2 -- Static multi-metric quality of LLM-generated GUIs.}
 \begin{quote}
-\textit{When evaluation moves from binary pairwise comparison to
-multi-\allowbreak dimensional rubric scoring, how well do modern multimodal LLMs
-align with human ratings per dimension, and which rubric dimensions are
-most and least reliably judged?}
+\textit{How can LLM-generated GUIs be evaluated with static
+multi-dimensional metrics, and how well do automated or LLM-based scores
+align with human ratings across visual structure, information clarity,
+and requirement fidelity?}
 \end{quote}
-This question applies to both Track~A and Track~B
-(Section~\ref{sec:track-b}).
-It examines whether LLMs can assign human-aligned scores along specific
-quality axes -- visual structure, information clarity, requirement
-fidelity, and interaction quality -- rather than returning only a
-binary preference.
+This question is centred on Track~B (Section~\ref{sec:track-b}), where
+different generator models produce interfaces from the same requirements.
+It examines whether the static portion of the leaderboard can provide
+interpretable per-dimension quality signals rather than only a single
+aggregate score.
 
-\paragraph{RQ3 -- Judging strategies and reliability.}
+\paragraph{RQ3 -- Evaluation method reliability and cost.}
 \begin{quote}
 \textit{Among the tested judging strategies -- zero-shot prompting,
 rubric-guided prompting, order-swapped pairwise comparisons, and
-repeated sampling -- which configurations achieve the best trade-off
-between alignment with human labels and API cost?}
+repeated sampling -- which configurations provide the most reliable and
+cost-effective measurement signals for the leaderboard?}
 \end{quote}
-This question is answered across both tracks.
+This question is answered across both tracks but remains a methodological
+supporting question.
 It draws on the LLM-as-a-judge literature~\cite{llm_judge,
 li-etal-2025-generation,shi-etal-2025-judging} to select strategies
 known to affect judge reliability, and applies them systematically
-to the GUI evaluation setting.
+to the GUI evaluation setting. Bias analysis is therefore treated as a
+control and reporting requirement rather than as the thesis's central
+contribution.
 
-\paragraph{RQ4 -- Static judgements and dynamic interaction outcomes.}
+\paragraph{RQ4 -- Static and dynamic GUI quality signals.}
 \begin{quote}
 \textit{For the same set of executable Track~B interfaces,
-do static LLM rubric scores predict the success rate of
-LLM-derived interaction plans on derived tasks,
-and which rubric dimensions are most predictive of dynamic outcomes?}
+how are static quality scores related to dynamic functionality and
+task-validation outcomes, and where do the two kinds of metrics
+complement or diverge from each other?}
 \end{quote}
-This is the core novel question of the thesis.
+This is the core empirical question of the thesis.
 Prior work has evaluated GUI quality from screenshots
 or evaluated agents on web tasks, but the two lines of research
 have not been connected on the same set of interfaces.
 RQ4 addresses this gap by pairing a static rubric score vector
 with a dynamic plan-success rate for every Track~B item
-and measuring their correlation.
+and analysing both correlations and mismatch cases. The goal is not to
+assume that static and dynamic metrics should be identical, but to
+understand what each signal captures about the quality of generated GUIs.
 
 \section{Overall Study Design}
 \label{sec:design}
@@ -99,6 +108,11 @@ The key design principle is that the same interface receives both a
 static rubric score vector and a dynamic plan-success measurement,
 forming the paired data needed to answer RQ4.
 
+The primary leaderboard unit is the generated GUI submission, aggregated
+by generator model and requirement set. Evaluator models, prompts, and
+human annotations are part of the evaluation protocol used to compute
+the metrics; they are not the main entities being ranked.
+
 Human annotations provide the reference labels for both tracks.
 Track~A reuses the preference labels published with the UIClip dataset,
 so no new annotation is required for pairwise tasks on that track.
@@ -114,15 +128,15 @@ reproducibility.
   \placeholderfigure{%
     [Figure 3.1: End-to-end pipeline.\\
     Left: Track A (UIClip pairs $\rightarrow$ pairwise judging $\rightarrow$ RQ1).\\
-    Centre: Track B (requirements $\rightarrow$ generation $\rightarrow$ rendering
-    $\rightarrow$ static rubric judging $\rightarrow$ RQ2, RQ3).\\
+    Centre: Track B (requirements $\rightarrow$ GUI generation $\rightarrow$ rendering
+    $\rightarrow$ static multi-metric scoring $\rightarrow$ RQ2, RQ3).\\
     Right: Track B dynamic branch (executable HTML $\rightarrow$ task derivation
     $\rightarrow$ action plan elicitation $\rightarrow$ DOM validation
     $\rightarrow$ RQ4).\\
     Bottom: leaderboard artifact.]}
   \caption{End-to-end evaluation pipeline.
            Track~A supports reproduction (RQ1).
-           Track~B supports rubric-based assessment (RQ2, RQ3)
+           Track~B supports static multi-metric assessment (RQ2, RQ3)
            and dynamic plan validation (RQ4).}
   \label{fig:pipeline}
 \end{figure}
@@ -138,12 +152,12 @@ the range of quality contrasts present in the original dataset.
 
 No new human annotation is collected for Track~A.
 The original UIClip preference labels serve as ground-truth reference,
-and agreement between each judge model and those labels constitutes
+and agreement between each evaluator model and those labels constitutes
 the alignment measure.
 This design makes Track~A lightweight and directly comparable to
-the UIClip publication while still allowing the main novel
-contributions -- multi-dimensional rubric assessment and dynamic
-evaluation -- to be concentrated in Track~B.
+the UIClip publication while keeping the main thesis contribution --
+a static and dynamic leaderboard for LLM-generated GUIs -- concentrated
+in Track~B.
 
 \section{Track B: Requirement-driven Generated Interfaces}
 \label{sec:track-b}
@@ -172,9 +186,11 @@ source.
 
 Each requirement is submitted to two or three generator models,
 producing a set of generated HTML implementations per requirement.
-The generator models are drawn from the same pool as the judge models
-(Section~\ref{sec:static-method}) to allow analysis of whether a
-model judges its own outputs differently from those of other generators.
+The generator models are drawn from the same pool as the evaluator models
+(Section~\ref{sec:static-method}) where feasible, but generator identity
+and evaluator identity are recorded separately. The leaderboard compares the
+quality of the generated interfaces; evaluator behaviour is analysed only as
+part of the evaluation methodology.
 
 \subsection{Rendering Pipeline}
 
@@ -193,12 +209,12 @@ the input to both the static and dynamic evaluation modules.
 
 \subsection{Model Selection}
 
-Four judge models are tested to span a range of capability levels.
+Four evaluator models are tested to span a range of capability levels.
 Two closed-source multimodal models represent the current
 state of the art; one open-weight multimodal model is included to
 allow reproducibility without API access; and one smaller or older
 multimodal model serves as a weaker baseline that makes the
-relationship between model capability and judge quality visible.
+relationship between model capability and evaluator quality visible.
 Exact model identifiers and access dates are recorded in the
 reproducibility appendix.
 
@@ -249,7 +265,7 @@ Disentangling these sources is difficult and adds substantial
 engineering overhead.
 
 Instead, this thesis uses \textit{action plan elicitation}:
-a judge model is given the rendered screenshot, the DOM snapshot,
+an evaluator model is given the rendered screenshot, the DOM snapshot,
 and a short task description derived from the original requirement,
 and is asked to produce an ordered action plan -- a JSON list of
 steps, each specifying an action type, a CSS or ARIA target selector,
@@ -303,7 +319,7 @@ the RQ4 correlation analysis if they cannot be resolved.
 \label{sec:metrics}
 
 \paragraph{Human-model agreement (pairwise).}
-Cohen's $\kappa$ measures agreement between a judge model's pairwise
+Cohen's $\kappa$ measures agreement between an evaluator model's pairwise
 preference and the human majority label, correcting for chance.
 
 \paragraph{Human-model correlation (rubric).}
@@ -324,10 +340,13 @@ The proportion of action steps in a plan that pass all three
 feasibility checks (existence, unique resolution, state transition).
 Averaged across steps within an item to obtain an item-level score.
 
-\paragraph{Static-dynamic correlation.}
+\paragraph{Static-dynamic relationship.}
 Spearman's $\rho$ between the item-level static rubric score
 (aggregate and per-dimension) and the item-level plan-success rate,
-computed across all Track~B items.
+computed across all Track~B items. In addition, mismatch cases are
+reported qualitatively, because a visually strong interface can still
+fail a task and a visually plain interface can still be functionally
+successful.
 
 \paragraph{API cost.}
 Total token cost in USD per model per condition, computed from
@@ -352,21 +371,21 @@ the primary metrics, and the results section that reports the findings.
     \textbf{RQ} & \textbf{Question (short)} & \textbf{Track} & \textbf{Task type}
       & \textbf{Primary metrics} \\
     \midrule
-    1 & Modern multimodal LLMs vs UIClip in pairwise GUI comparison
+    1 & UIClip-style pairwise baseline and evaluation limits
       & Track~A & Pairwise judging
-      & Cohen's $\kappa$; accuracy vs UIClip labels \\
+      & Accuracy vs UIClip-derived labels; position-bias rate \\
     \addlinespace
-    2 & Human-model alignment in multi-dimensional rubric scoring
-      & Track~A + B & Rubric scoring
-      & Spearman $\rho$ per dimension \\
+    2 & Static multi-metric quality of generated GUIs
+      & Track~B & Rubric scoring
+      & Human-model Spearman $\rho$ per dimension; leaderboard scores \\
     \addlinespace
-    3 & Best judging strategy for alignment-cost trade-off
+    3 & Reliable and cost-effective evaluation methodology
       & Track~A + B & Pairwise + rubric
       & $\kappa$; $\rho$; position-bias rate; self-consistency rate; API cost \\
     \addlinespace
-    4 & Static rubric scores as predictors of dynamic task success
+    4 & Relationship between static and dynamic quality signals
       & Track~B & Rubric + action plan validation
-      & Spearman $\rho$ (static-dynamic); plan-success rate; failure categories \\
+      & Spearman $\rho$ (static-dynamic); plan-success rate; mismatch categories \\
     \bottomrule
   \end{tabular}
 \end{table}

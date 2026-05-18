@@ -19,6 +19,16 @@
 - Smoke test ran 3 pairs / 6 calls successfully.
 - Formal small run completed on 50 pairs / 100 calls.
 
+### 2026-05-06 literature update: dynamic usability CUA paper
+
+Added paper note: `notes/paper_notes_dynamic_usability_cua.md`
+
+Paper: Gao et al., "Training Computer Use Agents to Assess the Usability of Graphical User Interfaces" (arXiv:2604.26020v1, 28 Apr 2026).
+
+Impact: this paper strongly overlaps with a broad "CUA-based dynamic usability assessment" direction. The thesis should not claim novelty for training or using CUAs to assess GUI usability in general. Instead, Track B should be positioned as the core of a multi-metric static and dynamic leaderboard for evaluating LLM-generated GUIs.
+
+Recommended change: keep Track B, but frame RQ4 as the relationship, complementarity, and divergence between static quality scores and dynamic task-validation outcomes, not as building a new usability-assessment CUA.
+
 ### Result: UIClip human caption-matched pairs, GPT-4o, 50 pairs
 
 Result file: `scripts/results/track_a_eval_gpt-4o_20260504_161730.json`
@@ -39,11 +49,83 @@ Interpretation: GPT-4o still shows a clear second-image preference on the UIClip
 
 ### Next
 
-- [ ] Manually inspect the 50 derived pairs for matching quality.
-- [ ] Improve caption matching if mismatches are found.
-- [ ] Scale to 100 pairs after pair quality is checked.
-- [ ] Add rubric-guided prompt condition.
+- [x] Manually inspect the 50 derived pairs for matching quality.
+- [x] Exclude 7 manually marked mismatch pairs and save clean subset.
+- [x] Scale to 100 pairs after pair quality is checked.
+- [x] Manually inspect the 100-pair run and produce clean subset.
+- [x] Add rubric-guided prompt condition.
 - [ ] Add one comparison model only after GPT-4o formal setup is stable.
+
+### Manual review update: clean 43-pair subset
+
+Manual review marked 7/50 pairs as mismatch / needs review:
+`pair_id` = 0, 15, 31, 33, 35, 41, 48.
+
+Cleaned result file: `scripts/results/track_a_eval_gpt-4o_20260504_161730_clean43.json`
+
+| Metric | Original 50 pairs | Clean 43 pairs |
+|--------|-------------------|----------------|
+| Raw accuracy | 59.0% | **61.6%** |
+| Accuracy Run1 (good=A) | 40.0% | **39.5%** |
+| Accuracy Run2 (good=B) | 78.0% | **83.7%** |
+| Consistency rate | 58.0% | **55.8%** |
+| Position bias rate | 42.0% | **44.2%** |
+| Corrected accuracy | 65.5% | **70.8%** |
+| Chose A / Chose B | 31 / 69 | **24 / 62** |
+
+Interpretation: after removing clear mismatches, model accuracy improves slightly, but the core pattern remains: GPT-4o still strongly favors the second image. This strengthens the claim that the position effect is not merely an artifact of mismatched pairs.
+
+### 100-pair run before manual cleaning
+
+Result file: `scripts/results/track_a_eval_gpt-4o_20260506_142748.json`  
+Review page: `scripts/results/track_a_eval_gpt-4o_20260506_142748_pair_review/review.html`
+
+| Metric | Value |
+|--------|-------|
+| Raw accuracy | **59.5%** |
+| Accuracy Run1 (good=A) | **38.0%** |
+| Accuracy Run2 (good=B) | **81.0%** |
+| Consistency rate | **53.0%** |
+| Position bias rate | **47.0%** |
+| Corrected accuracy | **67.9%** |
+| Chose A / Chose B | 57 / 143 |
+
+Interpretation: the 100-pair run reproduces the same position-bias pattern found in the 50-pair run. Manual pair-quality review is still required before treating this as the clean Track A result.
+
+### Manual review update: clean 85-pair subset
+
+Manual review marked 15/100 pairs as mismatch / needs review:
+`pair_id` = 0, 23, 33, 41, 56, 57, 58, 87, 90, 91, 92, 94, 95, 97, 98.
+
+Cleaned result file: `scripts/results/track_a_eval_gpt-4o_20260506_142748_clean85.json`
+
+| Metric | Original 100 pairs | Clean 85 pairs |
+|--------|--------------------|----------------|
+| Raw accuracy | 59.5% | **62.4%** |
+| Accuracy Run1 (good=A) | 38.0% | **38.8%** |
+| Accuracy Run2 (good=B) | 81.0% | **85.9%** |
+| Consistency rate | 53.0% | **52.9%** |
+| Position bias rate | 47.0% | **47.1%** |
+| Corrected accuracy | 67.9% | **73.3%** |
+| Chose A / Chose B | 57 / 143 | **45 / 125** |
+
+Interpretation: after manual removal of mismatched derived pairs, the alignment estimate improves, but the position-bias finding is unchanged. GPT-4o still selects the second image in 125/170 calls.
+
+### Rubric-guided prompt comparison on clean85
+
+Rubric-guided result file: `scripts/results/track_a_eval_openai_gpt-4o_rubric_20260506_162332.json`
+
+| Metric | Zero-shot clean85 | Rubric-guided clean85 |
+|--------|-------------------|-----------------------|
+| Raw accuracy | 62.4% | **57.1%** |
+| Accuracy Run1 (good=A) | 38.8% | **20.0%** |
+| Accuracy Run2 (good=B) | 85.9% | **94.1%** |
+| Consistency rate | 52.9% | **25.9%** |
+| Position bias rate | 47.1% | **74.1%** |
+| Corrected accuracy | 73.3% | **77.3%** |
+| Chose A / Chose B | 45 / 125 | **22 / 148** |
+
+Interpretation: rubric-guided prompting did not improve reliability in this pairwise setting. It made the B-position preference stronger, reducing raw accuracy and consistency. This supports RQ3 by showing that prompt strategy effects must be measured rather than assumed.
 
 ## 2026-05-04 — 阶段总结 & 后续计划
 
@@ -51,12 +133,13 @@ Interpretation: GPT-4o still shows a clear second-image preference on the UIClip
 
 #### 论文框架
 - **8章大纲**已确定：`notes/thesis_outline.md`（含章节结构、subsection、图表清单、文献）
-- **4个研究问题（RQ）**已锁定：
-  - RQ1：现代多模态LLM与UIClip人工标签的pairwise对齐度
-  - RQ2：从pairwise升级到多维rubric后，各维度的human-model对齐情况
-  - RQ3：judging策略（zero-shot / rubric-guided / order-swap / 重复采样）的最优trade-off
-  - RQ4 ⭐：Track B静态rubric评分能否预测动态交互任务的成功率
-- **双轨设计**：Track A（UIClip截图对复现）+ Track B（requirement-driven生成UI + 动态评估）
+- **主贡献已重定位为**：multi-metric static + dynamic leaderboard for evaluating LLM-generated GUIs.
+- **4个研究问题（RQ）**已更新：
+  - RQ1：UIClip-style pairwise baseline 及其方法限制（position/order bias 作为控制项）
+  - RQ2：LLM-generated GUI 的静态多维指标评估，以及自动/LLM评分与人工评分的对齐情况
+  - RQ3：评价方法（zero-shot / rubric-guided / order-swap / 重复采样）的可靠性与成本 trade-off
+  - RQ4 ⭐：Track B 静态质量指标与动态功能/任务验证结果之间的关系、互补和分歧
+- **双轨设计**：Track A（UIClip-style reduced baseline）+ Track B（requirement-driven generated GUI + static/dynamic leaderboard 主线）
 
 #### 文献与章节草稿
 | 文件 | 内容 |
@@ -104,6 +187,7 @@ Interpretation: GPT-4o still shows a clear second-image preference on the UIClip
   - Track A/B数据pipeline说明
   - 4维Rubric（D1–D4）+ 1–5分锚点完整表格
   - 标注协议、IRR目标（α≥0.5）、Pilot标注设计
+  - 明确 leaderboard 的主要对象是 generated GUI / generator model，而不是 judge model
 - [ ] **Ch2草稿** `notes/draft_ch2_background.tex`
   - 整合gap matrix进完整Ch2叙述
   - §2.1 GUI Quality理论（Nielsen/ISO根基）

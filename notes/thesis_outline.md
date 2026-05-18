@@ -18,6 +18,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 4. **Dynamic 模块**：是论文重要组成（老师明确要求），不是 add-on
 5. **Track A**：**保留但缩小范围**（用户决策 2026-04-29）。理由：现在还不确定后续走向，留作 fallback 与 UIClip 锚点。**起步范围**：直接复用 UIClip 公开 pair 数据 50–100 对，**不做新的人工标注**，只让 LLM judges 跑一遍并报告与 UIClip 的差距。Track A 后期可视情况扩展或砍掉。
 6. **整体策略**：**先锁定一个"大概可行"的 starting scope，开工后再裁剪**——不在动笔前过度决策。
+7. **Primary novelty axis（2026-05-18 更新）**：**multi-metric static + dynamic leaderboard for evaluating LLM-generated GUIs**。Leaderboard 的主要对象不是 judge model，而是不同 LLM / generator model 生成出来的 GUI 质量。LLM-as-a-judge、人类标注、bias control 是评价方法与可靠性控制，不是论文最终排名的主角。uxCUA（Gao et al. 2026；摘要见 [notes/uxCUA_short_codex_note.md](D:/master_thesis/notes/uxCUA_short_codex_note.md) 与 [notes/paper_notes_dynamic_usability_cua.md](D:/master_thesis/notes/paper_notes_dynamic_usability_cua.md)）在**动态 CUA usability assessment** 方向上与本论文有较大重叠，应避免将"CUA-based 动态可用性评估"作为本论文的新颖点来宣称。但 uxCUA **未覆盖**的领域仍然开放且显著：面向 LLM-generated GUI 的多指标 benchmark、static + dynamic 评分、requirement fidelity、以及 HF Space leaderboard。**Artifact contribution = benchmark + HF Space leaderboard**；**empirical centerpiece = static/dynamic GUI quality signals 的关系、互补与分歧**。Mobile/desktop UI 仅作 Ch8.7 future work，不进主轴。
 
 ### 关于 dynamic 实现方式（建议但未最终决定）
 两种实现路径，建议**起步用方案 B（轻量），跑通后视情况决定要不要升级到方案 A**：
@@ -30,9 +31,9 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **结论：方法论上分两章，数据层面合并为同一条线。** 具体安排：
 
 - **Track A**（screenshot only）：缩小范围版——复用 UIClip 50–100 对公开数据，不新做人工标注，作为 UIClip 数字锚点 + reproduction sanity check。后期可裁剪为 Ch5 一个小节
-- **Track B**（generated executable UI）：**同一批界面同时接受 static rubric 评分 + dynamic agent 任务测试**
+- **Track B**（generated executable UI）：**同一批界面同时接受 static rubric 评分 + dynamic task validation / action-plan validation**
   - 这意味着每个 Track B item 都有两组分数：static rubric (Ch5) + dynamic task success (Ch6)
-  - 由此**static-dynamic correlation 成为论文的核心新颖发现**，回答："静态 LLM judge 能否预测真实交互结果？"
+  - 由此**static-dynamic relationship 成为论文的核心实证问题**，回答："静态质量指标和动态功能指标分别捕捉什么？哪些情况下相关，哪些情况下互补或分歧？"
   - 这正是把老师建议 2、3、4 串起来的最强论点
 
 这种"分章不分 dataset"的设计避免了 dynamic 模块孤立、规模太小的问题，同时让两套评估互相支撑。Ch3 methodology 与 Ch7 results 都要显式强调这个配对关系。
@@ -57,6 +58,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - LLM 已能产出 UI mockup + 前端代码，引 Design2Code 与 Designer Feedback 的实证数字
 - GUI 质量 ≠ 视觉吸引力，还包括 usability / 任务完成 / requirement 满足
 - 三类 stakeholder 都需要可信的 GUI 评估：设计师（迭代反馈）、开发者（自动化测试）、AI 研究者（模型对比）
+- **Positioning vs uxCUA**: 近期工作（uxCUA, Gao et al. 2026）已证明专门训练的 computer-use agent 能够通过交互式探索给 GUI 输出 usability 分数。该工作确立了动态可用性评估的价值，但其产出是**单一训练好的 agent / usability model**。本论文的主贡献不同：它面向 LLM-generated GUIs，构建一套可复现的 static + dynamic 多指标 benchmark 和 leaderboard，用来比较不同生成模型产出的 GUI 质量。LLM judge 与 human feedback 是打分方法，不是 leaderboard 的主要排名对象。
 
 **1.2 Problem Statement**
 - 现有 screenshot-based 方法（UIClip）的三重局限：仅 pairwise / 旧模型 / 纯静态
@@ -66,12 +68,12 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **1.3 Research Questions** (preview, full statement in §3.1)
 - 4 个 RQ 列表（不展开）
 
-**1.4 Contributions**
-- C1: 双 track GUI 质量评估 benchmark（Track A reproduction + Track B requirement-driven）
-- C2: 4 维 GUI 质量 rubric，建立在 Nielsen / ISO 9241 上
-- C3: 现代多模态 LLM judge 的系统对比（含 prompting 策略 ablation 与 position bias 分析）
-- C4: ⭐ 首次实证 static rubric 评分与 dynamic 任务执行成功率的关系
-- C5: 开源评估 pipeline + Hugging Face Space leaderboard
+**1.4 Contributions** (重新排序 2026-05-14，benchmark+leaderboard 提到 C1；理由见 Part 0 #7)
+- **C1 (artifact contribution)**: A public multi-metric benchmark and Hugging Face Space leaderboard for evaluating the quality of LLM-generated GUIs, combining static rubric scores and dynamic task-validation outcomes.
+- **C2**: Two-track evaluation design（Track A UIClip-style reduced baseline + Track B requirement-driven generated GUIs）operationalizing the benchmark.
+- **C3**: A 4-dimensional GUI quality rubric grounded in Nielsen heuristics, ISO 9241-11, and **Shneiderman's 8 Golden Rules**（后者是 uxCUA defect 分类的理论基础，对 D4 Interaction Quality 尤其相关）.
+- **C4**: Reliability controls for the evaluation pipeline, including prompting strategy ablation, order-swap, repeated sampling, and position-bias reporting. 这些是方法保障，不作为论文主创新点。
+- **C5** ⭐ (empirical centerpiece): A focused empirical study of the relationship between static quality scores and dynamic task-validation outcomes on the same generated UIs（RQ4）。这里不预设二者必须一致，而是分析相关、互补和分歧案例。
 
 **1.5 Thesis Structure**
 - 每章 1 段（~50 字）
@@ -90,9 +92,9 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **2.1 GUI Quality and Usability**
 - 2.1.1 Definition of GUI quality (visual + functional + interactive 三个层面)
-- 2.1.2 Classical usability heuristics: Nielsen's 10, ISO 9241-11
-- 2.1.3 How established usability theory informs our rubric
-- *写作要点：这一节是审稿人最爱挑刺的地方，必须有理论根基。Nielsen + ISO 至少各引一处。*
+- 2.1.2 Classical usability heuristics: Nielsen's 10, ISO 9241-11, **Shneiderman's 8 Golden Rules**
+- 2.1.3 How established usability theory informs our rubric。Shneiderman 的 feedback / dialog closure / error prevention / reversal 类别直接对应 D4 Interaction Quality 的动态评估切片；这也正是 uxCUA 用来构造其 defect 分类的同一套理论基础。
+- *写作要点：这一节是审稿人最爱挑刺的地方，必须有理论根基。Nielsen + ISO + Shneiderman 至少各引一处。*
 
 **2.2 Screenshot-based UI Evaluation**
 - 2.2.1 Pre-LLM era: rule-based, ML classifiers (brief)
@@ -114,12 +116,21 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 2.5.1 VisualWebArena: setup, agent, metrics
 - 2.5.2 Brief mention: WebArena, Mind2Web (1 段)
 - 2.5.3 Computer-use agents (Claude/GPT Operator): capabilities & current failure modes
-- *写作要点：诚实承认 agent 仍然不稳定，这就是为什么本论文用 Plan B（action plan elicitation）而不是真 agent execution。*
+- **2.5.4 Trained CUAs for usability assessment (uxCUA, Gao et al. 2026)** ⭐ 本节是与本论文最接近的相关工作
+  - uxWeb 数据集构造：879 plain clones + 1,707 defect-augmented sites = 2,586 interactive UIs
+  - Defect injection 基于 Shneiderman's 8 Golden Rules（与 §2.1.2 / §4.5 的理论基础同源）
+  - Designer preference labels：510 pairs，17 名 annotator，**Krippendorff's α = 0.308**（在 §4.7 讨论 IRR 时直接引这个数字）
+  - 训练流程：rollouts → reward（navigation quality + score accuracy）→ fine-tune
+  - 报告 AUC：synthetic defects = 0.632，human preferences = 0.607——即使专门训练的 CUA 仍远未解决 GUI usability evaluation，本论文"生成 GUI 质量评估仍是开放问题"的定位由此得到外部证据
+  - **Contrast statement**: uxCUA 产出的是 model；本论文产出的是面向 LLM-generated GUI 的 benchmark + leaderboard。Artifact 类型不同、目标用户不同、用途不同。
+- *写作要点：诚实承认 agent 仍然不稳定，这就是为什么本论文用 Plan B（action plan elicitation）而不是真 agent execution。Plan B vs Plan A 的详细对比见 §6.2.*
 
 **2.6 Research Gap**
 - 一段 narrative，再用一张矩阵 table 强化
-- 矩阵列：[work] × [evaluation material / judgment type / multidim / human labels / requirement fidelity / dynamic interaction]
-- 行：UIClip / Designer Feedback / MT-Bench / VisualWebArena / Design2Code / **This thesis**
+- 矩阵列：[work] × [evaluation material / generated GUI quality / multidim metrics / human labels / requirement fidelity / dynamic interaction / **public benchmark+leaderboard** / **evaluation reliability controls**]
+- 行：UIClip / Designer Feedback / MT-Bench / VisualWebArena / Design2Code / **uxCUA** / **This thesis**
+- **uxCUA 行的差异化标注**：dynamic interaction ✓、designer human labels ✓、uxWeb dataset/benchmark ✓、但产出重点是 trained CUA usability model，不是面向 LLM-generated GUI 的多指标 leaderboard；没有 public leaderboard submission flow，也不以 requirement-driven GUI generation model comparison 为主。
+- **This thesis 行的独特交叉单元**：LLM-generated GUI quality ✓ **AND** static + dynamic metrics ✓ **AND** public benchmark+leaderboard ✓ **AND** evaluation reliability controls ✓ — 这组交集是本论文主轴。
 
 **Figures**: Fig 2.1 Taxonomy of GUI evaluation paradigms（static vs dynamic, pairwise vs rubric）
 **Tables**: Table 2.1 Related-work comparison matrix
@@ -133,10 +144,10 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **3.1 Research Questions**
 - 完整 4 RQ 措辞（每个 RQ 含 1–2 个 sub-question）：
-  - **RQ1** (Track A, reproduction): How well do modern multimodal LLMs align with UIClip's original pairwise human labels, and how does this compare to UIClip's reported model performance?
-  - **RQ2** (Track A + B, multidim): When moving from pairwise comparison to multi-dimensional rubric scoring, what is the human-model alignment per dimension, and which dimensions are most reliably judged?
-  - **RQ3** (judge methodology): Among prompting strategies (zero-shot, rubric-guided), reliability conditions (order-swap, repeated sampling), and across model families, which configurations achieve the best alignment-cost trade-off?
-  - **RQ4** ⭐ (static-dynamic linkage): For Track B executable interfaces, do static rubric scores predict the success rate of LLM-derived action plans on derived tasks? Which rubric dimensions correlate most with dynamic task success?
+  - **RQ1** (Track A, baseline): What does a reduced UIClip-style reproduction reveal about pairwise GUI judging and its methodological limits?
+  - **RQ2** (Track B, static metrics): How can LLM-generated GUIs be evaluated with static multi-dimensional metrics, and how well do automated / LLM-based scores align with human ratings?
+  - **RQ3** (evaluation methodology): Which prompting, order-control, and repeated-sampling settings provide reliable and cost-effective measurement signals for the leaderboard?
+  - **RQ4** ⭐ (static-dynamic relationship, empirical centerpiece): For generated executable web UIs, how are static quality scores related to dynamic functionality and task-validation outcomes, and where do the two signals complement or diverge? 这里不写成 "是否一致"，因为 static 和 dynamic 本来衡量不同方面。
 
 **3.2 Overall Study Design**
 - 3.2.1 Two-track architecture (rationale recap)
@@ -163,7 +174,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 3.5.4 Reliability conditions: order-swap (must), repeated sampling 3× (must)
 
 **3.6 Dynamic Evaluation Methodology (Plan B)**
-- 3.6.1 Approach choice: Plan B (action plan elicitation) over Plan A (full agent execution)，理由见 §6.2
+- 3.6.1 Approach choice: Plan B (action plan elicitation) over Plan A (full agent execution)，理由见 §6.2。uxCUA 是 Plan A 的代表性参照，本论文 §6.2 显式与之对比；§6.8 在 5–10 个 item 上跑 Plan A 作为 cross-check。
 - 3.6.2 Task derivation 流程
 - 3.6.3 Action plan validation: deterministic script
 - 3.6.4 Plan A 列入 future work
@@ -212,7 +223,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 一个 minimal example item shown inline
 
 **4.5 GUI Quality Rubric**
-- 4.5.1 Design rationale（grounded in §2.1）
+- 4.5.1 Design rationale（grounded in §2.1）。D1/D2 主要呼应 Nielsen heuristics 与 ISO 9241-11；**D4 Interaction Quality 直接对应 Shneiderman's 8 Golden Rules 中的 feedback / dialog closure / error prevention / reversal 四类**——这同时也是 uxCUA defect injection 的理论来源（[notes/uxCUA_short_codex_note.md](D:/master_thesis/notes/uxCUA_short_codex_note.md) §4），所以本论文与 uxCUA 的 dynamic 评估理论根基一致，差别只在 artifact 类型与评估方法。
 - 4.5.2 Four starting dimensions（pilot 后可调）：
   - **D1 Visual Structure**：layout、alignment、spacing、visual hierarchy（合并原 6 维的 layout + hierarchy）
   - **D2 Information Clarity**：grouping、labeling、可读性、可推断的可用性（合并原 organization + perceived usability）
@@ -245,9 +256,9 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 ---
 
-### Chapter 5 — LLM-as-a-Judge Experiments (~10–12 pages)
+### Chapter 5 — Automated GUI Evaluation Experiments (~10–12 pages)
 
-**Purpose**: 定义并执行模型评判实验，回答 RQ1, RQ2, RQ3 的方法论部分。
+**Purpose**: 定义并执行自动评分 / LLM-as-evaluator 实验，为 generated GUI leaderboard 产生 static metrics，并回答 RQ1、RQ2、RQ3 的方法论部分。
 
 **5.1 Model Selection**
 - 2 closed-source: Claude (Sonnet/Opus latest)、GPT-4o 或继任
@@ -291,7 +302,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 ---
 
-### Chapter 6 — Dynamic Evaluation with Computer-Use Agents (~8–10 pages)
+### Chapter 6 — Dynamic Task Validation for Executable Generated Interfaces (~9–11 pages)
 
 **Purpose**: 在 Track B 同一批 UI 上做 dynamic 评估，与 Ch5 配对回答 RQ4。
 
@@ -302,9 +313,10 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **6.2 Approach: Plan B (Action Plan Elicitation)**
 - 6.2.1 Why not Plan A (full agent execution): agent + UI 两个 noise source 叠加，归因困难，成本高
+  - **uxCUA 对比段落**：A full computer-use-agent execution approach is feasible — uxCUA (Gao et al. 2026) demonstrates this on uxWeb — but it compounds two noise sources, UI quality and agent execution capability, that are difficult to disentangle. uxCUA itself reaches AUC = 0.63 against synthetic defects after dedicated training, and reports ~5 seconds per agent step with a 50-step budget per UI. For a master thesis with O(100) UIs × multiple models × multiple prompt conditions × repeated sampling, Plan A's compute and time budget is infeasible. Plan B (action-plan elicitation + deterministic validation) isolates judge quality from agent execution, costs roughly one model-inference call per (item, model), and matches Track B's static-dynamic pairing protocol.
 - 6.2.2 Plan B definition: 给 LLM (DOM + screenshot + task)，让它输出 action sequence (JSON)
 - 6.2.3 Validation: 确定性脚本检查 sequence 可行性
-- 6.2.4 Plan A 在 §8.7 列入 future work
+- 6.2.4 Plan A 保留为 §6.8 的小规模 cross-check pilot；完整规模的 Plan A 留作 §8.7 future work
 
 **6.3 Task Derivation**
 - 6.3.1 Protocol: 每个 Track B requirement → 1–2 个 short task with unambiguous success criterion
@@ -334,10 +346,18 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 每个 Track B item 产出 4-tuple: `(item_id, rubric_vector, plan_success_rate, failure_categories)`
 - 这是 §7.5 的 RQ4 直接输入
 
-**Figures**: Fig 6.1 Dynamic pipeline; Fig 6.2 Example action plan + validation outcome
-**Tables**: Table 6.1 Task examples; Table 6.2 Failure taxonomy with examples
+**6.8 Plan A Navigation Pilot (⚠️ TIME-PERMITTING OPTIONAL cross-check, 2026-05-14)**
+- **Status**: 本节非正式承诺内容，仅在主线 Plan B 完成、时间允许时执行。写作时标注为 "if time permits"；若未执行，在 §8.6 限制中说明即可，不影响论文主线。目的是防止 §6 因 CUA 执行实验而膨胀成 uxCUA 第二。
+- 6.8.1 动机：reviewer 可能质疑 Plan B 的 action-plan-success 信号与"真 agent 真实交互"脱钩；本节用小规模 Plan A pilot 作为外部一致性检查。
+- 6.8.2 Setup：从 Track B 选 5–10 个 item，覆盖 low/mid/high static rubric score；单一 off-the-shelf 浏览器 agent（Playwright + Claude computer use API）
+- 6.8.3 uxCUA-inspired navigation metrics：unique-screen ratio、dead-click rate、loop count、step count
+- 6.8.4 比较：navigation metrics vs Plan B `plan_success_rate`，报告 1 张表 + 1 张 scatter
+- 6.8.5 **明确不做**：不扩展到全部 Track B；不比较多个 agent；不替代 Plan B——full-scale Plan A 在 §8.7 future work
 
-**Cites**: VisualWebArena (作 Plan A 的对比), Design2Code (Track B 数据基础)
+**Figures**: Fig 6.1 Dynamic pipeline; Fig 6.2 Example action plan + validation outcome; **Fig 6.3 Plan A pilot navigation metrics scatter（新增）**
+**Tables**: Table 6.1 Task examples; Table 6.2 Failure taxonomy with examples; **Table 6.3 Plan A pilot results 5–10 items（新增）**
+
+**Cites**: VisualWebArena (作 Plan A 的对比), Design2Code (Track B 数据基础), **uxCUA / Gao et al. 2026 (Plan A 的代表性参考 + navigation metrics 来源)**
 
 ---
 
@@ -350,26 +370,26 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - Per-dimension IRR (α)
 - Cost summary
 
-**7.2 RQ1: Pairwise Modern Models vs UIClip**
+**7.2 RQ1: UIClip-style Pairwise Baseline**
 - Per-model agreement with UIClip labels
 - 与 UIClip 报告数字直接对比表
 - 解读：现代模型是否真的更好，差距多少
 
-**7.3 RQ2: Multidimensional Rubric Alignment**
+**7.3 RQ2: Static Multi-metric Quality of Generated GUIs**
 - Per-dimension Spearman correlation (model × dimension heatmap)
 - 哪些维度模型表现最好，哪些最差
 - D3 (Requirement Fidelity) 与 D4 (Interaction Quality) 的特殊讨论
 
-**7.4 RQ3: Strategy Ablation**
+**7.4 RQ3: Evaluation Strategy and Reliability**
 - Zero-shot vs rubric-guided：alignment 提升多少
 - Order-swap：position consistency 数字
 - Repeated sampling：self-consistency 数字
 - Cost vs alignment trade-off
 
-**7.5 RQ4: Static-Dynamic Correlation ⭐**
-- Scatter: rubric (D1+D2 平均) vs plan success rate
+**7.5 RQ4: Static-Dynamic Relationship ⭐**
+- Scatter: static rubric scores vs plan success rate
 - Per-dimension correlation table
-- 哪些 static 维度预测 dynamic 最好
+- 分析哪些 static 维度与 dynamic 功能结果相关，哪些维度主要提供互补信息
 - Diverging cases 定性分析（visually appealing but task-failed; cluttered but task-success）
 
 **7.6 Cost-Quality Trade-off**
@@ -394,9 +414,9 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **8.2 Pairwise vs Rubric vs Requirement Fidelity**
 - 三种 task format 各自的强项与失效场景
 
-**8.3 The Static-Dynamic Gap**
+**8.3 The Static-Dynamic Relationship**
 - RQ4 结果的含义
-- 当 LLM judge 作为 usability proxy 时该信什么、不该信什么
+- 当 static metrics 作为 functionality / usability proxy 时该信什么、不该信什么
 
 **8.4 Practical Benchmark and Leaderboard Implications**
 - HF Space 部署 summary
@@ -413,13 +433,17 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - Plan B 不是真 agent execution
 - Annotator pool 有限
 - 仅静态截图 + DOM，未涵盖动效与可访问性
+- **Untrained judge**（2026-05-14 新增）：本论文评估的是 off-the-shelf 多模态 LLM 作为 judge，未训练专门的 CUA-style usability model。所观察到的性能上限应被解读为"现成模型上限"，而非"问题本质上限"——uxCUA 即是反例。
+- **Subjective human labels**（2026-05-14 新增）：GUI 质量判断本身高度主观。uxCUA 报告 designer-preference Krippendorff's α = 0.308（[notes/uxCUA_short_codex_note.md §5](D:/master_thesis/notes/uxCUA_short_codex_note.md)）。因此本论文将"human alignment"作为方向性信号而非 ground truth，对应的描述与解读必须保留这一边界。
+- **Plan B vs Plan A semantic gap**（2026-05-14 新增）：action-plan validation 衡量的是"是否存在一条可解析的 plan"，并非"真实用户是否能完成"。§6.8 pilot 缓解但不能完全消除此 gap；full-scale Plan A 是显式 future work（§8.7）。
 
-**8.7 Future Work**
-- 更大 Track B
-- Plan A: full agent execution
-- Code-level UI quality (无障碍、性能)
-- Judge calibration / fine-tuning
-- 长期 leaderboard 维护机制
+**8.7 Future Work**（2026-05-14 重写：与 uxCUA 互补的三条主推 + 三条沿用）
+- ⭐ **Trained CUA evaluator for this benchmark**：按 uxCUA (Gao et al. 2026) 的训练流程（rollouts → reward → fine-tune），但**训练数据用本论文 Track B 的 requirement-driven items**，将训练得到的 CUA 作为一种 evaluator 接入本论文 leaderboard。这是把 uxCUA 方法直接接入本论文 artifact 的最自然延伸。
+- ⭐ **Mobile and desktop GUI extension**：将 benchmark 扩展到 mobile-web responsive layouts，进一步扩到 native mobile（iOS / Android）与 desktop apps。uxCUA 显式将该方向列为他们的 open problem（[notes/uxCUA_short_codex_note.md §11](D:/master_thesis/notes/uxCUA_short_codex_note.md)）；本论文 benchmark 基础设施设计上支持新增 track。
+- ⭐ **Full Plan A scale-up**：将 §6.8 pilot 从 5–10 item 扩到全部 Track B，使用真 browser agent，比较 static rubric 与真实 navigation-quality 指标的相关性。
+- 更大 Track B（覆盖更多 UI 类型与生成器）
+- Code-level UI quality（无障碍、性能、安全）
+- 长期 leaderboard 维护机制（submission 审核、模型版本漂移追踪）
 
 **8.8 Conclusion**
 - Restate contributions
@@ -539,7 +563,7 @@ GPT 大纲的 6 个 RQ 里 RQ4（"哪些维度最可靠"）和 RQ5（"requiremen
 1. **Annotation 资源**：是否能保证 ≥3 个 annotator？预算从哪里来（同学/Prolific/HCI lab）？
 2. **Rubric 维度**：保留当前 6 维，还是允许 pilot 后调整为 4–5 维？
 3. **Track B 自建那 5–10 条 requirement 覆盖什么场景**？建议：mobile UI（Design2Code 主要是桌面 web），或者 form-heavy 任务界面（更利于 dynamic agent 任务设计）。
-4. **Dynamic agent 选择**：用 VisualWebArena 的 agent 实现，还是直接调用 Anthropic computer use API / OpenAI Operator？后者代码量小但 API 成本高。
+4. **§6.8 Optional Plan A pilot**：是否保留 5–10 item 的 optional Plan A cross-check（time-permitting）？若决定不做，§8.6 限制中补充说明即可，无需选择 dynamic agent；若决定做，建议直接用 Anthropic computer use API（代码量最小，和主线 LLM judge 调用方式一致）。
 
 ---
 

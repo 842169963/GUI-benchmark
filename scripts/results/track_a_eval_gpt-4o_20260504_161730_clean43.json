@@ -1,0 +1,1442 @@
+{
+  "meta": {
+    "model": "gpt-4o",
+    "dataset": "biglab/uiclip_human_data_hf",
+    "split": "train",
+    "n_pairs_requested": 50,
+    "seed": 42,
+    "date": "2026-05-04T16:17:30.173631",
+    "prompt": "You are evaluating two user interface screenshots for visual design quality.\n\nImage A is shown first, Image B is shown second.\n\nWhich interface has better visual design overall? Consider layout, visual\nhierarchy, clarity, and aesthetic quality.\n\nReply with ONLY the letter A or B. Nothing else.",
+    "order_swap": true,
+    "base_url": "https://api.chatanywhere.tech/v1",
+    "review_status": "manual_mismatch_excluded"
+  },
+  "summary": {
+    "n_pairs": 43,
+    "n_calls": 86,
+    "excluded_pair_ids": [
+      0,
+      15,
+      31,
+      33,
+      35,
+      41,
+      48
+    ],
+    "raw_accuracy": 0.6162790697674418,
+    "accuracy_run1_good_a": 0.3953488372093023,
+    "accuracy_run2_good_b": 0.8372093023255814,
+    "consistency_rate": 0.5581395348837209,
+    "position_bias_rate": 0.4418604651162791,
+    "corrected_accuracy_consistent_only": 0.7083333333333334,
+    "n_consistent_pairs": 24,
+    "chose_a": 24,
+    "chose_b": 62
+  },
+  "pairs": [
+    {
+      "pair_id": 25,
+      "source": "caption_matched",
+      "group_key": "sign up page of fitness app",
+      "caption_good": "ui screenshot. well-designed. sign up page of a fitness app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. sign up page of a fitness app",
+      "source_idx_good": 108,
+      "source_idx_bad": 116
+    },
+    {
+      "pair_id": 23,
+      "source": "caption_matched",
+      "group_key": "screen shows cart details in shopping app",
+      "caption_good": "ui screenshot. well-designed. screen shows cart details in a shopping app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. screen shows cart details in a shopping app",
+      "source_idx_good": 110,
+      "source_idx_bad": 111
+    },
+    {
+      "pair_id": 19,
+      "source": "caption_matched",
+      "group_key": "flight details display page",
+      "caption_good": "ui screenshot. well-designed. flight details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. flight details display page",
+      "source_idx_good": 79,
+      "source_idx_bad": 81
+    },
+    {
+      "pair_id": 11,
+      "source": "caption_matched",
+      "group_key": "displaying different categories in social app",
+      "caption_good": "ui screenshot. well-designed. page displaying different categories in a social app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying different categories in a social app",
+      "source_idx_good": 41,
+      "source_idx_bad": 42
+    },
+    {
+      "pair_id": 4,
+      "source": "caption_matched",
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. login page",
+      "source_idx_good": 20,
+      "source_idx_bad": 21
+    },
+    {
+      "pair_id": 45,
+      "source": "caption_matched",
+      "group_key": "screen displays news feed page",
+      "caption_good": "ui screenshot. well-designed. a screen displays a news feed page.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. a screen displays a news feed page.",
+      "source_idx_good": 245,
+      "source_idx_bad": 246
+    },
+    {
+      "pair_id": 26,
+      "source": "caption_matched",
+      "group_key": "displaying to choose country",
+      "caption_good": "ui screenshot. well-designed. page displaying to choose a country",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to choose a country",
+      "source_idx_good": 125,
+      "source_idx_bad": 126
+    },
+    {
+      "pair_id": 9,
+      "source": "caption_matched",
+      "group_key": "displaying different applications to share",
+      "caption_good": "ui screenshot. well-designed. page displaying different applications to share",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying different applications to share",
+      "source_idx_good": 30,
+      "source_idx_bad": 31
+    },
+    {
+      "pair_id": 29,
+      "source": "caption_matched",
+      "group_key": "displaying to enter email",
+      "caption_good": "ui screenshot. well-designed. page displaying to enter email",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to enter email",
+      "source_idx_good": 146,
+      "source_idx_bad": 147
+    },
+    {
+      "pair_id": 16,
+      "source": "caption_matched",
+      "group_key": "displaying start page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. screen displaying the start page",
+      "source_idx_good": 60,
+      "source_idx_bad": 61
+    },
+    {
+      "pair_id": 21,
+      "source": "caption_matched",
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. login page",
+      "source_idx_good": 84,
+      "source_idx_bad": 85
+    },
+    {
+      "pair_id": 12,
+      "source": "caption_matched",
+      "group_key": "welcome page of travel app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a travel app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. welcome page of a travel app",
+      "source_idx_good": 43,
+      "source_idx_bad": 44
+    },
+    {
+      "pair_id": 3,
+      "source": "caption_matched",
+      "group_key": "screen shows next option to continue",
+      "caption_good": "ui screenshot. well-designed. screen shows next option to continue",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen shows next option to continue",
+      "source_idx_good": 17,
+      "source_idx_bad": 19
+    },
+    {
+      "pair_id": 39,
+      "source": "caption_matched",
+      "group_key": "displaying to enter email and send",
+      "caption_good": "ui screenshot. well-designed. page displaying to enter email and send",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to enter email and send",
+      "source_idx_good": 191,
+      "source_idx_bad": 192
+    },
+    {
+      "pair_id": 38,
+      "source": "caption_matched",
+      "group_key": "welcome page of travel app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a travel app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. welcome page of a travel app",
+      "source_idx_good": 186,
+      "source_idx_bad": 187
+    },
+    {
+      "pair_id": 10,
+      "source": "caption_matched",
+      "group_key": "displaying start app",
+      "caption_good": "ui screenshot. well-designed. screen shows to start an app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. screen shows to start an app",
+      "source_idx_good": 37,
+      "source_idx_bad": 38
+    },
+    {
+      "pair_id": 24,
+      "source": "caption_matched",
+      "group_key": "login page of fitness app",
+      "caption_good": "ui screenshot. well-designed. login page of a fitness app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. login page of a fitness app",
+      "source_idx_good": 112,
+      "source_idx_bad": 113
+    },
+    {
+      "pair_id": 43,
+      "source": "caption_matched",
+      "group_key": "displaying to start application",
+      "caption_good": "ui screenshot. well-designed. page displaying to start an application",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to start an application",
+      "source_idx_good": 226,
+      "source_idx_bad": 228
+    },
+    {
+      "pair_id": 18,
+      "source": "caption_matched",
+      "group_key": "displaying various options in app",
+      "caption_good": "ui screenshot. well-designed. page displaying various options in app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. page displaying various options in app",
+      "source_idx_good": 64,
+      "source_idx_bad": 65
+    },
+    {
+      "pair_id": 30,
+      "source": "caption_matched",
+      "group_key": "ui of onboarding displaying next option",
+      "caption_good": "ui screenshot. well-designed. A UI of an onboarding page displaying the next option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. A UI of an onboarding page displaying the next option",
+      "source_idx_good": 138,
+      "source_idx_bad": 148
+    },
+    {
+      "pair_id": 28,
+      "source": "caption_matched",
+      "group_key": "screen displays news feed page",
+      "caption_good": "ui screenshot. well-designed. a screen displays a news feed page.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. a screen displays a news feed page.",
+      "source_idx_good": 140,
+      "source_idx_bad": 141
+    },
+    {
+      "pair_id": 20,
+      "source": "caption_matched",
+      "group_key": "displaying signing in information about application",
+      "caption_good": "ui screenshot. well-designed. page displaying signing in information about an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying signing in information about an application",
+      "source_idx_good": 70,
+      "source_idx_bad": 83
+    },
+    {
+      "pair_id": 22,
+      "source": "caption_matched",
+      "group_key": "welcome page of hotel booking app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a hotel booking app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. welcome page of a hotel booking app",
+      "source_idx_good": 86,
+      "source_idx_bad": 101
+    },
+    {
+      "pair_id": 42,
+      "source": "caption_matched",
+      "group_key": "displaying start messaging page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start messaging page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen displaying the start messaging page",
+      "source_idx_good": 93,
+      "source_idx_bad": 221
+    },
+    {
+      "pair_id": 46,
+      "source": "caption_matched",
+      "group_key": "in cooking app screen displays particulars of recipe",
+      "caption_good": "ui screenshot. well-designed. in a cooking app, the screen displays the particulars of a recipe.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. in a cooking app, the screen displays the particulars of a recipe.",
+      "source_idx_good": 164,
+      "source_idx_bad": 247
+    },
+    {
+      "pair_id": 36,
+      "source": "caption_matched",
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. login page",
+      "source_idx_good": 177,
+      "source_idx_bad": 178
+    },
+    {
+      "pair_id": 32,
+      "source": "caption_matched",
+      "group_key": "displaying different recipes ingredient",
+      "caption_good": "ui screenshot. well-designed. page displaying different recipes' ingredient ",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying different recipes' ingredient ",
+      "source_idx_good": 160,
+      "source_idx_bad": 161
+    },
+    {
+      "pair_id": 44,
+      "source": "caption_matched",
+      "group_key": "displaying image with skip option",
+      "caption_good": "ui screenshot. well-designed. page displaying an image with skip option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying an image with skip option",
+      "source_idx_good": 241,
+      "source_idx_bad": 242
+    },
+    {
+      "pair_id": 13,
+      "source": "caption_matched",
+      "group_key": "screen shows about news articles",
+      "caption_good": "ui screenshot. well-designed. screen shows about news articles",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. screen shows about news articles",
+      "source_idx_good": 45,
+      "source_idx_bad": 46
+    },
+    {
+      "pair_id": 49,
+      "source": "caption_matched",
+      "group_key": "displaying to enable location tracking",
+      "caption_good": "ui screenshot. well-designed. page displaying to enable location-tracking",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to enable location-tracking",
+      "source_idx_good": 275,
+      "source_idx_bad": 276
+    },
+    {
+      "pair_id": 47,
+      "source": "caption_matched",
+      "group_key": "screen shows start page",
+      "caption_good": "ui screenshot. well-designed. screen shows start page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen shows start page",
+      "source_idx_good": 259,
+      "source_idx_bad": 260
+    },
+    {
+      "pair_id": 2,
+      "source": "caption_matched",
+      "group_key": "property details display page",
+      "caption_good": "ui screenshot. well-designed. property details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. property details display page",
+      "source_idx_good": 15,
+      "source_idx_bad": 16
+    },
+    {
+      "pair_id": 27,
+      "source": "caption_matched",
+      "group_key": "displaying start page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. screen displaying the start page",
+      "source_idx_good": 137,
+      "source_idx_bad": 139
+    },
+    {
+      "pair_id": 37,
+      "source": "caption_matched",
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. login page",
+      "source_idx_good": 179,
+      "source_idx_bad": 180
+    },
+    {
+      "pair_id": 5,
+      "source": "caption_matched",
+      "group_key": "displaying start application",
+      "caption_good": "ui screenshot. well-designed. screen shows to start an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. screen shows to start an application",
+      "source_idx_good": 22,
+      "source_idx_bad": 23
+    },
+    {
+      "pair_id": 34,
+      "source": "caption_matched",
+      "group_key": "sign in page for application",
+      "caption_good": "ui screenshot. well-designed. sign in page for an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. sign in page for an application",
+      "source_idx_good": 167,
+      "source_idx_bad": 168
+    },
+    {
+      "pair_id": 6,
+      "source": "caption_matched",
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. login page",
+      "source_idx_good": 24,
+      "source_idx_bad": 25
+    },
+    {
+      "pair_id": 8,
+      "source": "caption_matched",
+      "group_key": "displaying next option",
+      "caption_good": "ui screenshot. well-designed. page displaying the next option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying the next option",
+      "source_idx_good": 28,
+      "source_idx_bad": 29
+    },
+    {
+      "pair_id": 14,
+      "source": "caption_matched",
+      "group_key": "displaying to create account",
+      "caption_good": "ui screenshot. well-designed. page displaying to create an account",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to create an account",
+      "source_idx_good": 47,
+      "source_idx_bad": 48
+    },
+    {
+      "pair_id": 17,
+      "source": "caption_matched",
+      "group_key": "displaying to create or reset password",
+      "caption_good": "ui screenshot. well-designed. page displaying to create or reset password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to create or reset password",
+      "source_idx_good": 55,
+      "source_idx_bad": 63
+    },
+    {
+      "pair_id": 1,
+      "source": "caption_matched",
+      "group_key": "displaying resetting password",
+      "caption_good": "ui screenshot. well-designed. page displaying resetting password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying resetting password",
+      "source_idx_good": 6,
+      "source_idx_bad": 7
+    },
+    {
+      "pair_id": 7,
+      "source": "caption_matched",
+      "group_key": "news article s display on page",
+      "caption_good": "ui screenshot. well-designed. news article's display on a page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. news article's display on a page",
+      "source_idx_good": 26,
+      "source_idx_bad": 27
+    },
+    {
+      "pair_id": 40,
+      "source": "caption_matched",
+      "group_key": "displaying next option",
+      "caption_good": "ui screenshot. well-designed. page displaying next option",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. page displaying next option",
+      "source_idx_good": 203,
+      "source_idx_bad": 204
+    }
+  ],
+  "results": [
+    {
+      "pair_id": 25,
+      "group_key": "sign up page of fitness app",
+      "caption_good": "ui screenshot. well-designed. sign up page of a fitness app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. sign up page of a fitness app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 23,
+      "group_key": "screen shows cart details in shopping app",
+      "caption_good": "ui screenshot. well-designed. screen shows cart details in a shopping app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. screen shows cart details in a shopping app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 19,
+      "group_key": "flight details display page",
+      "caption_good": "ui screenshot. well-designed. flight details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. flight details display page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 11,
+      "group_key": "displaying different categories in social app",
+      "caption_good": "ui screenshot. well-designed. page displaying different categories in a social app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying different categories in a social app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 4,
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. login page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 45,
+      "group_key": "screen displays news feed page",
+      "caption_good": "ui screenshot. well-designed. a screen displays a news feed page.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. a screen displays a news feed page.",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 26,
+      "group_key": "displaying to choose country",
+      "caption_good": "ui screenshot. well-designed. page displaying to choose a country",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to choose a country",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 9,
+      "group_key": "displaying different applications to share",
+      "caption_good": "ui screenshot. well-designed. page displaying different applications to share",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying different applications to share",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 29,
+      "group_key": "displaying to enter email",
+      "caption_good": "ui screenshot. well-designed. page displaying to enter email",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to enter email",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 16,
+      "group_key": "displaying start page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. screen displaying the start page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 21,
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. login page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 12,
+      "group_key": "welcome page of travel app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a travel app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. welcome page of a travel app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 3,
+      "group_key": "screen shows next option to continue",
+      "caption_good": "ui screenshot. well-designed. screen shows next option to continue",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen shows next option to continue",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 39,
+      "group_key": "displaying to enter email and send",
+      "caption_good": "ui screenshot. well-designed. page displaying to enter email and send",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to enter email and send",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 38,
+      "group_key": "welcome page of travel app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a travel app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. welcome page of a travel app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 10,
+      "group_key": "displaying start app",
+      "caption_good": "ui screenshot. well-designed. screen shows to start an app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. screen shows to start an app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 24,
+      "group_key": "login page of fitness app",
+      "caption_good": "ui screenshot. well-designed. login page of a fitness app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. login page of a fitness app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 43,
+      "group_key": "displaying to start application",
+      "caption_good": "ui screenshot. well-designed. page displaying to start an application",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to start an application",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 18,
+      "group_key": "displaying various options in app",
+      "caption_good": "ui screenshot. well-designed. page displaying various options in app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. page displaying various options in app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 30,
+      "group_key": "ui of onboarding displaying next option",
+      "caption_good": "ui screenshot. well-designed. A UI of an onboarding page displaying the next option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. A UI of an onboarding page displaying the next option",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 28,
+      "group_key": "screen displays news feed page",
+      "caption_good": "ui screenshot. well-designed. a screen displays a news feed page.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. a screen displays a news feed page.",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 20,
+      "group_key": "displaying signing in information about application",
+      "caption_good": "ui screenshot. well-designed. page displaying signing in information about an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying signing in information about an application",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 22,
+      "group_key": "welcome page of hotel booking app",
+      "caption_good": "ui screenshot. well-designed. welcome page of a hotel booking app",
+      "caption_bad": "ui screenshot. poor design. bad contrast. welcome page of a hotel booking app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 42,
+      "group_key": "displaying start messaging page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start messaging page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen displaying the start messaging page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 46,
+      "group_key": "in cooking app screen displays particulars of recipe",
+      "caption_good": "ui screenshot. well-designed. in a cooking app, the screen displays the particulars of a recipe.",
+      "caption_bad": "ui screenshot. poor design. bad contrast. in a cooking app, the screen displays the particulars of a recipe.",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 36,
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. login page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 32,
+      "group_key": "displaying different recipes ingredient",
+      "caption_good": "ui screenshot. well-designed. page displaying different recipes' ingredient ",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying different recipes' ingredient ",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 44,
+      "group_key": "displaying image with skip option",
+      "caption_good": "ui screenshot. well-designed. page displaying an image with skip option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying an image with skip option",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 13,
+      "group_key": "screen shows about news articles",
+      "caption_good": "ui screenshot. well-designed. screen shows about news articles",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. screen shows about news articles",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 49,
+      "group_key": "displaying to enable location tracking",
+      "caption_good": "ui screenshot. well-designed. page displaying to enable location-tracking",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to enable location-tracking",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 47,
+      "group_key": "screen shows start page",
+      "caption_good": "ui screenshot. well-designed. screen shows start page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. screen shows start page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 2,
+      "group_key": "property details display page",
+      "caption_good": "ui screenshot. well-designed. property details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. property details display page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 27,
+      "group_key": "displaying start page",
+      "caption_good": "ui screenshot. well-designed. screen displaying the start page",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. screen displaying the start page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 37,
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. login page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 5,
+      "group_key": "displaying start application",
+      "caption_good": "ui screenshot. well-designed. screen shows to start an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. screen shows to start an application",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 34,
+      "group_key": "sign in page for application",
+      "caption_good": "ui screenshot. well-designed. sign in page for an application",
+      "caption_bad": "ui screenshot. poor design. bad proximity. sign in page for an application",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 6,
+      "group_key": "login page",
+      "caption_good": "ui screenshot. well-designed. login page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. login page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 8,
+      "group_key": "displaying next option",
+      "caption_good": "ui screenshot. well-designed. page displaying the next option",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying the next option",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 14,
+      "group_key": "displaying to create account",
+      "caption_good": "ui screenshot. well-designed. page displaying to create an account",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to create an account",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 17,
+      "group_key": "displaying to create or reset password",
+      "caption_good": "ui screenshot. well-designed. page displaying to create or reset password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying to create or reset password",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 1,
+      "group_key": "displaying resetting password",
+      "caption_good": "ui screenshot. well-designed. page displaying resetting password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying resetting password",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 7,
+      "group_key": "news article s display on page",
+      "caption_good": "ui screenshot. well-designed. news article's display on a page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. news article's display on a page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 40,
+      "group_key": "displaying next option",
+      "caption_good": "ui screenshot. well-designed. page displaying next option",
+      "caption_bad": "ui screenshot. poor design. bad contrast. bad proximity. page displaying next option",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        },
+        {
+          "run": "good_b",
+          "ground_truth": "B",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": true
+        }
+      ]
+    }
+  ],
+  "manual_review": {
+    "excluded_as_mismatch": [
+      {
+        "pair_id": 31,
+        "source": "caption_matched",
+        "group_key": "sign in page for application with entry details",
+        "caption_good": "ui screenshot. well-designed. sign in page for the application with entry details",
+        "caption_bad": "ui screenshot. poor design. bad proximity. sign in page for the application with entry details",
+        "source_idx_good": 66,
+        "source_idx_bad": 155
+      },
+      {
+        "pair_id": 35,
+        "source": "caption_matched",
+        "group_key": "displaying to start application",
+        "caption_good": "ui screenshot. well-designed. page displaying to start an application",
+        "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to start an application",
+        "source_idx_good": 171,
+        "source_idx_bad": 172
+      },
+      {
+        "pair_id": 0,
+        "source": "caption_matched",
+        "group_key": "displaying information of app",
+        "caption_good": "ui screenshot. well-designed. page displaying the information of the app",
+        "caption_bad": "ui screenshot. poor design. bad proximity. page displaying the information of the app",
+        "source_idx_good": 2,
+        "source_idx_bad": 3
+      },
+      {
+        "pair_id": 33,
+        "source": "caption_matched",
+        "group_key": "displaying to accept terms and conditions",
+        "caption_good": "ui screenshot. well-designed. page displaying to accept terms and conditions",
+        "caption_bad": "ui screenshot. poor design. bad proximity. page displaying to accept terms and conditions",
+        "source_idx_good": 51,
+        "source_idx_bad": 163
+      },
+      {
+        "pair_id": 48,
+        "source": "caption_matched",
+        "group_key": "displaying to continue with social app",
+        "caption_good": "ui screenshot. well-designed. page displaying to continue with social app",
+        "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying to continue with social app",
+        "source_idx_good": 268,
+        "source_idx_bad": 269
+      },
+      {
+        "pair_id": 41,
+        "source": "caption_matched",
+        "group_key": "sign in page of learning app",
+        "caption_good": "ui screenshot. well-designed. sign in page of a learning app",
+        "caption_bad": "ui screenshot. poor design. bad contrast. sign in page of a learning app",
+        "source_idx_good": 131,
+        "source_idx_bad": 213
+      },
+      {
+        "pair_id": 15,
+        "source": "caption_matched",
+        "group_key": "displaying different recipes available",
+        "caption_good": "ui screenshot. well-designed. page displaying different recipes available",
+        "caption_bad": "ui screenshot. poor design. bad proximity. bad contrast. page displaying different recipes available",
+        "source_idx_good": 58,
+        "source_idx_bad": 59
+      }
+    ],
+    "n_excluded": 7,
+    "note": "Pairs manually marked as mismatch / needs review in HTML pair review page."
+  }
+}

@@ -36,7 +36,10 @@ DEFAULT_DATASET = "biglab/uiclip_human_data_hf"
 DEFAULT_RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 
-PAIRWISE_PROMPT = """\
+# Two prompting strategies for pairwise judging. Both share the same A/B
+# output format so the rest of the pipeline can stay strategy-agnostic.
+
+ZEROSHOT_PROMPT = """\
 You are evaluating two user interface screenshots for visual design quality.
 
 Image A is shown first, Image B is shown second.
@@ -45,6 +48,30 @@ Which interface has better visual design overall? Consider layout, visual
 hierarchy, clarity, and aesthetic quality.
 
 Reply with ONLY the letter A or B. Nothing else."""
+
+RUBRIC_PROMPT = """\
+You are an expert UI design reviewer evaluating two user interface screenshots.
+Image A is shown first, Image B is shown second.
+
+Score each interface on the following four dimensions before deciding:
+
+1. Visual structure - layout, alignment, spacing, and visual hierarchy.
+2. Information clarity - readability, labelling, and grouping of related items.
+3. Aesthetic quality - typography, colour use, and overall polish.
+4. Inferred usability - how easy the interface looks to use at a glance.
+
+Briefly compare the two interfaces dimension by dimension in your head, then
+pick the one that is better overall.
+
+Reply with ONLY the letter A or B on the last line. Nothing else."""
+
+# Backwards-compatible default that older code paths still reference.
+PAIRWISE_PROMPT = ZEROSHOT_PROMPT
+
+STRATEGIES = {
+    "zeroshot": ZEROSHOT_PROMPT,
+    "rubric": RUBRIC_PROMPT,
+}
 
 
 def load_env_file(path):
@@ -187,13 +214,13 @@ def build_pairs(dataset_name, split, n_pairs, seed, max_source_rows):
     return pairs[:n_pairs]
 
 
-def ask_pairwise(client, model, img_a, img_b):
+def ask_pairwise_openai(client, model, img_a, img_b, prompt, max_tokens):
     response = client.chat.completions.create(
         model=model,
         messages=[{
             "role": "user",
             "content": [
-                {"type": "text", "text": PAIRWISE_PROMPT},
+                {"type": "text", "text": prompt},
                 {"type": "text", "text": "Image A:"},
                 {"type": "image_url", "image_url": {
                     "url": f"data:image/png;base64,{pil_to_b64(img_a)}",
@@ -206,14 +233,54 @@ def ask_pairwise(client, model, img_a, img_b):
                 }},
             ],
         }],
-        max_tokens=5,
+        max_tokens=max_tokens,
         temperature=0,
     )
     return response.choices[0].message.content.strip()
 
 
+def ask_pairwise_anthropic(client, model, img_a, img_b, prompt, max_tokens):
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=0,
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {"type": "text", "text": "Image A:"},
+                {"type": "image", "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": pil_to_b64(img_a),
+                }},
+                {"type": "text", "text": "Image B:"},
+                {"type": "image", "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": pil_to_b64(img_b),
+                }},
+            ],
+        }],
+    )
+    parts = [block.text for block in response.content if getattr(block, "type", None) == "text"]
+    return "".join(parts).strip()
+
+
+def ask_pairwise(provider, client, model, img_a, img_b, prompt, max_tokens):
+    if provider == "openai":
+        return ask_pairwise_openai(client, model, img_a, img_b, prompt, max_tokens)
+    if provider == "anthropic":
+        return ask_pairwise_anthropic(client, model, img_a, img_b, prompt, max_tokens)
+    raise ValueError(f"Unknown provider: {provider}")
+
+
 def parse_choice(raw):
+    """Find the last standalone A or B in the response (rubric prompt may have prose)."""
     upper = raw.upper()
+    matches = re.findall(r"\b([AB])\b", upper)
+    if matches:
+        return matches[-1]
     if upper.startswith("A"):
         return "A"
     if upper.startswith("B"):
@@ -227,10 +294,14 @@ def should_stop(exc):
         return "invalid OpenAI API key"
     if "insufficient_quota" in text or "billing" in text:
         return "no available OpenAI API quota"
+    if "authentication_error" in text or "invalid x-api-key" in text:
+        return "invalid Anthropic API key"
+    if "credit balance" in text or "billing" in text:
+        return "no available Anthropic API credit"
     return None
 
 
-def evaluate_pair(client, model, pair, order_swap):
+def evaluate_pair(provider, client, model, pair, order_swap, prompt, max_tokens):
     results = []
 
     runs = [{
@@ -248,7 +319,7 @@ def evaluate_pair(client, model, pair, order_swap):
         })
 
     for run in runs:
-        raw = ask_pairwise(client, model, run["img_a"], run["img_b"])
+        raw = ask_pairwise(provider, client, model, run["img_a"], run["img_b"], prompt, max_tokens)
         choice = parse_choice(raw)
         results.append({
             "run": run["run"],
@@ -307,11 +378,12 @@ def summarize(results, n_pairs, order_swap):
     return summary
 
 
-def save_results(args, pairs, results, summary, base_url):
+def save_results(args, pairs, results, summary, base_url, prompt_text):
     os.makedirs(args.results_dir, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     safe_model = args.model.replace("/", "-").replace(":", "-")
-    path = os.path.join(args.results_dir, f"track_a_eval_{safe_model}_{ts}.json")
+    fname = f"track_a_eval_{args.provider}_{safe_model}_{args.strategy}_{ts}.json"
+    path = os.path.join(args.results_dir, fname)
 
     serializable_pairs = []
     for pair in pairs:
@@ -322,15 +394,19 @@ def save_results(args, pairs, results, summary, base_url):
 
     output = {
         "meta": {
+            "provider": args.provider,
             "model": args.model,
+            "strategy": args.strategy,
             "dataset": args.dataset,
             "split": args.split,
             "n_pairs_requested": args.n,
+            "n_pairs_actual": len(pairs),
+            "pairs_from": args.pairs_from or None,
             "seed": args.seed,
             "date": datetime.now().isoformat(),
-            "prompt": PAIRWISE_PROMPT,
+            "prompt": prompt_text,
             "order_swap": args.order_swap,
-            "base_url": base_url or "https://api.openai.com/v1",
+            "base_url": base_url,
         },
         "summary": summary,
         "pairs": serializable_pairs,
@@ -342,26 +418,74 @@ def save_results(args, pairs, results, summary, base_url):
     return path
 
 
+def load_pair_id_filter(path):
+    """Load pair_ids from a previous result JSON (for re-running on the same subset)."""
+    if not path:
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    if "results" in data:
+        return {item["pair_id"] for item in data["results"]}
+    if "pairs" in data:
+        return {item["pair_id"] for item in data["pairs"]}
+    raise ValueError(f"Cannot extract pair_ids from {path}")
+
+
+def build_client(provider):
+    if provider == "openai":
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise SystemExit("ERROR: OPENAI_API_KEY not set.")
+        base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("OPENAI_API_BASE")
+        client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
+        return client, base_url or "https://api.openai.com/v1"
+
+    if provider == "anthropic":
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise SystemExit("ERROR: ANTHROPIC_API_KEY not set.")
+        # Local import so users without the SDK can still run --provider openai.
+        from anthropic import Anthropic
+        base_url = os.environ.get("ANTHROPIC_BASE_URL")
+        client = Anthropic(api_key=api_key, base_url=base_url) if base_url else Anthropic(api_key=api_key)
+        return client, base_url or "https://api.anthropic.com"
+
+    raise SystemExit(f"ERROR: unknown provider {provider!r}. Use openai or anthropic.")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", default=DEFAULT_DATASET)
     parser.add_argument("--split", default="train")
     parser.add_argument("--n", type=int, default=50)
+    parser.add_argument("--provider", choices=["openai", "anthropic"], default="openai")
     parser.add_argument("--model", default="gpt-4o")
+    parser.add_argument("--strategy", choices=list(STRATEGIES.keys()), default="zeroshot")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-source-rows", type=int, default=2500)
     parser.add_argument("--results-dir", default=DEFAULT_RESULTS_DIR)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-order-swap", dest="order_swap", action="store_false")
+    parser.add_argument("--pairs-from",
+                        help="Path to a previous result JSON; only its pair_ids will be evaluated.")
     parser.set_defaults(order_swap=True)
     args = parser.parse_args()
+
+    prompt_text = STRATEGIES[args.strategy]
+    max_tokens = 5
 
     load_env()
     print(f"Building {args.n} pairs from {args.dataset} ({args.split})...")
     pairs = build_pairs(args.dataset, args.split, args.n, args.seed, args.max_source_rows)
     print(f"Built {len(pairs)} pairs.")
 
-    if len(pairs) < args.n:
+    if args.pairs_from:
+        keep = load_pair_id_filter(args.pairs_from)
+        before = len(pairs)
+        pairs = [p for p in pairs if p["pair_id"] in keep]
+        print(f"Filtered by --pairs-from {args.pairs_from}: {before} -> {len(pairs)} pairs.")
+
+    if not args.pairs_from and len(pairs) < args.n:
         print(f"WARNING: requested {args.n} pairs but only built {len(pairs)}.")
 
     for pair in pairs[:5]:
@@ -373,18 +497,15 @@ def main():
         print("Dry run complete. No API calls were made.")
         return
 
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        raise SystemExit("ERROR: OPENAI_API_KEY not set.")
-
-    base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("OPENAI_API_BASE")
-    client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
+    client, base_url = build_client(args.provider)
+    print(f"Provider: {args.provider} | Model: {args.model} | Strategy: {args.strategy}")
 
     results = []
     for i, pair in enumerate(pairs):
         print(f"[{i + 1:03d}/{len(pairs):03d}] Querying {args.model}...", end=" ", flush=True)
         try:
-            runs = evaluate_pair(client, args.model, pair, args.order_swap)
+            runs = evaluate_pair(args.provider, client, args.model, pair,
+                                 args.order_swap, prompt_text, max_tokens)
         except Exception as exc:
             print(f"ERROR: {exc}")
             reason = should_stop(exc)
@@ -419,7 +540,7 @@ def main():
         else:
             print(f"{key}: {value}")
 
-    path = save_results(args, pairs, results, summary, base_url)
+    path = save_results(args, pairs, results, summary, base_url, prompt_text)
     print(f"\nResults saved: {path}")
 
 

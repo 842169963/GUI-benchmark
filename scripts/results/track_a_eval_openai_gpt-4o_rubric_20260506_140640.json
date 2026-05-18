@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "strategy": "rubric",
+    "dataset": "biglab/uiclip_human_data_hf",
+    "split": "train",
+    "n_pairs_requested": 3,
+    "n_pairs_actual": 3,
+    "pairs_from": null,
+    "seed": 42,
+    "date": "2026-05-06T14:06:40.530966",
+    "prompt": "You are an expert UI design reviewer evaluating two user interface screenshots.\nImage A is shown first, Image B is shown second.\n\nScore each interface on the following four dimensions before deciding:\n\n1. Visual structure - layout, alignment, spacing, and visual hierarchy.\n2. Information clarity - readability, labelling, and grouping of related items.\n3. Aesthetic quality - typography, colour use, and overall polish.\n4. Inferred usability - how easy the interface looks to use at a glance.\n\nBriefly compare the two interfaces dimension by dimension in your head, then\npick the one that is better overall.\n\nReply with ONLY the letter A or B on the last line. Nothing else.",
+    "order_swap": false,
+    "base_url": "https://api.chatanywhere.tech/v1"
+  },
+  "summary": {
+    "n_pairs": 3,
+    "n_calls": 3,
+    "raw_accuracy": 0.3333333333333333
+  },
+  "pairs": [
+    {
+      "pair_id": 1,
+      "source": "caption_matched",
+      "group_key": "displaying resetting password",
+      "caption_good": "ui screenshot. well-designed. page displaying resetting password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying resetting password",
+      "source_idx_good": 6,
+      "source_idx_bad": 7
+    },
+    {
+      "pair_id": 0,
+      "source": "caption_matched",
+      "group_key": "displaying information of app",
+      "caption_good": "ui screenshot. well-designed. page displaying the information of the app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying the information of the app",
+      "source_idx_good": 2,
+      "source_idx_bad": 3
+    },
+    {
+      "pair_id": 2,
+      "source": "caption_matched",
+      "group_key": "property details display page",
+      "caption_good": "ui screenshot. well-designed. property details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. property details display page",
+      "source_idx_good": 15,
+      "source_idx_bad": 16
+    }
+  ],
+  "results": [
+    {
+      "pair_id": 1,
+      "group_key": "displaying resetting password",
+      "caption_good": "ui screenshot. well-designed. page displaying resetting password",
+      "caption_bad": "ui screenshot. poor design. bad contrast. page displaying resetting password",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "A",
+          "raw_response": "A",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "pair_id": 0,
+      "group_key": "displaying information of app",
+      "caption_good": "ui screenshot. well-designed. page displaying the information of the app",
+      "caption_bad": "ui screenshot. poor design. bad proximity. page displaying the information of the app",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "pair_id": 2,
+      "group_key": "property details display page",
+      "caption_good": "ui screenshot. well-designed. property details display page",
+      "caption_bad": "ui screenshot. poor design. bad proximity. property details display page",
+      "runs": [
+        {
+          "run": "good_a",
+          "ground_truth": "A",
+          "model_choice": "B",
+          "raw_response": "B",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -54,7 +54,7 @@ Interpretation: GPT-4o still shows a clear second-image preference on the UIClip
 - [x] Scale to 100 pairs after pair quality is checked.
 - [x] Manually inspect the 100-pair run and produce clean subset.
 - [x] Add rubric-guided prompt condition.
-- [ ] Add one comparison model only after GPT-4o formal setup is stable.
+- [x] Add one comparison model only after GPT-4o formal setup is stable.
 
 ### Manual review update: clean 43-pair subset
 
@@ -127,6 +127,57 @@ Rubric-guided result file: `scripts/results/track_a_eval_openai_gpt-4o_rubric_20
 
 Interpretation: rubric-guided prompting did not improve reliability in this pairwise setting. It made the B-position preference stronger, reducing raw accuracy and consistency. This supports RQ3 by showing that prompt strategy effects must be measured rather than assumed.
 
+### Cross-model check: Claude Sonnet 4.5 on clean85
+
+Claude result file: `scripts/results/track_a_eval_chatanywhere-anthropic_claude-sonnet-4-5-20250929_zeroshot_20260519_153820.json`
+
+Condition: zero-shot pairwise prompt, same clean85 subset, order-swap enabled.
+
+| Metric | GPT-4o zero-shot clean85 | Claude Sonnet 4.5 zero-shot clean85 |
+|--------|--------------------------|-------------------------------------|
+| Raw accuracy | **62.4%** | **55.3%** |
+| Accuracy Run1 (good=A) | **38.8%** | **20.0%** |
+| Accuracy Run2 (good=B) | **85.9%** | **90.6%** |
+| Consistency rate | **52.9%** | **29.4%** |
+| Position bias rate | **47.1%** | **70.6%** |
+| Corrected accuracy | **73.3%** | **68.0%** |
+| Chose A / Chose B | **45 / 125** | **25 / 145** |
+
+Interpretation: Claude Sonnet 4.5 reproduces the core Track A reliability concern and shows an even stronger second-image preference than GPT-4o on this subset. This supports treating Track A as a reduced cross-model baseline and moving the main effort to Track B.
+
+### Track A interpretation boundary
+
+Track A should be written as a noisy reduced reproduction rather than a definitive model-capability benchmark. The clean85 pairs are caption-matched UIClip-human-derived pairs, not raw pairwise human preferences. Manual cleaning removed obvious mismatches, but the remaining pairs may still contain weak or ambiguous quality contrasts. Therefore, the safest claim is methodological: order-swapped pairwise judging reveals severe reliability problems in this derived-pair setting. The main thesis evidence should come from Track B, where requirements, generated UIs, rubric labels, and dynamic validation are controlled by the thesis pipeline.
+
+### 2026-05-19 Track B source update: Vision2Web
+
+New Track B direction: use a reduced Vision2Web Level 1/Level 2 subset as the primary data source. Vision2Web is more aligned with the thesis's static-vs-dynamic question than Design2Code because it includes both visual website development and functional/agent verification signals. Design2Code remains useful as a static UI-to-code reference and backup source, but it is no longer the main Track B substrate.
+
+Scope boundary: exclude Vision2Web Level 3 full-stack tasks. They introduce backend state, deployment, authentication, and long-horizon workflow complexity that would shift the thesis away from GUI-quality evaluation.
+
+Pilot preparation:
+
+- Created `notes/track_b_vision2web_pilot_plan.md` with 10 selected Level 2 frontend tasks and 4 selected Level 1 static control tasks.
+- Created `scripts/prepare_track_b_vision2web_manifest.py` and generated `data/track_b/vision2web_pilot_manifest.json`.
+- Created `scripts/extract_track_b_vision2web_pilot.py` to download Vision2Web archives and extract only selected task directories when ready.
+- Downloaded/extracted selected Vision2Web task directories into `data/track_b/vision2web_raw/`.
+- Extraction summary saved at `data/track_b/vision2web_extraction_summary.json`.
+- Directory check: all 10 Level 2 `frontend` tasks have `prompt.txt`, `workflow.json`, `prototypes/`, and `resources/`; all 4 Level 1 `webpage` tasks have `workflow.json`, `prototypes/`, and `resources/` but no `prompt.txt`, which matches the dataset format.
+- Created `scripts/normalize_track_b_vision2web_items.py` and normalized the 14 selected tasks into `data/track_b/items/`.
+- Normalization summary saved at `data/track_b/normalization_summary.json`.
+- Normalized Track B item format now contains `requirement.md`, `workflow.json`, copied `prototypes/`, copied `resources/`, `source_meta.json`, and empty `generated/` / `renders/` directories.
+- Created `scripts/generate_track_b_ui.py` for first generator-model smoke tests; the first Track B generation prompt template is recorded as `TB-GEN-v1` in `thesis/appendices/prompt_templates.tex`.
+- Ran a Claude Sonnet 4.5 smoke generation on `F09_elections_bc`, saved at `data/track_b/items/F09_elections_bc/generated/claude_sonnet45_smoke/`.
+- Rendered Chrome desktop/mobile smoke screenshots. Desktop is non-empty; mobile shows horizontal overflow, so the next step is a stricter render gate / prompt revision before scaling to the full Track B batch.
+- Added `TB-GEN-v2` to tighten Track B generation around complete HTML, same-file JavaScript handlers, workflow-required interactions, and responsive no-overflow behavior.
+- Added `scripts/check_track_b_generation.py` as a static generation gate. It correctly flags the first Claude smoke run as invalid because the HTML is incomplete and `showPage` is referenced but undefined.
+- Attempted to re-run `F09_elections_bc` with `TB-GEN-v2`, but the current sandbox blocked the external ChatAnywhere API call because it would send local Track B prompt inputs and prototype screenshots outside the workspace. Re-run requires explicit approval of that data transfer risk.
+- After permission was opened, reran `F09_elections_bc` with revised prompts. `TB-GEN-v4` produced `data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/` and passed all static gate checks.
+- `TB-GEN-v5` was added to reduce hash-scroll side effects and tighten mobile CSS requirements, but its first ChatAnywhere call failed with HTTP 524 before an artifact was written.
+- After reviewing the experimental scope, mobile/responsive behavior was moved out of the current hard gate and into future work. `TB-GEN-v6` is now the active Track B generation prompt: it keeps desktop visual fidelity and workflow-required interactions as the main requirements, allows non-workflow secondary navigation to remain placeholder-like, and treats missing real PDF downloads as a visible-content quality issue when the dataset supplies no PDF assets.
+- Added GWDG/SAIA support through the OpenAI-compatible endpoint `https://chat-ai.academiccloud.de/v1` using local `GWDG_API_KEY`. The available model list was checked through `scripts/list_gwdg_models.py`. The next smoke run will use `qwen3.5-397b-a17b` first, with `qwen3.6-35b-a3b` as the fallback if the larger model is unstable or slow.
+- GWDG/SAIA smoke update: `qwen3.5-397b-a17b` timed out after 360 seconds without writing an artifact. `qwen3.6-35b-a3b` succeeded only after increasing the output budget to 40k tokens. The valid artifact is `data/track_b/items/F09_elections_bc/generated/gwdg_qwen36_35b_v6_smoke_40k/`; static gate passed after recognizing `data-route-target` delegated route links. Hash route checks for `voter_registration` and `local_election_forms` passed. The rendered desktop screenshot is non-empty but starts below the header/navigation, so the next prompt revision should focus on hash-scroll behavior and output compactness before a wider batch.
+
 ## 2026-05-04 — 阶段总结 & 后续计划
 
 ### 一、已完成工作
@@ -194,8 +245,9 @@ Interpretation: rubric-guided prompting did not improve reliability in this pair
   - §2.2–§2.5 各节 → §2.6 Research Gap
 
 #### Track B Pipeline（工程量最大）
-- [ ] Design2Code-HARD筛选：80个example中挑选~50个，过滤dynamic-impossible页面
-- [ ] Requirement反向提取：reference HTML → 自然语言requirement（半自动+人工修订）
+- [x] Vision2Web Level 1/2筛选：先选10–20个pilot tasks，过滤无法本地渲染、依赖外部服务、或动态成功标准不清楚的项目
+- [x] 明确排除Vision2Web Level 3 full-stack：backend/deployment/long-horizon workflow不进主线
+- [ ] Requirement整理：复用Vision2Web的prototype/structured requirement/assets，必要时改写成统一自然语言requirement
 - [ ] 生成UI：2–3个generator模型（GPT-4o/Claude）各自生成HTML
 - [ ] 渲染pipeline：Playwright headless → screenshot + DOM dump
 

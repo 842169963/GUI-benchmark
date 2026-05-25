@@ -1,0 +1,1960 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track A Pair Review</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f7f7f4; color: #202124; }
+    header { position: sticky; top: 0; z-index: 1; padding: 18px 24px; background: #ffffff; border-bottom: 1px solid #ddd; }
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    header p { margin: 4px 0; color: #5f6368; }
+    main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .pair { background: #fff; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 22px; overflow: hidden; }
+    .pair-head { padding: 14px 16px; border-bottom: 1px solid #e6e6e6; }
+    .pair h2 { margin: 0 0 6px; font-size: 18px; }
+    .pair h2 span { color: #777; font-size: 13px; font-weight: normal; }
+    .key, .run { margin: 5px 0; color: #4a4f55; }
+    label { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: bold; }
+    input { width: 18px; height: 18px; }
+    .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    figure { margin: 0; padding: 16px; border-right: 1px solid #eee; }
+    figure:last-child { border-right: 0; }
+    img { width: 100%; max-height: 760px; object-fit: contain; background: #f0f0f0; border: 1px solid #ddd; }
+    figcaption { margin-top: 10px; line-height: 1.45; }
+    small { color: #777; }
+    @media (max-width: 800px) { .imgs { grid-template-columns: 1fr; } figure { border-right: 0; border-bottom: 1px solid #eee; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Track A Pair Review</h1>
+    <p>Source: track_a_eval_gpt-4o_20260506_142748.json</p>
+    <p>Dataset: biglab/uiclip_human_data_hf, pairs: 100</p>
+    <button id="copy-review">Copy checked mismatches</button>
+    <textarea id="review-output" rows="4" readonly placeholder="Checked mismatch IDs will appear here."></textarea>
+  </header>
+  <main>
+    
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 001 <span>source pair_id=42</span></h2>
+            <p class="key">displaying start messaging page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="001" data-pair-id="42" data-key="displaying start messaging page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_001_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the start messaging page<br><small>source_idx=93</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_001_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying the start messaging page<br><small>source_idx=221</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 002 <span>source pair_id=41</span></h2>
+            <p class="key">sign in page of learning app</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="002" data-pair-id="41" data-key="sign in page of learning app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_002_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sign in page of a learning app<br><small>source_idx=131</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_002_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. sign in page of a learning app<br><small>source_idx=213</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 003 <span>source pair_id=91</span></h2>
+            <p class="key">job search app s screen</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="003" data-pair-id="91" data-key="job search app s screen"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_003_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. job search app&#x27;s screen<br><small>source_idx=490</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_003_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. job search app&#x27;s screen<br><small>source_idx=491</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 004 <span>source pair_id=9</span></h2>
+            <p class="key">displaying different applications to share</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="004" data-pair-id="9" data-key="displaying different applications to share"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_004_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different applications to share<br><small>source_idx=30</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_004_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying different applications to share<br><small>source_idx=31</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 005 <span>source pair_id=65</span></h2>
+            <p class="key">displaying signing in information about application</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="005" data-pair-id="65" data-key="displaying signing in information about application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_005_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying signing in information about an application<br><small>source_idx=82</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_005_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying signing in information about an application<br><small>source_idx=372</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 006 <span>source pair_id=50</span></h2>
+            <p class="key">welcome and brief page of travel app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="006" data-pair-id="50" data-key="welcome and brief page of travel app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_006_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome and brief page of a travel app<br><small>source_idx=280</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_006_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. welcome and brief page of a travel app<br><small>source_idx=281</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 007 <span>source pair_id=1</span></h2>
+            <p class="key">displaying resetting password</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="007" data-pair-id="1" data-key="displaying resetting password"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_007_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying resetting password<br><small>source_idx=6</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_007_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying resetting password<br><small>source_idx=7</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 008 <span>source pair_id=70</span></h2>
+            <p class="key">about health app s display page</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="008" data-pair-id="70" data-key="about health app s display page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_008_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. about a health app&#x27;s display page<br><small>source_idx=388</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_008_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. about a health app&#x27;s display page<br><small>source_idx=389</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 009 <span>source pair_id=15</span></h2>
+            <p class="key">displaying different recipes available</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="009" data-pair-id="15" data-key="displaying different recipes available"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_009_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different recipes available<br><small>source_idx=58</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_009_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying different recipes available<br><small>source_idx=59</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 010 <span>source pair_id=78</span></h2>
+            <p class="key">displaying continue option</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="010" data-pair-id="78" data-key="displaying continue option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_010_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the continue option<br><small>source_idx=414</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_010_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. screen displaying the continue option<br><small>source_idx=415</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 011 <span>source pair_id=73</span></h2>
+            <p class="key">screen shows multiple options in travel application</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="011" data-pair-id="73" data-key="screen shows multiple options in travel application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_011_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows multiple options in a travel application<br><small>source_idx=400</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_011_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. screen shows multiple options in a travel application<br><small>source_idx=401</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 012 <span>source pair_id=10</span></h2>
+            <p class="key">displaying start app</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="012" data-pair-id="10" data-key="displaying start app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_012_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows to start an app<br><small>source_idx=37</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_012_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. screen shows to start an app<br><small>source_idx=38</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 013 <span>source pair_id=55</span></h2>
+            <p class="key">displaying about property</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="013" data-pair-id="55" data-key="displaying about property"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_013_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying about a property<br><small>source_idx=323</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_013_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying about a property<br><small>source_idx=324</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 014 <span>source pair_id=56</span></h2>
+            <p class="key">displaying information about fitness application</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="014" data-pair-id="56" data-key="displaying information about fitness application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_014_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying information about a fitness application<br><small>source_idx=104</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_014_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying information about a fitness application<br><small>source_idx=334</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 015 <span>source pair_id=72</span></h2>
+            <p class="key">displaying flight ticket information</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="015" data-pair-id="72" data-key="displaying flight ticket information"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_015_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying flight ticket information<br><small>source_idx=398</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_015_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying flight ticket information<br><small>source_idx=399</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 016 <span>source pair_id=45</span></h2>
+            <p class="key">screen displays news feed page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="016" data-pair-id="45" data-key="screen displays news feed page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_016_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. a screen displays a news feed page.<br><small>source_idx=245</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_016_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. a screen displays a news feed page.<br><small>source_idx=246</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 017 <span>source pair_id=48</span></h2>
+            <p class="key">displaying to continue with social app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="017" data-pair-id="48" data-key="displaying to continue with social app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_017_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to continue with social app<br><small>source_idx=268</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_017_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying to continue with social app<br><small>source_idx=269</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 018 <span>source pair_id=92</span></h2>
+            <p class="key">screen shows my list in shopping app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="018" data-pair-id="92" data-key="screen shows my list in shopping app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_018_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows my list in a shopping app<br><small>source_idx=494</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_018_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. screen shows my list in a shopping app<br><small>source_idx=495</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 019 <span>source pair_id=76</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="019" data-pair-id="76" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_019_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the start page<br><small>source_idx=409</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_019_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. screen displaying the start page<br><small>source_idx=410</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 020 <span>source pair_id=37</span></h2>
+            <p class="key">login page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="020" data-pair-id="37" data-key="login page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_020_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page<br><small>source_idx=179</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_020_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. login page<br><small>source_idx=180</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 021 <span>source pair_id=30</span></h2>
+            <p class="key">ui of onboarding displaying next option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="021" data-pair-id="30" data-key="ui of onboarding displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_021_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. A UI of an onboarding page displaying the next option<br><small>source_idx=138</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_021_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. A UI of an onboarding page displaying the next option<br><small>source_idx=148</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 022 <span>source pair_id=21</span></h2>
+            <p class="key">login page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="022" data-pair-id="21" data-key="login page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_022_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page<br><small>source_idx=84</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_022_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. login page<br><small>source_idx=85</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 023 <span>source pair_id=32</span></h2>
+            <p class="key">displaying different recipes ingredient</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="023" data-pair-id="32" data-key="displaying different recipes ingredient"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_023_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different recipes&#x27; ingredient <br><small>source_idx=160</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_023_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying different recipes&#x27; ingredient <br><small>source_idx=161</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 024 <span>source pair_id=96</span></h2>
+            <p class="key">displaying to enter details</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="024" data-pair-id="96" data-key="displaying to enter details"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_024_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to enter details<br><small>source_idx=231</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_024_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying to enter details<br><small>source_idx=514</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 025 <span>source pair_id=80</span></h2>
+            <p class="key">displaying different workouts in fitness app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="025" data-pair-id="80" data-key="displaying different workouts in fitness app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_025_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different workouts in a fitness app<br><small>source_idx=425</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_025_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying different workouts in a fitness app<br><small>source_idx=426</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 026 <span>source pair_id=49</span></h2>
+            <p class="key">displaying to enable location tracking</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="026" data-pair-id="49" data-key="displaying to enable location tracking"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_026_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to enable location-tracking<br><small>source_idx=275</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_026_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying to enable location-tracking<br><small>source_idx=276</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 027 <span>source pair_id=83</span></h2>
+            <p class="key">displaying different account setting options in shopping app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="027" data-pair-id="83" data-key="displaying different account setting options in shopping app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_027_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different account setting options in shopping app<br><small>source_idx=446</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_027_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying different account setting options in shopping app<br><small>source_idx=447</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 028 <span>source pair_id=26</span></h2>
+            <p class="key">displaying to choose country</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="028" data-pair-id="26" data-key="displaying to choose country"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_028_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to choose a country<br><small>source_idx=125</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_028_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to choose a country<br><small>source_idx=126</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 029 <span>source pair_id=87</span></h2>
+            <p class="key">displaying news article</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="029" data-pair-id="87" data-key="displaying news article"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_029_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the news article<br><small>source_idx=133</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_029_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. screen showing a news article<br><small>source_idx=472</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 030 <span>source pair_id=33</span></h2>
+            <p class="key">displaying to accept terms and conditions</p>
+            <p class="run">good_a=A/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="030" data-pair-id="33" data-key="displaying to accept terms and conditions"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_030_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to accept terms and conditions<br><small>source_idx=51</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_030_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to accept terms and conditions<br><small>source_idx=163</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 031 <span>source pair_id=8</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="031" data-pair-id="8" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_031_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the next option<br><small>source_idx=28</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_031_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying the next option<br><small>source_idx=29</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 032 <span>source pair_id=47</span></h2>
+            <p class="key">screen shows start page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="032" data-pair-id="47" data-key="screen shows start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_032_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows start page<br><small>source_idx=259</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_032_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen shows start page<br><small>source_idx=260</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 033 <span>source pair_id=59</span></h2>
+            <p class="key">welcome page of food app</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="033" data-pair-id="59" data-key="welcome page of food app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_033_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page of a food app<br><small>source_idx=9</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_033_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. welcome page of a food app<br><small>source_idx=349</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 034 <span>source pair_id=63</span></h2>
+            <p class="key">sign in page for app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="034" data-pair-id="63" data-key="sign in page for app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_034_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sign in page for an app<br><small>source_idx=188</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_034_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. sign in page for an app<br><small>source_idx=368</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 035 <span>source pair_id=74</span></h2>
+            <p class="key">displaying connect with social app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="035" data-pair-id="74" data-key="displaying connect with social app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_035_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the connect with social app<br><small>source_idx=53</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_035_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying the connect with social app<br><small>source_idx=406</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 036 <span>source pair_id=44</span></h2>
+            <p class="key">displaying image with skip option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="036" data-pair-id="44" data-key="displaying image with skip option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_036_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying an image with skip option<br><small>source_idx=241</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_036_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying an image with skip option<br><small>source_idx=242</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 037 <span>source pair_id=98</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="037" data-pair-id="98" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_037_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying start page<br><small>source_idx=505</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_037_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying the start page<br><small>source_idx=535</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 038 <span>source pair_id=52</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="038" data-pair-id="52" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_038_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying start page<br><small>source_idx=284</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_038_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying start page<br><small>source_idx=285</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 039 <span>source pair_id=85</span></h2>
+            <p class="key">displaying information of app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="039" data-pair-id="85" data-key="displaying information of app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_039_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the information of the app<br><small>source_idx=451</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_039_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying the information of the app<br><small>source_idx=452</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 040 <span>source pair_id=12</span></h2>
+            <p class="key">welcome page of travel app</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="040" data-pair-id="12" data-key="welcome page of travel app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_040_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page of a travel app<br><small>source_idx=43</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_040_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. welcome page of a travel app<br><small>source_idx=44</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 041 <span>source pair_id=36</span></h2>
+            <p class="key">login page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="041" data-pair-id="36" data-key="login page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_041_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page<br><small>source_idx=177</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_041_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. login page<br><small>source_idx=178</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 042 <span>source pair_id=23</span></h2>
+            <p class="key">screen shows cart details in shopping app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="042" data-pair-id="23" data-key="screen shows cart details in shopping app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_042_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows cart details in a shopping app<br><small>source_idx=110</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_042_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. screen shows cart details in a shopping app<br><small>source_idx=111</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 043 <span>source pair_id=39</span></h2>
+            <p class="key">displaying to enter email and send</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="043" data-pair-id="39" data-key="displaying to enter email and send"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_043_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to enter email and send<br><small>source_idx=191</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_043_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to enter email and send<br><small>source_idx=192</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 044 <span>source pair_id=40</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="044" data-pair-id="40" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_044_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying next option<br><small>source_idx=203</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_044_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. page displaying next option<br><small>source_idx=204</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 045 <span>source pair_id=18</span></h2>
+            <p class="key">displaying various options in app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="045" data-pair-id="18" data-key="displaying various options in app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_045_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying various options in app<br><small>source_idx=64</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_045_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. page displaying various options in app<br><small>source_idx=65</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 046 <span>source pair_id=66</span></h2>
+            <p class="key">screen shows next option to continue</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="046" data-pair-id="66" data-key="screen shows next option to continue"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_046_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows next option to continue<br><small>source_idx=376</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_046_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. screen shows next option to continue<br><small>source_idx=377</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 047 <span>source pair_id=61</span></h2>
+            <p class="key">displaying to reset password</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="047" data-pair-id="61" data-key="displaying to reset password"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_047_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to reset password<br><small>source_idx=304</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_047_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying to reset password<br><small>source_idx=358</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 048 <span>source pair_id=60</span></h2>
+            <p class="key">displaying tutorial page of social app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="048" data-pair-id="60" data-key="displaying tutorial page of social app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_048_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the tutorial page of a social app<br><small>source_idx=353</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_048_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. screen displaying the tutorial page of a social app<br><small>source_idx=354</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 049 <span>source pair_id=7</span></h2>
+            <p class="key">news article s display on page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="049" data-pair-id="7" data-key="news article s display on page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_049_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. news article&#x27;s display on a page<br><small>source_idx=26</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_049_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. news article&#x27;s display on a page<br><small>source_idx=27</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 050 <span>source pair_id=34</span></h2>
+            <p class="key">sign in page for application</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="050" data-pair-id="34" data-key="sign in page for application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_050_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sign in page for an application<br><small>source_idx=167</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_050_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. sign in page for an application<br><small>source_idx=168</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 051 <span>source pair_id=99</span></h2>
+            <p class="key">ui displaying access for home page on side bar</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="051" data-pair-id="99" data-key="ui displaying access for home page on side bar"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_051_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. UI displaying the access for home page on a side bar<br><small>source_idx=542</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_051_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. UI displaying the access for home page on a side bar<br><small>source_idx=550</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 052 <span>source pair_id=46</span></h2>
+            <p class="key">in cooking app screen displays particulars of recipe</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="052" data-pair-id="46" data-key="in cooking app screen displays particulars of recipe"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_052_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. in a cooking app, the screen displays the particulars of a recipe.<br><small>source_idx=164</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_052_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. in a cooking app, the screen displays the particulars of a recipe.<br><small>source_idx=247</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 053 <span>source pair_id=2</span></h2>
+            <p class="key">property details display page</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="053" data-pair-id="2" data-key="property details display page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_053_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. property details display page<br><small>source_idx=15</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_053_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. property details display page<br><small>source_idx=16</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 054 <span>source pair_id=51</span></h2>
+            <p class="key">welcome page of fashion shopping app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="054" data-pair-id="51" data-key="welcome page of fashion shopping app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_054_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page of a fashion shopping app<br><small>source_idx=282</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_054_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. welcome page of a fashion shopping app<br><small>source_idx=283</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 055 <span>source pair_id=16</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="055" data-pair-id="16" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_055_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the start page<br><small>source_idx=60</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_055_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. screen displaying the start page<br><small>source_idx=61</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 056 <span>source pair_id=38</span></h2>
+            <p class="key">welcome page of travel app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="056" data-pair-id="38" data-key="welcome page of travel app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_056_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page of a travel app<br><small>source_idx=186</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_056_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. welcome page of a travel app<br><small>source_idx=187</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 057 <span>source pair_id=58</span></h2>
+            <p class="key">sports news on screen in sports app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="057" data-pair-id="58" data-key="sports news on screen in sports app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_057_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sports news on a screen in a sports app<br><small>source_idx=208</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_057_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. sports news on a screen in a sports app<br><small>source_idx=343</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 058 <span>source pair_id=68</span></h2>
+            <p class="key">displaying various hotels in booking app</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="058" data-pair-id="68" data-key="displaying various hotels in booking app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_058_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying various hotels in a booking app<br><small>source_idx=381</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_058_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying various hotels in a booking app<br><small>source_idx=382</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 059 <span>source pair_id=22</span></h2>
+            <p class="key">welcome page of hotel booking app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="059" data-pair-id="22" data-key="welcome page of hotel booking app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_059_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page of a hotel booking app<br><small>source_idx=86</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_059_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. welcome page of a hotel booking app<br><small>source_idx=101</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 060 <span>source pair_id=62</span></h2>
+            <p class="key">displaying various search results</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="060" data-pair-id="62" data-key="displaying various search results"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_060_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying various search results<br><small>source_idx=363</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_060_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. page displaying various search results<br><small>source_idx=364</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 061 <span>source pair_id=24</span></h2>
+            <p class="key">login page of fitness app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="061" data-pair-id="24" data-key="login page of fitness app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_061_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page of a fitness app<br><small>source_idx=112</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_061_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. login page of a fitness app<br><small>source_idx=113</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 062 <span>source pair_id=5</span></h2>
+            <p class="key">displaying start application</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="062" data-pair-id="5" data-key="displaying start application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_062_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows to start an application<br><small>source_idx=22</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_062_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. screen shows to start an application<br><small>source_idx=23</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 063 <span>source pair_id=6</span></h2>
+            <p class="key">login page</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="063" data-pair-id="6" data-key="login page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_063_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page<br><small>source_idx=24</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_063_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. login page<br><small>source_idx=25</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 064 <span>source pair_id=67</span></h2>
+            <p class="key">news article s display on page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="064" data-pair-id="67" data-key="news article s display on page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_064_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. news article&#x27;s display on a page<br><small>source_idx=378</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_064_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. news article&#x27;s display on a page<br><small>source_idx=380</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 065 <span>source pair_id=82</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="065" data-pair-id="82" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_065_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the next option<br><small>source_idx=287</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_065_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying the next option<br><small>source_idx=441</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 066 <span>source pair_id=19</span></h2>
+            <p class="key">flight details display page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="066" data-pair-id="19" data-key="flight details display page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_066_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. flight details display page<br><small>source_idx=79</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_066_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. flight details display page<br><small>source_idx=81</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 067 <span>source pair_id=79</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="067" data-pair-id="79" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_067_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the next option<br><small>source_idx=218</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_067_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying the next option<br><small>source_idx=422</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 068 <span>source pair_id=43</span></h2>
+            <p class="key">displaying to start application</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="068" data-pair-id="43" data-key="displaying to start application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_068_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to start an application<br><small>source_idx=226</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_068_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying to start an application<br><small>source_idx=228</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 069 <span>source pair_id=90</span></h2>
+            <p class="key">screen shows continue option</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="069" data-pair-id="90" data-key="screen shows continue option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_069_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows continue option<br><small>source_idx=488</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_069_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen shows continue option<br><small>source_idx=489</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 070 <span>source pair_id=20</span></h2>
+            <p class="key">displaying signing in information about application</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="070" data-pair-id="20" data-key="displaying signing in information about application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_070_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying signing in information about an application<br><small>source_idx=70</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_070_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying signing in information about an application<br><small>source_idx=83</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 071 <span>source pair_id=0</span></h2>
+            <p class="key">displaying information of app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="071" data-pair-id="0" data-key="displaying information of app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_071_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the information of the app<br><small>source_idx=2</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_071_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying the information of the app<br><small>source_idx=3</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 072 <span>source pair_id=95</span></h2>
+            <p class="key">displaying information about fitness application</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="072" data-pair-id="95" data-key="displaying information about fitness application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_072_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying information about a fitness application<br><small>source_idx=333</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_072_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying information about a fitness application<br><small>source_idx=508</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 073 <span>source pair_id=57</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="073" data-pair-id="57" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_073_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying the next option<br><small>source_idx=216</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_073_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying next option<br><small>source_idx=338</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 074 <span>source pair_id=93</span></h2>
+            <p class="key">displaying job search in job search app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="074" data-pair-id="93" data-key="displaying job search in job search app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_074_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying a job search in a job search app<br><small>source_idx=501</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_074_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying a job search in a job search app<br><small>source_idx=502</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 075 <span>source pair_id=53</span></h2>
+            <p class="key">home page of shopping app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="075" data-pair-id="53" data-key="home page of shopping app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_075_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. home page of a shopping app<br><small>source_idx=300</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_075_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. home page of a shopping app<br><small>source_idx=302</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 076 <span>source pair_id=89</span></h2>
+            <p class="key">sports news on screen in sports app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="076" data-pair-id="89" data-key="sports news on screen in sports app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_076_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sports news on a screen in a sports app<br><small>source_idx=342</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_076_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. sports news on a screen in a sports app<br><small>source_idx=482</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 077 <span>source pair_id=25</span></h2>
+            <p class="key">sign up page of fitness app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="077" data-pair-id="25" data-key="sign up page of fitness app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_077_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sign up page of a fitness app<br><small>source_idx=108</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_077_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. sign up page of a fitness app<br><small>source_idx=116</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 078 <span>source pair_id=71</span></h2>
+            <p class="key">displaying to enter email and password</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="078" data-pair-id="71" data-key="displaying to enter email and password"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_078_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to enter email and password<br><small>source_idx=390</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_078_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to enter email and password<br><small>source_idx=1</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 079 <span>source pair_id=84</span></h2>
+            <p class="key">displaying next option</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="079" data-pair-id="84" data-key="displaying next option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_079_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying next option<br><small>source_idx=337</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_079_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying the next option<br><small>source_idx=449</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 080 <span>source pair_id=77</span></h2>
+            <p class="key">displaying home page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="080" data-pair-id="77" data-key="displaying home page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_080_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the home page<br><small>source_idx=412</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_080_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying the home page<br><small>source_idx=0</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 081 <span>source pair_id=64</span></h2>
+            <p class="key">welcome page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="081" data-pair-id="64" data-key="welcome page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_081_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. welcome page<br><small>source_idx=369</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_081_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. welcome page<br><small>source_idx=370</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 082 <span>source pair_id=29</span></h2>
+            <p class="key">displaying to enter email</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="082" data-pair-id="29" data-key="displaying to enter email"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_082_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to enter email<br><small>source_idx=146</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_082_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to enter email<br><small>source_idx=147</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 083 <span>source pair_id=27</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="083" data-pair-id="27" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_083_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying the start page<br><small>source_idx=137</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_083_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. bad proximity. screen displaying the start page<br><small>source_idx=139</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 084 <span>source pair_id=88</span></h2>
+            <p class="key">food recipe app s displaying recipe</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="084" data-pair-id="88" data-key="food recipe app s displaying recipe"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_084_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. a food recipe app&#x27;s screen displaying a recipe<br><small>source_idx=479</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_084_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. a food recipe app&#x27;s screen displaying a recipe<br><small>source_idx=480</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 085 <span>source pair_id=97</span></h2>
+            <p class="key">displaying flight ticket</p>
+            <p class="run">good_a=A/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="085" data-pair-id="97" data-key="displaying flight ticket"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_085_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying a flight ticket<br><small>source_idx=210</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_085_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying a flight ticket<br><small>source_idx=529</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 086 <span>source pair_id=4</span></h2>
+            <p class="key">login page</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="086" data-pair-id="4" data-key="login page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_086_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page<br><small>source_idx=20</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_086_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. login page<br><small>source_idx=21</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 087 <span>source pair_id=54</span></h2>
+            <p class="key">displaying help and support page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="087" data-pair-id="54" data-key="displaying help and support page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_087_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying help and support page<br><small>source_idx=314</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_087_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying help and support page<br><small>source_idx=315</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 088 <span>source pair_id=75</span></h2>
+            <p class="key">displaying different categories in social app</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="088" data-pair-id="75" data-key="displaying different categories in social app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_088_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different categories in a social app<br><small>source_idx=150</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_088_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying different categories in a social app<br><small>source_idx=408</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 089 <span>source pair_id=11</span></h2>
+            <p class="key">displaying different categories in social app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="089" data-pair-id="11" data-key="displaying different categories in social app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_089_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying different categories in a social app<br><small>source_idx=41</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_089_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. page displaying different categories in a social app<br><small>source_idx=42</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 090 <span>source pair_id=69</span></h2>
+            <p class="key">page with flight information</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="090" data-pair-id="69" data-key="page with flight information"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_090_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page with flight information<br><small>source_idx=385</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_090_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page with flight information<br><small>source_idx=386</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 091 <span>source pair_id=86</span></h2>
+            <p class="key">screen shows continue option</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="091" data-pair-id="86" data-key="screen shows continue option"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_091_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows continue option<br><small>source_idx=459</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_091_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen shows continue option<br><small>source_idx=460</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 092 <span>source pair_id=13</span></h2>
+            <p class="key">screen shows about news articles</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="092" data-pair-id="13" data-key="screen shows about news articles"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_092_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows about news articles<br><small>source_idx=45</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_092_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. bad contrast. screen shows about news articles<br><small>source_idx=46</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 093 <span>source pair_id=17</span></h2>
+            <p class="key">displaying to create or reset password</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="093" data-pair-id="17" data-key="displaying to create or reset password"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_093_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to create or reset password<br><small>source_idx=55</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_093_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. page displaying to create or reset password<br><small>source_idx=63</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 094 <span>source pair_id=28</span></h2>
+            <p class="key">screen displays news feed page</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="094" data-pair-id="28" data-key="screen displays news feed page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_094_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. a screen displays a news feed page.<br><small>source_idx=140</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_094_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. a screen displays a news feed page.<br><small>source_idx=141</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 095 <span>source pair_id=31</span></h2>
+            <p class="key">sign in page for application with entry details</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="095" data-pair-id="31" data-key="sign in page for application with entry details"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_095_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. sign in page for the application with entry details<br><small>source_idx=66</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_095_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. sign in page for the application with entry details<br><small>source_idx=155</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 096 <span>source pair_id=35</span></h2>
+            <p class="key">displaying to start application</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="096" data-pair-id="35" data-key="displaying to start application"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_096_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to start an application<br><small>source_idx=171</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_096_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to start an application<br><small>source_idx=172</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 097 <span>source pair_id=94</span></h2>
+            <p class="key">displaying start page</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="097" data-pair-id="94" data-key="displaying start page"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_097_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen displaying start page<br><small>source_idx=465</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_097_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen displaying start page<br><small>source_idx=506</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 098 <span>source pair_id=3</span></h2>
+            <p class="key">screen shows next option to continue</p>
+            <p class="run">good_a=B/A | good_b=A/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="098" data-pair-id="3" data-key="screen shows next option to continue"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_098_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. screen shows next option to continue<br><small>source_idx=17</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_098_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. screen shows next option to continue<br><small>source_idx=19</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 099 <span>source pair_id=14</span></h2>
+            <p class="key">displaying to create account</p>
+            <p class="run">good_a=A/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="099" data-pair-id="14" data-key="displaying to create account"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_099_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. page displaying to create an account<br><small>source_idx=47</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_099_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad proximity. page displaying to create an account<br><small>source_idx=48</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+        <section class="pair">
+          <div class="pair-head">
+            <h2>Pair 100 <span>source pair_id=81</span></h2>
+            <p class="key">login page of food app</p>
+            <p class="run">good_a=B/A | good_b=B/B</p>
+            <label><input type="checkbox" class="mismatch" data-review-id="100" data-pair-id="81" data-key="login page of food app"> mismatch / needs review</label>
+          </div>
+          <div class="imgs">
+            <figure>
+              <img src="images/pair_100_good.jpg" alt="good screenshot">
+              <figcaption><strong>Good</strong><br>ui screenshot. well-designed. login page of a food app<br><small>source_idx=438</small></figcaption>
+            </figure>
+            <figure>
+              <img src="images/pair_100_bad.jpg" alt="bad screenshot">
+              <figcaption><strong>Bad</strong><br>ui screenshot. poor design. bad contrast. login page of a food app<br><small>source_idx=439</small></figcaption>
+            </figure>
+          </div>
+        </section>
+        
+  </main>
+  <script>
+    const button = document.getElementById('copy-review');
+    const output = document.getElementById('review-output');
+    button.addEventListener('click', async () => {
+      const checked = [...document.querySelectorAll('.mismatch:checked')].map(box => ({
+        review_id: box.dataset.reviewId,
+        pair_id: Number(box.dataset.pairId),
+        group_key: box.dataset.key
+      }));
+      const text = JSON.stringify(checked, null, 2);
+      output.value = text;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = `Copied ${checked.length} mismatches`;
+      } catch (err) {
+        button.textContent = `Listed ${checked.length} mismatches`;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{
+  "created_at": "2026-05-21T23:17:59.530263",
+  "manifest": "data\\track_b\\vision2web_pilot_manifest.json",
+  "output_root": "data\\track_b\\items",
+  "item_count": 14,
+  "items": [
+    {
+      "item_id": "F01_1daycloud",
+      "task_name": "1daycloud",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F01_1daycloud",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F02_401trucksource",
+      "task_name": "401trucksource",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F02_401trucksource",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F03_about_gitlab",
+      "task_name": "about_gitlab",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F03_about_gitlab",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F04_academy_govloop",
+      "task_name": "academy_govloop",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F04_academy_govloop",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F05_balancingbirthbaby",
+      "task_name": "balancingbirthbaby",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F05_balancingbirthbaby",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F06_community_dynamics",
+      "task_name": "community_dynamics",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F06_community_dynamics",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F07_community_hpe",
+      "task_name": "community_hpe",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F07_community_hpe",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F08_copenhagenmarathon",
+      "task_name": "copenhagenmarathon",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F08_copenhagenmarathon",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F09_elections_bc",
+      "task_name": "elections_bc",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F09_elections_bc",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "F10_gourmania",
+      "task_name": "gourmania",
+      "config": "frontend",
+      "item_dir": "data\\track_b\\items\\F10_gourmania",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "W01_aihw",
+      "task_name": "aihw",
+      "config": "webpage",
+      "item_dir": "data\\track_b\\items\\W01_aihw",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "W02_aws",
+      "task_name": "aws",
+      "config": "webpage",
+      "item_dir": "data\\track_b\\items\\W02_aws",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "W03_eventbrite",
+      "task_name": "eventbrite",
+      "config": "webpage",
+      "item_dir": "data\\track_b\\items\\W03_eventbrite",
+      "copied_prototypes": true,
+      "copied_resources": true
+    },
+    {
+      "item_id": "W04_ebay",
+      "task_name": "ebay",
+      "config": "webpage",
+      "item_dir": "data\\track_b\\items\\W04_ebay",
+      "copied_prototypes": true,
+      "copied_resources": true
+    }
+  ]
+}

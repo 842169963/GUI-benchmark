@@ -1,0 +1,1292 @@
+                                                  Training Computer Use Agents to Assess the Usability of
+                                                               Graphical User Interfaces
+                                                           Alice Gao                                      Weixi Tong                                Rishab Vempati
+                                                   University of Washington                            Purdue University                            Purdue University
+                                                       Seattle, WA, USA                             West Lafayette, IN, USA                      West Lafayette, IN, USA
+                                                   atgao@cs.washington.edu                           tong172@purdue.edu                           rvempat@purdue.edu
+
+                                                    Katharina Reinecke                              R. Benjamin Shapiro                              Tianyi Zhang
+                                                   University of Washington                        University of Washington                       Purdue University
+                                                       Seattle, WA, USA                                Seattle, WA, USA                         West Lafayette, IN, USA
+arXiv:2604.26020v1 [cs.CL] 28 Apr 2026
+
+
+
+
+                                                 reinecke@cs.washington.edu                         rbs@cs.washington.edu                        tianyi@purdue.edu
+
+                                                                                                            Jason Wu
+                                                                                                       Purdue University
+                                                                                                    West Lafayette, IN, USA
+                                                                                                     jasonwu@purdue.edu
+
+                                         Abstract                                                                  continuous integration), prior to engaging human evaluators on
+                                         Usability testing with experts and potential users can assess the         final or near-final products.
+                                         effectiveness, efficiency, and user satisfaction of graphical user in-       With this goal in mind, HCI research has a long tradition of in-
+                                         terfaces (GUIs) but doing so remains a costly and time-intensive          vestigating computational methods of assessing interface usability.
+                                         process. Prior work has used computer use agents (CUAs) and other         In The Psychology of Human Computer Interaction, Card, Moran, and
+                                         generative agents that can simulate user interactions and prefer-         Newell first introduced the Model Human Processor, an automated
+                                         ence, but we show that agents still struggle to provide accurate          approach to approximating the usability of an interface given es-
+                                         usability assessments. In this work, we present a novel machine           timates of a user’s cognitive and motor abilities [8]. Subsequent
+                                         learning method that operationalizes a computational definition           research substantially improved the accuracy of these approxima-
+                                         of usability to train CUAs to assess GUI usability by i) prioritizing     tions, integrating more complex cognitive mechanisms [3] along
+                                         important interaction flows, ii) executing them through human-like        with more recent machine learning and optimization approaches
+                                         interactions, and iii) predicting a learned numerical usability score.    [52]. However, these computational methods face similar challenges
+                                         We train a computer use agent, uxCUA, with our algorithm on a             as traditional usability testing with human participants, lacking
+                                         large-scale dataset of fully interactive user interfaces (UIs) paired     adequate data and resources for developing rigorous automated
+                                         with usability labels and human preferences. We show that uxCUA           assessments. Without large-scale data, these previous approaches
+                                         outperforms larger models in accurate usability assessments and           are limited in their approximations of a human-like usability as-
+                                         produces realistic critiques of both synthetic and real UIs. More         sessments.
+                                         broadly, our work aims to build a principled, data-driven foundation         Large generative models (e.g., large language models or LLMs)
+                                         for automated usability assessment in HCI.                                offer a potentially promising solution as they are trained on vast
+                                                                                                                   amounts of human data. Prior research has simulated human-like
+                                                                                                                   interactions through virtual agents [53], offered design critiques
+                                         1   Introduction                                                          through manually crafted guidelines or instructions [12], and per-
+                                         Evaluating the usability of graphical user interfaces (GUIs) is a         formed cognitive walkthroughs for usability on user interfaces [89].
+                                         crucial step in ensuring that users can effectively, efficiently, and     Computer use agents (CUAs) which leverage LLMs are also able
+                                         satisfactorily navigate software. Traditional usability testing relies    to navigate through websites and complete tasks [28, 41]. Though
+                                         on recruiting human participants [11, 13, 43, 47] or experts [27, 48]     these models offer the ability to scale the simulation of human
+                                         to test interface functionality through navigating critical interac-      behavior on user interfaces, their assessments still lack proper
+                                         tion flows. Feedback from this process can be used to evaluate the        alignment with human behavior and thus the rigor needed for
+                                         candidate interface [48], select between design alternatives [68],        benchmarking and designing comparative user interface (UI) eval-
+                                         and guide iterative improvements [45]. While human-driven us-             uations [12, 89].
+                                         ability evaluation is an effective solution, it is often forgone before      In this paper, we present our work toward data-driven assess-
+                                         developing new products due to perceived barriers, such as insuffi-       ment of UI usability and development of a novel machine learning
+                                         cient time, costs, and knowledge [33]. The ability to conduct initial     objective to train computer use agents (CUAs) to assess GUI usabil-
+                                         usability evaluations rapidly and at scale would likely reduce the        ity. Our training objective provides a computational definition of
+                                         number of usability issues users encounter by enabling evaluations        usability through the creation of uxWeb, the first large-scale dataset
+                                         where they may otherwise be skipped, as well as support imme-             of 2,586 fully interactive UIs paired with usability labels (e.g. nu-
+                                         diate evaluations of software redesigns as they happen (similar to        merical usability scores) and human judgments. Usability labels
+                                                                                                                                       Gao et al.
+
+
+were obtained through our synthetic augmentation pipeline that           improving specific aspects of usability. One particular focus is to de-
+instructed coding agents to inject common usability errors into          termine and taxonomize dark patterns [10, 22], or UIs intentionally
+these websites to modify their source code, to create sets of defect-    design to mislead users. Others threads of research have focused
+augmented counterparts. Through our approach we fine-tuned a             on detecting design defects [76, 81] or accessibility issues [14, 88]
+model, uxCUA, that provides prioritizes important interaction flows      and even eliciting design preferences that may impact usability
+and provides accurate usability assessments.                             for different user groups. Our work extends existing work in user
+   While prior systems cannot accurately simulate human usability        interface evaluation, aiming towards providing automated usability
+preferences or perform accurate usability evaluations, we show           assessment in a data-driven manner.
+that with our training objective uxCUA outperforms much larger
+models in a baseline evaluation with strong proprietary and open
+source vision language models (VLMs). uxCUA demonstrates a 25%
+increase in accuracy for generating usability scores over other base-
+lines with a 41% improvement over the original model. Our results
+also show that uxCUA produces i) accurate usability assessments          2.2    User Simulation
+in line with known usability labels and human preferences and ii)        One approach of improving automated UI evaluation is to accurately
+realistic usability critiques of synthetic and real-world sites.         simulate users of those interfaces. Early work in HCI and cognitive
+   To summarize, this paper makes the following contributions:           psychology approximated UI usability by combining cognitive and
+     (1) We create uxWeb, a large-scale dataset of fully interac-        physical measurements (e.g., reaction time and motor speed) with
+         tive clones of original websites and their defect-augmented     interaction traces to approximate time needed to complete tasks.
+         counterparts, annotated with usability labels and judgments     ACT-R [3], incorporated richer models of human cognition, such
+         by designers.                                                   as memory, attention, and learning to more realistically simulate
+     (2) We introduce a novel training objective to train uxCUA          these user-interface interactions. Together with interaction and task
+         on our dataset to generate accurate usability ratings of        models [54], these user models have been employed to automatically
+         websites after exploring them.                                  design and evaluate UIs, through approaches collectively known
+     (3) We design and conduct a benchmark aimed at measuring            as model-based UI development [56]. However, these approaches
+         the accuracy of agents in accurately assessing UI usability.    largely relied on hand-crafted models and manually specified rules
+         Our benchmark showed that proprietary VLMs (e.g., GPT-5)        rather than data-driven learning of user behavior.
+         often do not assign usability ratings that align with known        Since LLMs and other foundation models are trained on large
+         defects and designer preferences. We also show that uxCUA       volumes of human-written text and artifacts, researchers hypothe-
+         outperforms much larger proprietary models in usability         sized these models to be effective simulations of human responses
+         assessment and can effectively generate critiques for several   and interactions [25, 53, 74], also applying these approaches to
+         categories of usability principles.                             simulate UI feedback. Recent work has explored prompting LLMs
+                                                                         with UI screenshots, personas, and design guidelines to simulate
+                                                                         comments from end-users [78] and experts [12, 89]. Since usability
+2     Related Work                                                       evaluation often depends on interface interaction rather than static
+Our research builds on existing work surrounding UI usability            screenshots, researchers have also developed LLM-based agents
+evaluation and user simulation by encoding human notions of              and crawlers capable of navigating and operating applications as
+usability into computational models. We contextualize our work by        another method of simulating users. Computer use agents (CUAs)
+providing an overview of UI usability evaluation, user simulation,       have been used to test the functionality of GUIs and identify bugs
+and computer-use agents.                                                 through “crawling” [19, 82]. Another avenue has been to incorpo-
+                                                                         rate these systems into evaluation protocols, such as automated
+                                                                         judges [37] or supporting expert-driven evaluation [29, 41, 88].
+2.1    User Interface Evaluation                                            LLM-based user simulation relies on the assumption that LLMs
+Traditionally, UI evaluation has relied on experts to conduct usabil-    are accurate models of users, but several works have shown mis-
+ity studies with target users [46] or heuristic evaluations using a      matches in human ratings [60], responses [31], and assessments [76].
+set of guidelines [48]. While expert-driven evaluations can offer        This suggests a need to incorporate additional training objectives or
+rich and targeted feedback, these approaches are costly and only         additional data to refine off-the-shelf models. Oulasvirta, Jokinen,
+capture the opinions of a small number of evaluators, remaining          and Howes theorized that human users behave as bounded ratio-
+difficult to scale. As a result, crowdsourced approaches or “arenas”     nal agents, and their behavior can be approximated by reinforce-
+have been used to incorporate feedback from larger numbers of            ment learning training objectives [52]. Subsequent work applied
+non-experts [42] and are widely used to benchmark the design             these techniques to learn user simulations for typing [63], VR selec-
+performance of AI models on design tasks [6]. These approaches           tion [30], and menu navigation [44]. Others have fine-tuned LLMs
+enable more rapid feedback, enabling designers to improve UIs for        using human data such as feedback [12, 76, 86] and interaction
+the user experience. Other solutions have focused on modeling            traces [9] so that their behavior more closely matches that of real
+human behavior [17, 18, 51] to assess and adapt UIs.                     users. Our work combines both approaches to fine-tune CUAs for
+   Simultaneously, UI evaluation is not limited towards general-         usability testing, with the goal of better aligning their assessment
+ized usability, other types of UI evaluations exist aimed towards        scores and navigation behavior with human users.
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+2.3     Training Computer-Use Agents                                                3.1.1 Website Generation. We first generated clones of popular
+Foundation models are promising for UI understanding because                        websites drawn from Mind2Web, a standardized web agent naviga-
+of their pretraining on large amounts of web data and text gives                    tion benchmark [9] that contains 137 websites, across 5 high-level
+them strong capabilities for interpreting interfaces and user in-                   domains (e.g., shopping, entertainment) and 30 subdomains. Gener-
+structions. Many approaches for building CUAs prompt foundation                     ating standalone “clones” of websites made them easier to deploy,
+models with representations of a target UI and along with the                       allowed synthetic control of website behavior (e.g., through code
+model’s context window and a goal. CUAs can rely on text-only                       edits) and reduced barriers to agent use (e.g., login credentials).
+LLMs by converting UIs into intermediate representations (e.g.,                        To create these clones, we used the Claude Code agent [4] config-
+pseudo DOM) to execute actions [9, 72] or they can use multimodal                   ured with GLM 4.7 [83] as the backend endpoint for cost efficiency.
+models [49], where they integrate visual prompting techniques to                    At the time of our experiments, Claude Code was the best per-
+“ground” their actions. While prompting methods can be effective,                   forming coding agent, and GLM 4.7 was the best-performing open
+they rely heavily on the pre-existing capabilities of the underlying                source code generation model [6]. We provided GLM 4.7 a bare
+foundation models.                                                                  bones React.js template, to avoid requiring the model to gener-
+   To address this issue, later work has explored learning-based                    ate “boilerplate” configuration code. The coding agent was then
+approaches that use demonstration trajectories to train or fine-tune                prompted to replicate an existing site from Mind2Web based on its
+CUAs. For example, Mind2Web combined manually annotated web                         name and a description of its functionality. It was also prompted to
+trajectories with fine-tuned action prediction models [9], while We-                ensure that the website clone was fully functional, self-contained,
+bGUM more directly framed web navigation as offline multimodal                      and with mocked backend flows that represented the real website as
+training over a large corpus of demonstrations [15]. Other systems                  closely as possible. Placeholder assets such as images were retrieved
+such as UI-TARS and OpenCUA trained end-to-end GUI agents on                        using an online API that was queried with model-generated alt-text
+large action-trace datasets and human computer-use demonstra-                       annd mock data that was self-generated by the model. The full
+tions [58, 73], and provided automated judges to assess the quality                 prompt is provided in Appendix A. Because many of the websites
+of web development [37]. Another learning-based approach to im-                     are popular, the coding agent was often able to reconstruct their
+proving CUA performance is by designing new training objectives                     general interaction flows and common tasks from prior knowledge
+or applying reinforcement learning in online environments. Ex-                      alone, without requiring screenshots of the reference site. Our goal
+amples include AndroidEnv, which provides an interactive mobile                     was not to produce clones that matched the original websites ex-
+environment for agent training [70], and more recent methods such                   actly in terms functionality or appearance, but instead to generate a
+as DigiRL, WebRL, and EvoCUA, which improve agents through                          diverse distribution of realistic websites for our experiments. Once
+online interaction, reinforcement learning, or large-scale synthetic                website generation finished, the model also created a txt file docu-
+rollouts [7, 57, 80]. As a result, most CUAs are trained for task                   menting all the user flows it had implemented. We used this file for
+completion, e.g., following a user’s natural language command.                      quality control, checking if the first few clones generated had realis-
+   In our work, we contribute to this line of research by i) construct-             tic and representative user flows implemented before continuing to
+ing a novel dataset of interaction rollouts for usability testing, ii)              generate the rest of our dataset. We also used this file when injected
+developing a new objective for accurate usability scoring, and iii)                 usability defects. Each website clone took 5-7 minutes for GLM 4.7
+releasing uxCUA as a pretrained checkpoint for future CUA models.                   to fully implement. The 879 websites required approximately 102.5
+                                                                                    machine-hours to generate, which was distributed over the course
+                                                                                    of a month.
+                                                                                       Since synthetic data generation can introduce hallucination, such
+3     Dataset of Interface Usability                                                as the model claiming to have implemented a user flow it did not,
+To explore a data-driven approach for usability assessment capabil-                 or introduce defects due to probabilistic outputs, we cloned each of
+ities of machine learning models, we first describe our approach                    the 137 Mind2Web sites eight times. We performed two additional
+to building uxWeb, a large-scale dataset of 2,586 fully interactive                 rounds of quality checks resulting in a total of 879 plain website
+websites paired with usability labels and human judgments. Since a                  clones. The first involved creating a script that would check if
+large-scale dataset with the location and severity of real-world us-                the website could be rendered in Playwright, a headless Chrome
+ability flaws is not readily available, uxWeb is constructed through a              browser. If the resulting screenshots were were blank, the website
+combination of synthetic replication of popular websites, principled                was removed from our dataset. The second quality check occurred
+data augmentation, and human expert ratings.                                        during our training procedure, which we discuss in §4.3.2.
+
+                                                                                    3.1.2 Usability Defect Injection. Like their real-world counterparts,
+                                                                                    our synthetically-cloned websites were not free of usability defects
+3.1     Synthetic Websites                                                          but the type, location, and severity of these defects remains un-
+uxWeb consists of sets of synthetically generated clones of websites                known for both real-world sites and our synthetic ones. To support
+with usability labels generated from synthetic augmentation and                     modeling and benchmarking, we developed an approach to inject
+human labeling. We describe the i) website generation process to                    known usability defects into each of our plain clones in a program-
+create plain clones of existing sites, ii) synthetic usability augmen-              matic manner to create sets of defect-augmented versions for each
+tations to create a set of defect-augmented counterparts for each                   plain synthetic clone. This augmentation process allowed us to mea-
+plain clone, and iii) our protocol for collecting human ratings.                    sure model performance on a known (but possibly incomplete) list
+                                                                                                                                                             Gao et al.
+
+
+of usability flaws. This process also resulted in a relative ranking of            defect-augmented sites may not capture usability flaws that were
+website usability between plain and defect-augmented sites, which                  present in the original website clones or reflect human perception
+we later used to calibrate absolute score prediction through an our                of usability, limiting the generalization of models trained on this
+training objective.                                                                data. Therefore, we collected an additional split of data labeled by
+   To design these usability defects, we reviewed various usability                human designers.
+and design guidelines [5, 20, 38, 46]. Ultimately, we chose to adapt
+                                                                                   3.2.1 Designer Rating Procedure. To collect designer ratings of
+Ben Shneiderman’s 8 Golden Rules of Interface Design [64] for their
+                                                                                   these clones, we constructed a model arena. Model arenas are inter-
+relevancy to our task and ability to operationalize1 . Below, are the
+                                                                                   faces commonly used for LLM feedback collection and benchmark-
+eight types of usability defects inspired by these principles:
+                                                                                   ing [6, 40], and they require participants to rate multiple candidate
+      • Consistency: Consistent sequence of actions should be
+                                                                                   outputs for the same input prompt. In our case, we developed a
+         required in similar situations (e.g., identical terminology
+                                                                                   feedback interface where two plain websites without intentionally-
+         used in prompts, menus, help screens, consistent layout,
+                                                                                   introduced defects corresponding to the same source website and
+         capitalization, fonts).
+                                                                                   prompt were compiled and displayed side-by-side in iframe ele-
+      • Feedback: For every user interaction there should be in-
+                                                                                   ments, allowing experts to use the websites while preserving inter-
+         terface feedback. Feedback should be proportional to fre-
+                                                                                   activity. The interface also contained a button that required users
+         quency and importance of actions.
+                                                                                   to expand the iframe for more detailed inspection and access the
+      • Dialog: Dialogs should yield closure and should have a
+                                                                                   website using the full resolution of their browser window.
+         clear beginning, middle, and end.
+                                                                                      We recruited 17 participants at university level or higher with
+      • Prevention: The interface should be designed so that a
+                                                                                   design background (i.e. university courses or work experience) to
+         user cannot make serious errors; erroneous actions should
+                                                                                   partake in our study to rate 30 preference pairs. After navigating
+         leave the interface state unchanged.
+                                                                                   the functionality of each site, participants were asked to provide a
+      • Control: Users should feel as if they are in control of the
+                                                                                   response that indicated which of the two sites were more usable.
+         interface; they should not get unexpected surprises or have
+                                                                                   Participants were instructed that the sites were clones of existing
+         tedious data-entry sequences.
+                                                                                   sites and that placeholder data was used. Participants were recruited
+      • Reversal: As much as possible, actions should be reversible.
+                                                                                   through word of mouth or university Slack channels. Our study
+      • Memory: Avoid designs that require users to remember
+                                                                                   protocol was determined as exempt by our institution’s IRB. Study
+         information when moving from one display to another.
+                                                                                   details can be found in Appendix C.
+      • Hierarchy: Important elements central to the task should
+                                                                                      In total, we collected 510 preference pairs, which spanned 428
+         be emphasized and easy to find.
+                                                                                   unique plain website clones. Using server logs, we found that partic-
+   We automated our usability defect injection in a similar manner
+                                                                                   ipants spent an average of 54.832 seconds on each pair and clicked
+to our initial website generation. For each existing plain website
+                                                                                   on the iframe window an average of 4.65 times and on an average
+clone, we prompted our coding agent to inject code changes to
+                                                                                   of 3.05 elements before making their final response. This suggests
+introduce defects that violated one of our usability principles above.
+                                                                                   that participants spent effort in testing website flows before mak-
+We provided GLM 4.7 the codebase for the existing website and the
+                                                                                   ing their assessments. Nevertheless, when we computed inter-rater
+usability principle to violate, then instructed it to introduce changes
+                                                                                   agreement for a subset of pairs with multiple labels, we found an
+that would violate the user flows documented in the generation
+                                                                                   agreement rate of 0.308 (Krippendorff’s 𝛼). We expected moderate-
+step. The coding agent was instructed to keep all changes contained
+                                                                                   to-high levels of disagreement, as the websites being compared
+in the src folder and not introduce changes that would break web-
+                                                                                   were all generated from the same model and same prompt, and
+site functionality. We injected usability defects into 388 plain sites.
+                                                                                   were therefore more likely to contain similarities. This also mirrors
+Usability defect injection took 7-10 minutes per principle, which
+                                                                                   results found by other prior research [12, 42, 55, 76, 77], which
+took a total of approximately 284.5 hours to generate our dataset of
+                                                                                   found high levels of subjectivity in design-related evaluation.
+1,707 defect-augmented sites. We provide the prompt for usability
+defect injection in Appendix A.
+                                                                                   4     Training Approach
+   uxWeb was randomly partitioned into training, validation, and
+testing splits based on unique website name. We reserved one web-                  In this section we provide an overview of our novel machine learn-
+site per each unique subdomain (30 total) for our test set. 15% of the             ing objective to train computer use agents to i) prioritize exploration
+remaining websites were used for validation, resulting in 92 unique                of important UI flows and ii) and accurately predict usability scores
+websites and 15 unique websites for the training and validation                    that match ground-truth preferences. We also describe how we use
+splits respectively. In total we had 1,573 clones for training, 199                this approach to train uxCUA and our agent formulation.
+clones for validation, and 393 clones for testing.
+                                                                                   4.1     Problem Formulation
+3.2      Designer-Rated Usability                                                  uxCUA is a CUA designed to perform GUI usability assessment in
+Our synthetic approach supports the scalable generation of poten-                  the same way humans do, through visual perception and clicking.
+tially large numbers of training examples, which is beneficial for                 While research has shown that having access to hidden semantic
+model training. However, the usability defects injected to create our              information like the HTML or DOM allows web agents [16, 24, 71]
+                                                                                   2We removed outliers based on z-score with 𝑧 > 3 in cases where the participant may
+1 These principles also have significant overlap with Nielsen’s Heuristics [46].   have left the study tab open before coming back to complete a preference rating.
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+                                          Conduct a usability test of
+                                           this website...you have a                    time step, the harness captures a visual screenshot, or observation
+                                             budget of 50 steps...
+                                                                                        𝑜𝑡 , which to update the agent’s internal state 𝑠𝑡 , which consists of
+                                                                                        a window of the five most recent visual observations and a JSON-
+                                                    CUA                                 like representation of the session history. 𝑠𝑡 , 𝑜𝑡 , and a grounding
+                                           State            Policy                      instruction is used to prompt the uxCUA model to reason about how
+                                       Ot, Ot-1, Ot-2...                                to make progress towards 𝐺 and describe observations (similar to
+                                        Observation            π
+                                       Session History                                  a “think-aloud” exercise) to produce an executable action 𝑎𝑡 . Valid
+                                                                                        actions are defined by the UI-TARS harness and exposed to the
+                    Observation (Ot)                                    Action (αt+1)
+                                                                                        model through an initial system prompt. A single step of execution
+                                        Desktop Environment
+                                                                                        and processing lasts approximately five seconds. The agent stops
+                                                                                        its navigation when a special “stop” action is generated, e.g., if
+                                                                                        the model believes it has finished exploration, or if a maximum
+                                                                                        number of time steps (50) was reached. The final trace reflection and
+Figure 1: An overview of our CUA architecture for GUI us-                               usability scoring is implemented by appending a manually-crafted
+ability assessment. At each timestep, the agent receives an                             evaluation prompt (Appendix B) as an additional turn in the session
+observation 𝑜𝑡 in the form of a screenshot of GUI running                               history and generating a response using uxCUA. We provide an
+in a headless desktop environment, which it uses to update                              overview of this architecture in Figure 1.
+its internal state 𝑠𝑡 before executing an action 𝑎𝑡 under its
+current policy 𝜋.
+                                                                                        4.3    Training Algorithm
+                                                                                        We adopted an approach based on existing policy-based RL training
+to more effectively find information and executing tasks, we chose                      pipelines [2, 75] to train uxCUA to effectively i) explore UI flows,
+to formulate uxCUA to operate more generally on any type of GUI                         ii) test their functionality, and iii) score their usability. For our
+and use the same visual reasoning a human would typically un-                           experiments, we chose to use EvoCUA 8B [80] as our base model for
+dergoes (e.g., item search). Based on its initial observation of the                    fine-tuning because it was the best-performing open source model
+input UI, uxCUA predicts interaction flows that are important to                        on the OSWorld benchmark [79] that could fit on our hardware at
+overall usability (e.g., room booking for a hotel site) and prioritizes                 the time of our experiments. However, our training approach can
+important user flows to check within a given interaction budget                         be generalized to other open-source CUA models.
+(e.g., 50 actions). After the navigation phase, uxCUA reviews its in-                       In this section, we describe the three stages of our training ap-
+teraction session and reasons about the UI’s usability strengths and                    proach: i) rollout generation, ii) reward assignment, and iii) policy
+weaknesses, then produces a numerical value (0-100) representing                        update.
+a usability score. We choose this method as over rubric-based scor-
+ing due to typical coverage deficiency and noisy evaluations from                       4.3.1 Rollout Generation. In policy-based reinforcement learning
+LLM-based scoring [62, 65, 67], and the fact that no comprehensive                      approaches, training data is obtained by running the current policy
+usability scale exists. This score was initialized by prompting the                     in the environment and collecting rollouts that reflect its present
+model to estimate the probability a user could successfully com-                        behavior, later adjusted through learning. In our experiments, we
+plete the agent’s tested flows given the observed design defects. The                   configured our agent harness with a base model (i.e., EvoCUA-8B)
+score was calibrated and further refined using a training objective                     and generated up to 24 trace rollouts for each website in the training
+that enforces a margin (i.e., minimum difference) between preferred                     split of uxWeb by repeating its automated usability test protocol.
+and rejected UIs in our dataset.                                                           To perform rollout generation, we developed a containerized
+                                                                                        Apptainer environment that contained i) a headless X display server
+4.2     Agent Architecture                                                              running at 1080p resolution, ii) an instance of Firefox running in
+uxCUA is based on a popular open-source CUA agent harness [58]                          full-screen mode, and iii) our agent harness which controlled a
+that captures a stream of screenshots from the user’s desktop, feeds                    virtual mouse and keyboard. We wrote a script that repeatedly
+them to the underlying model hosted on a vLLM inference end-                            sampled a website from the uxWeb training split at random, which
+point [35], and uses generated responses to directly control the                        was a React.js application bundle. This bundle was transferred
+keyboard and mouse. This allows uxCUA to run on any graphical                           to the container, where the website was staged and hosted at a
+desktop environment (e.g., operating system) and interact with any                      pre-defined local URL. After successful staging, it was loaded into
+GUI regardless of the underlying implementation.                                        the browser, and a new usability testing session was started using
+   The CUA architecture follows the default settings of UI-TARS and                     our CUA harness. The CUA harness was configured to query a
+maintains several data structures. First, a textual goal, 𝐺, provided                   vLLM instance running on a compute cluster that served the base
+to the agent at the beginning of execution. While most CUAs are                         model. We configured our harness to log all interactions, model
+trained to perform well-defined tasks (e.g., navigating to a web                        responses, and screenshots to accurately represent the states and
+address), we use a static usability testing prompt (Appendix B) that                    actions of the rollout. Figure 2 shows a visualization of a portion of
+instructs the model to make its own determination of important                          a collected rollout. In total we generated 37,281 traces. Prompts for
+interaction flows to test for the purposes of rating usability. At each                 trace generation and scoring are provided in Appendix B.
+                                                                                                                                                                                                                                                    Gao et al.
+
+
+                                                                       Step 1: Pause briefly to                                      [...]Step 2: Prepare for                                     [...] Step 3: Click on the main
+                                                                       observe the current page.
+                                    the usability test.
+                                         menu to explore options.
+
+                                                                       Step 2: Prepare for the                                       Step 3: Click on the main                                    Step 4: Click on the "Recipes"
+            A                                                          usability test.
+                                              menu to explore options.
+                                    menu.
+
+ Conduct a usability test                                              Step 3: Click on the main                                     Step 4: Click on the                                         Step 5: Click on the "Chocolate               C
+ of this website, you                                                  menu...                                                       "Recipes" menu.                                              Lava Cakes" recipe card.
+ have 50 steps...                                                                                                                                                                                                                    Rate the website
+                                                                                                                                                                                                                                     usability from 0 to 100.
+                  B
+                                                                                                                                                                                                                            I've completed my usability testing
+                                                                                                                                                                                                                            covering all major user goals:
+                                                                                                                                                                                                                            discovering recipes, managing a
+                            I see the Epicurious homepage... I’ll continue to                 I can see the All Recipes page, showing 12                         I've navigated to the recipe page. Now I need
+                                                                                                                                                                                                                            shopping list, and planning meals.
+                            examine the main site sections to explore the                     recipes. To assess the usability of the site's                     to scroll down to view any more information.
+                                                                                                                                                                                                                            Based on the interaction history
+                            recipes and see how users can find them. 
+                        search functionality, I need...
+                                   This will help me understand the site’s
+                                                                                                                                                                                                                            with confusing flows, inconsistent
+                            Action: Click on the "Recipes" menu item.                         Action: Click on the "Chocolate Lava Cakes"                        usability.
+
+                                                                                                                                                                                                                            page loading behavior...Score: 15
+
+
+                                                                                              recipe card.                                                       Action: Scroll down the page.
+                                                                                                                                                                                                                             
+
+
+
+Figure 2: A portion of an interaction trace that the model executes on a site from uxWeb. At the beginning (a) the model is
+asked to conduct a usability test; (b) the model starts exploration through one if its identified flows; (c) the model concludes its
+exploration and is prompted to assess the usability based on its interaction history.
+
+
+4.3.2 Reward Assignment. After rollout generation, we evaluated                                                                              Usability Assessment Accuracy. After navigation, uxCUA must ac-
+and assigned rewards based on the i) quality of the navigation trace                                                                     curately reflect on its observations, reason about the UI’s strengths
+and ii) accuracy of the agent’s predicted usability score. Rollouts                                                                      and weaknesses, and provide a numerical usability score. Assigning
+that are assigned high reward scores are used to amplify effective                                                                       a reward that reflects the accuracy of a rollout’s usability assess-
+behaviors within the model’s policy.                                                                                                     ment is difficult due to the lack of ground truth for both the design
+                                                                                                                                         reasoning and a usability score.
+   Navigation Quality. The quality of navigation behavior has a
+                                                                                                                                             A straightforward but likely incorrect approach is to use a 100 as
+large impact in usability assessment, and CUAs can often exhibit
+                                                                                                                                         the target usability score for positive samples (plain websites) and 0
+behaviors that are not characteristic of human users, such as failure
+                                                                                                                                         as the target usability score for negative samples (defect-augmented
+to click graphical targets or “looping” between a small number of
+                                                                                                                                         websites). Yet, the absolute quality of websites in our data is not
+screens [80]. We developed several heuristic measures to validate
+                                                                                                                                         known, e.g., usability defects may exist outside of the ones that
+the navigation quality of rollouts used in training.
+                                                                                                                                         were intentionally introduced, which would make 100 the incorrect
+   For each rollout, we computed the following metrics:
+                                                                                                                                         target score.
+      • Same screen ratio: The fraction of transitions with no                                                                               To address this challenge, we introduce a method for dynam-
+         visual change. Higher values indicate more repetitive be-                                                                       ically estimating the target usability score of a website based on
+         havior.                                                                                                                         a model’s initial score predictions for both the website and its
+      • Same screen after clicks ratio: The fraction of clicks                                                                           defect-augmented counterpart. Our approach, inspired by other
+         that produced no screen change. Higher values suggest                                                                           contrastive learning objectives for text responses [36, 69] and visual
+         ineffective clicks or that the CUA became stuck.                                                                                design quality [77], enforces a margin between model-predicted
+      • Unique screen ratio: The fraction of unique visited screens.                                                                     scores of preferred and non-preferred samples (Figure 3). We first
+         Higher values indicate broader website exploration.                                                                             estimate the score of the plain website, 𝜇𝑝 , as the mean predicted
+      • Steps: The total number of steps in the interaction trace.                                                                       usability score across all of its rollouts, and use the same proce-
+         Some traces were shorter due to early failure.                                                                                  dure to estimate the score of the corresponding defect-augmented
+We filtered out blank screens (possibly due to load failures) before                                                                     website, 𝜇𝑑 . If the estimated score difference does not satisfy the
+computing the first three metrics as they could artificially reduce                                                                      desired margin, i.e., 𝜇𝑝 − 𝜇𝑑 < 𝑚, we define adjusted target scores
+these scores. We used perceptual hashing (phash) [34] with a Ham-                                                                        such that the positive website is assigned a target of 𝜇0 + 𝑚2 and
+ming distance of 4 to compute whether two screens were the same.                                                                         the negative website is assigned a target of 𝜇0 − 𝑚2 , which are the
+Perceptual hashing has applications in reverse image search and                                                                          values closest to the initial model estimates that satisfy the margin
+identifying similar screens [1, 26, 32, 59]. We then combined these                                                                                       𝜇 +𝜇
+                                                                                                                                         and with 𝜇0 = 𝑝 2 𝑑 . Reward values are then assigned to rollouts
+three metrics to compute the navigation quality score, 𝑠𝑛𝑎𝑣 :                                                                            for each website based on the proximity of their predicted usability
+        𝑠𝑛𝑎𝑣 = Unique screen ratio × (1 − Same screen ratio)                                                                             scores to the corresponding target score, such that rollouts with
+                                                                                                                        (1)
+                                                       (1 − Same screen after clicks ratio)                                              predictions closer to the target receive higher reward. We chose
+ We computed 𝑠𝑛𝑎𝑣 for unique screens in the rollout that were not                                                                        the value of the margin 𝑚 based on manual tuning, and we include
+separated by scrolling actions, which could trigger false positives                                                                      it as a hyperparameter in the Appendix.
+in the screen hashing metric. We thresholded this score and rollout
+length to filter our generated rollouts. Through trial and error we
+determined that a 𝑠𝑛𝑎𝑣 of at least 0.07 and a minimum of 30 steps                                                                        4.3.3 Policy Update. Finally, we used our dataset of reward-labeled
+indicated a quality trace. In total we had 7,895 traces that passed                                                                      rollouts to update the CUA’s policy model. For each site in the train-
+this quality check and used to train our model.                                                                                          ing split of uxWeb, we selected a single rollout (out of 24) with
+   As an additional filter for website quality, we excluded websites in                                                                  the highest assigned reward, which led to a total of 631 rollouts.
+uxWeb if fewer than 3 of its 24 rollouts passed our heuristics, since                                                                    We converted each rollout into multiple training examples using a
+we hypothesized that they were likely to contain implementation                                                                          sliding-window approach, where each training example contained
+errors that prevented useful rollouts to be collected.                                                                                   the expected input and output format of the policy network at each
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+
+Margin satisfied                                     Plain site estimated score
+                                                                                                    models and at the time of our experiments, this was one of
+                                                     Defect-augmented site estimated score          the latest models released.
+                                                     Adjusted estimated score                     • Kimi K2.5 [66]: Moonshot AI’s open-source 1.1T-parameter
+ Rollout Frequency
+
+
+
+
+                                                     Margin                                         reasoning model for coding and computer use. At the time
+                                                                                                    of our experiments, it ranked first among open-source mod-
+                                                                                                    els and second overall on OSWorld [79].
+                               Score                                                              • EvoCUA [80]: Meituan’s open-source CUA model. Its 8B
+                                                                                                    variant (EvoCUA-8B-20260105) was the strongest OSWorld
+Margin unsatisfied                                                                                  open-source model that could run on consumer hardware
+                                        Margin adjustment                                           at the time of our experiments.
+                                                                                                  • uxCUA: Our model, fine-tuned on uxWeb with ground-
+Rollout Frequency
+
+
+
+
+                                                                                                    truth usability labels and human preferences using our
+                                                                                                    training objective.
+                                                                                             5.1.2 Methodology. We first constructed test samples, i.e., prefer-
+                              Score                              Score
+                                                                                             ence pairs, from the test split of uxWeb. From our test split, we
+                                                                                             randomly selected one plain clone per unique source website (30)
+Figure 3: If the estimated target scores for plain sites (𝜇𝑝 ) and
+                                                                                             and randomly sampled 4 of 8 of the plain clone’s associated defect-
+defect-augmented sites (𝜇𝑑 ) satisfy the margin we use their
+                                                                                             augmented variants for a total of 150 sites. In addition, we collected
+estimated scores. Otherwise, we enforce a margin by shifting
+                                                                                             all designer ratings of websites in the test split. In total, the bench-
+their estimated scores.
+                                                                                             mark consisted of 150 unique uxWeb website implementations and
+                                                                                             115 comparison pairs.
+                                                                                                 During our evaluation, all CUAs were configured with the same
+timestep in the rollout [58, 80]. In total, we generated 27,493 win-                         harness and settings, which standardized their input/output modal-
+dows for fine-tuning our policy. Examples from all websites in the                           ities, i.e., visual observations of the GUI and keyboard/mouse in-
+uxWeb training split were aggregated together for training. We used                          teractions (§4.3.1), and generated chain-of-thought reasoning logs
+LLaMAFactory [87], an open source library, to conduct supervised                             during their interactions. Furthermore, all conditions were run in
+fine-tuning using this rejection-sampled rollouts. We employed                               our container-based GUI execution environment that staged web-
+4-bit quantization and LoRA to improve training efficiency. Hyper-                           sites locally and launched them in a full-screen Firefox browser.
+parameters were determined through manual experimentation and                                One interaction trace was generated for each evaluated site, which
+are provided in Appendix D. Model fine-tuning was conducted on                               was limited to a maximum of 50 timesteps. Next, we applied each
+a GPU compute node with 4 H100 GPUs.                                                         model to each site in a preference pair with the model’s prediction
+                                                                                             computed by taking the higher usability score of the sites in prefer-
+5                    Evaluation                                                              ence pairs. In cases where the model did not provide a score, we
+We conducted three evaluations to assess our training objective                              counted that as a vote for the other site.
+instantiated on our model and measure uxCUA’s performance com-                                   We used AUC (area under precision-recall curve) as our primary
+pared with baselines. We first conducted an evaluation that com-                             metric to assess the degree to which the model’s predicted score
+pared uxCUA’s usability scoring accuracy with that of existing                               discriminated between chosen sites (e.g., plain sites or human-
+open-source and proprietary agents. In our second evaluation, we                             preferred) over rejected ones (e.g., defect-augmented or human-
+analyzed uxCUA’s critiques on plain and defect-augmented syn-                                rejected), compared to random chance. AUC accounts for class
+thetic websites, characterizing the types usability issues it identified                     imbalance in the test set, including the four-to-one ratio of defect-
+and verifying if these issues existed. Our third evaluation is a case                        augmented to plain websites.
+study, where we provide an informal walkthrough of uxCUA as it                               5.1.3 Results. Overall, uxCUA outperformed proprietary models,
+conducts a usability test on a real-world site.                                              providing accurate usability scores that could discriminate between
+                                                                                             chosen sites. Our results are shown in Figure 4.
+5.1                   Evaluation 1: Usability Scoring                                           Without training, baseline models provide inaccurate usability
+We compared the usability scoring performance of uxCUA trained                               assessments on UIs with known usability issues. We observe how
+with our objective and several open-source and proprietary models.                           baseline models provide inaccurate usability assessments on our
+We evaluated the accuracy of model-predicted scores using labels                             defect-augmented sites, with GPT-5-mini and EvoCUA providing
+from the uxWeb dataset, which included both synthetic and human-                             assessments worse than chance, with an AUC of 0.436 and 0.381
+provided labels.                                                                             respectively. Though Kimi K2.5 is somewhat better at providing
+                                                                                             higher usability scores for plain sites over defect-augmented vari-
+5.1.1 Baselines. We used the following multimodal models as base-                            ants (AUC = 0.521), it is only slightly better than chance. In contrast,
+lines for usability scoring:                                                                 uxCUA shows much better performance in correctly providing us-
+                     • GPT-5-mini [50]: OpenAI’s proprietary efficient reasoning             ability assessments to sites with known defects with an AUC of
+                       model for coding, computer use, and agentic workflows.                0.632. On average, it provides a 44% increase in AUC with a notably
+                       GPT remains one of the leading choices for proprietary                substantial improvements to its base model, EvoCUA (65.9%).
+                                                                                                                                                                  Gao et al.
+
+
+
+                Baseline Model Performance on uxWeb                                        Overall we found that uxCUA’s precision for reporting existing
+                                                                        0.632           issues was 69.8%. The model tended to slightly misreport issues on
+      0.6             0.592            0.588                                    0.607
+                               0.521                        0.522                       plain clones (60.8%) while more accurately reasoning and providing
+      0.5
+              0.436                                                                     critiques on defect-augmented sites (71.9%). We also observed that
+      0.4                                           0.381
+                                                                                        uxCUA was most accurate in its assessment of usability issues
+AUC
+
+
+
+
+      0.3                                                                               related to feedback, control, and consistency for defect-augmented
+      0.2                                                                               sites while most accurate in control issues for plain sites. This aligns
+      0.1                                                                               with the types of issues uxCUA most frequently reported (Figures 1)
+      0.0                                                                               and may also be due to the fact during target selection and training,
+             GPT-5-Mini         Kimi K2.5               EvoCUA            uxCUA         these types of defect-augmented sites were most frequently seen.
+             uxWeb split      synthetic ground-truths       human preferences           Overall, these results suggest that uxCUA can not only provide
+                                                                                        accurate usability assessments for sites with known defects but
+Figure 4: Model performance on AUC of test splits on uxWeb                              also generates reasonable usability critiques. We provide the full
+for ground-truth labels and human preferences. Applying                                 breakdown of categorized issues in Appendix E.
+our training approach on a base model (EvoCUA) led to sig-
+nificant improvements (uxCUA) with a 41% increase in AUC.                               Table 1: Through a subset of manually inspected issues, we
+Our trained model is better at providing accurate usability                             observe that uxCUA provides realistic and existing usability
+scores for sites with and without known defects and for hu-                             issues for defect-augmented (D.A.) sites, as indicated by its
+man preferences.                                                                        precision. The left side of the table provides the true positive
+                                                                                        (TP) and false positive (FP) counts for reported issues.
+
+   Additionally, uxCUA achieves a higher AUC (0.607) on human
+preference labels compared to other baseline models. Similar to                                                        Plain         D.A.        Precision
+before, the AUC for other models (GPT-5-mini: 0.592, Kimi K2.5:                                     Category          TP    FP     TP    FP     Plain     D.A.
+0.588, EvoCUA: 0.522) remains low. Additionally, their agreement                                    Consistency        1      1     9      1     50%      90%
+rate with what humans label as more usable UIs suggests results                                     Feedback          18     19    95     52     49%      65%
+comparable to random guessing. As described in §3.2, the original                                   Dialog             0      1     1      0      0%     100%
+agreement rate between designers was low (𝛼=0.308) so large im-                                     Prevention         3      0    25      8    100%      76%
+provements may be difficult. More notably, uxCUA shows large                                        Control           14      3    44     22     82%      67%
+improvements over EvoCUA (0.435) for the agreement with de-                                         Reversal           0      0     1      0       –     100%
+signers. uxCUA also achieves the highest AUC score (0.607) of                                       Memory             0      0     2      1       –      67%
+all models, suggesting that training on human preferences pairs                                     Hierarchy          6      3    40      1     67%      98%
+benefits the model.
+   Overall, our results suggest that our training paradigm with our
+data is an effective method for learning usability scoring, providing                   5.3     Evaluation 3: A Walkthrough with uxCUA
+uxCUA the ability to both form accurate usability assessments on
+                                                                                        In this section, we demonstrate that with our training approach,
+sites with known defects and provide assessments aligned with
+                                                                                        uxCUA can i) conduct a usability test on a real-world site from
+human preferences.
+                                                                                        our test set, ii) prioritize important interaction flows to explore
+                                                                                        usability, and iii) providing a usability score grounded in its inter-
+5.2         Evaluation 2: Usability Critique Analysis
+                                                                                        action history. We selected craigslist.org and provide an example
+Our first evaluation focused on assessing models’ ability to accu-                      walkthrough3 as uxCUA navigates the website. As the site’s issues
+rately predict scores in comparison to human-scored ground-truth                        remain unknown, we highlight areas where uxCUA successfully
+labels and preference pairs. In this second evaluation, we examine                      and unsuccessfully explores the website and provide its final usabil-
+the usability issues (e.g., critiques) identified by uxCUA before it                    ity assessment as an example (Figure 5).
+provides its final usability assessment on both plain sites and their                      uxCUA begins when we instruct it to conduct a usability test
+defect-augmented counterparts.                                                          on craigslist.org. The agent first waits for the page to load before
+   We first extracted the list of usability issues the uxCUA provided                   beginning 1z   ):
+during its interaction trace just before it provided its usability as-
+                                                                                              Agent: I ' ll start by identifying the most important
+sessment on the 150 benchmark sites from the previous section. We                             user goals for this site . Craigslist is primarily
+used GPT-4o-mini to classify these issues into one of the eight types                         used for posting and searching for classified ads ,
+of usability defects we injected in §3.1.2. To validate the usability                         so I ' ll need to test these flows .
+critiques the uxCUA generated, two authors each examined 5 plain                          Observing the list of US states and cities, the agent decides to
+sites and a random sample of their defect-augmented counterparts                        explore local listings in New York City ( 2z), reasoning that is a
+along with the full list of usability critiques for each site. The au-                  major city that will enable it to better test the site’s features. After
+thors then manually inspected each site, verifying the existence of                     navigating to New York City Craigslist page, the agent decides
+uxCUA’s reported usability issue. In total, we manually inspected
+47 sites and created a list of 371 usability issues.                                    3 For the purpose of this walkthrough we provide abridged versions of turns.
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+                                                                                                             cellphones
+
+                                                                                                             electronics
+
+
+                                                                                                    3
+                                                                                                             cars & trucks
+    4
+                                                                                                             household items
+
+                                                       New York
+                       phones
+                                                                                                              all   owner dealer
+                                                         albany
+
+                                                         binghamton
+
+                                                         buffalo
+
+                                                                                                                                                     5
+                                                         ...
+
+                                                         new york city
+
+                              1
+                                                                    2
+
+
+
+
+ 6                                                                                                              9                              10
+                                             contact name: ...                      prev   next
+
+
+                                        7      email
+
+                                               call                                                 8
+
+
+
+
+Figure 5: An abridged interaction trace as uxCUA conducts a usability test on craigslist.org. In this example, the agent chooses
+to explore flows related to searching for items on sale.
+
+
+to test the functionality of the search box with a common item it                                  Overall, we observe that uxCUA is able to successfully navigate
+believes to be most useful to users, a phone ( 3z).                                             and identify key flows it should test on Craigslist, knowing how to
+                                                                                                search for items, identifying inconsistencies, and to explore page
+     Agent: I see the page has loaded with various
+     iPhone - related items . The search results are for
+                                                                                                details. Though it occasionally gets stuck, the agent still provides
+     " iphone " but the category filter on the left is set                                      as grounded assessment based on its interaction history.
+     to " cell phones ." I ' ll adjust the filter to
+     " electronics " to refine results and test                                                 6       Discussion
+     functionality .
+                                                                                                We introduced a novel training objective to train CUAs to assess
+    Once the agent successfully refines its search ( 4z), it decides                            GUI usability and show that through our training approach our
+to test flows for browsing and examining product details. To do                                 model, uxCUA, outperforms baselines in providing accurate us-
+so, uxCUA then clicks on a result for an iPhone, spending a few                                 ability scores and produces realistic critiques of synthetic and real-
+turns clicking through the image gallery( 5z     , 6z ). Once it finishes                       world UIs. We next discuss key results and broader implications.
+testing the gallery function, it progresses to see if it can view addi-
+tional details about the phone or seller’s contact information. After                           6.1      Computational Definition of Usability
+verifying that the seller’s contact information can be viewed ( 7z      ),                      A central goal of this work is to define usability assessment in a form
+it continues its usability test and attempts to navigate back to the                            that can be learned computationally. Usability depends on multiple
+main electronics listings page.                                                                 factors, including aesthetics, functionality, and how easily users can
+    Here( 8z ) the agent decides to click on the prev button at top                             discover important functionality. The UI perception and navigation
+of the screen to return to the main listing page, but ends up on a                              capabilities of the underlying foundation model are important, but
+different iPhone listing instead. This is likely due to the fact that the                       insufficient on their own. For example, our experiments found
+way to navigate back to Craigslist’s search results page is actually                            that models with stronger OSWorld navigation performance could
+through the uparrow (↑) between the prev and next hyperlinks                                    navigate sites but lacked grounded usability assessments, frequently
+and not the hyperlinks themselves. At this point the agent, unable                              assigning websites with known defects usability scores akin to
+to navigate back to the listings page, decides to continue its current                          chance.
+interaction flow by exploring more iPhone listings and examining                                   One way to operationalize usability is to prompt models with
+each iPhone listing in detail to test the functionality of details views                        design guidelines [89] or expert-written critiques [12]. However,
+before it reaches the maximum number of steps ( 9z         , 10z). At the                       these approaches often produce invalid or only partially valid cri-
+end, the agent provides its final usability assessment:                                         tiques, likely because positive examples alone do not discourage
+     Agent: I see issues with :                                                                 hallucinations and a model’s retrieved examples may come from
+     - Navigation: Repeatedly click on " prev " and " next "                                    mismatched contexts. Another approach is to supervise the evalua-
+     buttons to navigate content suggests inconsistent or                                       tion process itself by training on expert traces. In practice, this is
+     unreliable navigation , indicating potential issues .                                      difficult: different evaluation methods can produce different find-
+     - Confusing Flows: Interaction history shows the
+     assisstant needs to scroll multiple times to view
+                                                                                                ings [21]. Additionally traces are often noisy, and there is no single
+     content , suggesting the layout or content                                                 canonical path to a correct usability judgment. Such data is also
+     organization may be unintuitive .                                                          hard to augment synthetically.
+     - Failed Page Loads: There were no page load failures ,                                       We therefore focused on outcome supervision rather than direct
+     which is good .
+                                                                                                process supervision [39, 61]. Outcome labels are easier to generate
+     Based on the these issues , the website usability
+     score is 65.                                                                               at scale and less costly for humans to provide. Prior work has done
+                                                                                                this for static screenshots [76], but interactive usability assessment
+                                                                                                                                       Gao et al.
+
+
+makes process and outcome tightly coupled: incorrect judgments           compared to proprietary models still suggest that our training ob-
+may result from either poor exploration or poor reasoning. uxCUA         jective can be applied to more powerful models and improve their
+is an initial step toward encoding an HCI evaluation procedure into      usability assessments. With less computational limits, future work
+a model, and we hope similar approaches can help formalize and           can also explore applying our training approach with video streams
+learn other HCI methods.                                                 to improve model usability assessment performance.
+                                                                            The model was trained primarily on fixed-resolution websites,
+6.2    From User to Designer-Centered Simulation                         due to the available synthetic data and to the training environment
+                                                                         of the base model [80]. We expect this approach to transfer to similar
+Our approach builds on prior HCI work on user simulation, but
+                                                                         2D WIMP interfaces, but likely less well to mobile or XR settings.
+targets a different role: centering designers rather than end users.
+                                                                         Finally, our website evaluations did not include strong guardrails
+In a standard usability study, researchers provide participants with
+                                                                         against high-impact actions, such as making purchases or deleting
+tasks [46], so simulating users means modeling how they respond
+                                                                         data. Prior work highlights the importance of accounting for the
+to predefined stimuli or goals [3, 8, 84]. In contrast, our training
+                                                                         consequences of risky or irreversible UI actions [85], which was
+objective designed uxCUA to identify and prioritize important in-
+                                                                         one reason we limited evaluation on real-world sites.
+teraction flows and identify defects in those, providing insights that
+can guide designers in their work.
+   Our approach also extends prior systems that simulate expert
+                                                                            Generalizability. uxCUA was trained and primarily evaluated on
+critique in heuristic evaluation [12, 89]. The critiques simulated by
+                                                                         synthetic websites, limiting its generalizability. We used synthetic
+these systems were only considered helpful 30% of the time and
+                                                                         sites because they allow controlled manipulation of usability char-
+were not always helpful whereas our second evaluation demon-
+                                                                         acteristics, reproducible evaluation, and terms-of-service-compliant
+strates that uxCUA is more precise in producing valid usability
+                                                                         data collection without requiring user accounts or payment infor-
+critiques. Additionally, our training objective also provides rela-
+                                                                         mation. However, they are less polished than real websites and may
+tive usability scores. Beyond generating critiques, designers must
+                                                                         not capture the full range of real-world usability issues. Prior work
+weigh severity and tradeoffs, especially when comparing alter-
+                                                                         has shown that CUAs can be influenced by dark patterns, suggest-
+natives. Treating the numerical usability score prediction as an
+                                                                         ing that some interfaces may be harder for both our model and
+important part of training the model to make judgments provides
+                                                                         humans to evaluate [23]. Although our walkthrough provides some
+designers an interpretable way of assessing usability issues and
+                                                                         evidence that uxCUA can operate on real websites, our findings
+determining their severity.
+                                                                         may not extend to all intended use cases, such as other other GUI
+   As with prior user-simulation work [30], we hope releasing our
+                                                                         types (e.g., native desktop or mobile apps) or intermediate stages
+dataset and models will support more reproducible HCI evaluation
+                                                                         of a designer’s workflow. Still, the strong gains over EvoCUA-8B
+and provide a useful first-pass assessor when participant recruit-
+                                                                         on both splits of the synthetic dataset suggest that our architecture
+ment is difficult or when designers want rapid feedback during
+                                                                         and training approach are effective when suitable data is available,
+their design processes. Beyond user simulation, we believe designer
+                                                                         and may transfer to other domains with sufficient domain-specific
+simulation could enable additional possibilities for HCI researchers
+                                                                         data.
+and practitioners such as targeted testing, idea generation, and
+feedback synthesis. More broadly, whereas user simulation has tra-
+ditionally supported designers as a tool, we hope this work takes
+                                                                            Contextualized Evaluation. Finally, we note limitations of our
+an initial step toward systems that can collaborate in the design
+                                                                         evaluation and directions for future work. We focused on outcome
+process.
+                                                                         decision and critique accuracy, but these do not fully capture the
+                                                                         process by which uxCUA reaches its judgments. Even when the
+6.3    Limitations & Future Work                                         model matches human preferences, it is unclear whether this is
+While we show uxCUA outperforms other baselines in our experi-           because it explores the same parts of the interface or relies on
+mental data, we see several avenues for improvement.                     similarly meaningful evidence. Although our coding procedure
+                                                                         in §5.2 provides some insight, trace quality remains difficult to
+   Technical Limitations. uxCUA is constrained by both compute           measure in a principled way.
+limits and current CUA capabilities. Crawls were capped at 50               Different use cases will also require different capabilities and
+steps, likely preventing complete coverage of a website. This was        evaluation criteria. Our approach focused on training CUAs to
+due to practical constraints and by design: our training objective       provide accurate usability scores as a relative assessment for a site’s
+emphasized prioritizing important tasks rather than exhaustive           usability, in other scenarios such as designer judging, direct designer
+exploration. Accordingly, unlike a traditional crawler, uxCUA was        agreement may be more appropriate. Similarly, in other contexts,
+not intended to achieve full coverage in this initial work. Addition-    designers may value actionable feedback and control over the tasks,
+ally, uxCUA is slow, requiring at least five second per step when        instructions, and context provided to the model. Practitioners using
+accounting for the agent’s internal timing and model inference on        uxCUA in model training may need interpretable and calibrated
+our hardware. Due to this delay, uxCUA sometimes makes errors            scores. In end-user or generative UI settings, the model may also
+that humans typically would not (in §5.3), such as missing click         need to adapt to individual preferences and accessibility needs. We
+targets and misclassifying them as usability issues. However, ux-        hope our released dataset and models provide a foundation for
+CUA’s large improvements over its original model and performance         these more targeted applications and evaluations.
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+7    Conclusion                                                                               Human-Computer Interaction. Springer, 592–605.
+                                                                                         [14] Raymond Fok, Mingyuan Zhong, Anne Spencer Ross, James Fogarty, and Ja-
+We presented a novel training objective to train CUAs to assess GUI                           cob O. Wobbrock. 2022. A Large-Scale Longitudinal Analysis of Missing Label
+usability by prioritizing important interaction flows and predict                             Accessibility Failures in Android Apps. In Proceedings of the 2022 CHI Conference
+                                                                                              on Human Factors in Computing Systems (New Orleans, LA, USA) (CHI ’22). As-
+calibrating usability scores. We used it to fine-tune our model, ux-                          sociation for Computing Machinery, New York, NY, USA, Article 461, 16 pages.
+CUA. To support this goal, we created uxWeb, a large-scale dataset                            doi:10.1145/3491102.3502143
+of interactive websites annotated with both synthetic defect-based                       [15] Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust,
+                                                                                              Shixiang Shane Gu, and Izzeddin Gur. 2023. Multimodal Web Navigation with
+usability labels and human judgments. Across three evaluations,                               Instruction-Finetuned Foundation Models. arXiv:2305.11854 [cs.AI]
+uxCUA outperformed substantially larger proprietary and open                             [16] Hiroki Furuta, Kuang-Huei Lee, Ofir Nachum, Yutaka Matsuo, Aleksandra Faust,
+models on usability scoring and produced realistic assessments of                             Shixiang Shane Gu, and Izzeddin Gur. 2024. Multimodal Web Navigation with
+                                                                                              Instruction-Finetuned Foundation Models. arXiv:2305.11854 [cs.LG] https://
+both synthetic and real-world interfaces. These findings suggest                              arxiv.org/abs/2305.11854
+that current off-the-shelf agents are not (yet) sufficient for rigorous                  [17] Krzysztof Gajos and Daniel S Weld. 2004. SUPPLE: automatically generating
+                                                                                              user interfaces. In Proceedings of the 9th international conference on Intelligent
+usability assessment, but that usability assessment can be learned                            user interfaces. 93–100.
+when paired with appropriate data and objectives. More broadly,                          [18] Krzysztof Gajos and Daniel S Weld. 2005. Preference elicitation for interface
+we hope this work provides a foundation for scalable, reproducible,                           optimization. In Proceedings of the 18th annual ACM symposium on User interface
+                                                                                              software and technology. 173–182.
+and human-aligned usability evaluation in HCI, and that releasing                        [19] Yifei Gao, Jiang Wu, Xiaoyi Chen, Yifan Yang, Zhe Cui, Tianyi Ma, Jiaming Zhang,
+our data and models will support future research on automated                                 and Jitao Sang. 2026. GUITester: Enabling GUI Agents for Exploratory Defect
+design evaluation, benchmarking, and interactive AI systems.                                  Discovery. arXiv preprint arXiv:2601.04500 (2026). doi:10.48550/arXiv.2601.04500
+                                                                                         [20] Kelley Gordon. 2020. 5 Principles of Visual Design in UX. https://www.nngroup.
+                                                                                              com/articles/principles-visual-design/
+Acknowledgments                                                                          [21] Wayne D. Gray and Marilyn C. Salzman. 1998. Damaged Merchandise? A Review
+                                                                                              of Experiments That Compare Usability Evaluation Methods. Human–Computer
+This work used Anvil at Purdue University through allocation                                  Interaction 13, 3 (1998), 203–261. doi:10.1207/S15327051HCI1303_2
+CIS260289 from the Advanced Cyberinfrastructure Coordination                             [22] Johanna Gunawan, Amogh Pradeep, David Choffnes, Woodrow Hartzog, and
+                                                                                              Christo Wilson. 2021. A Comparative Study of Dark Patterns Across Web and
+Ecosystem: Services & Support (ACCESS) program and was funded                                 Mobile Modalities. Proc. ACM Hum.-Comput. Interact. 5, CSCW2, Article 377
+in part by NSF grant ITE-2333736.                                                             (Oct. 2021), 29 pages. doi:10.1145/3479521
+                                                                                         [23] Longjie Guo, Chenjie Yuan, Mingyuan Zhong, Robert Wolfe, Ruican Zhong,
+                                                                                              Yue Xu, Bingbing Wen, Hua Shen, Lucy Lu Wang, and Alexis Hiniker. 2026.
+References                                                                                    SusBench: An Online Benchmark for Evaluating Dark Pattern Susceptibility
+ [1] Pieter Agten, Wouter Joosen, Frank Piessens, and Nick Nikiforakis. 2015. Seven           of Computer-Use Agents. In Proceedings of the 31st International Conference on
+     months’ worth of mistakes: A longitudinal study of typosquatting abuse. In               Intelligent User Interfaces (IUI ’26). Association for Computing Machinery, New
+     Proceedings of the 22nd Network and Distributed System Security Symposium                York, NY, USA, 1917–1937. doi:10.1145/3742413.3789111
+     (NDSS 2015). Internet Society.                                                      [24] Izzeddin Gur, Hiroki Furuta, Austin Huang, Mustafa Safdari, Yutaka Matsuo,
+ [2] Arash Ahmadian, Chris Cremer, Matthias Gallé, Marzieh Fadaee, Julia Kreutzer,            Douglas Eck, and Aleksandra Faust. 2024. A Real-World WebAgent with Planning,
+     Olivier Pietquin, Ahmet Üstün, and Sara Hooker. 2024. Back to Basics: Revisiting         Long Context Understanding, and Program Synthesis. arXiv:2307.12856 [cs.LG]
+     REINFORCE Style Optimization for Learning from Human Feedback in LLMs.                   https://arxiv.org/abs/2307.12856
+     arXiv:2402.14740 [cs.LG] https://arxiv.org/abs/2402.14740                           [25] Perttu Hämäläinen, Mikke Tavast, and Anton Kunnari. 2023. Evaluating Large
+ [3] John R. Anderson and Christian Lebiere. 1998. The Atomic Components of Thought.          Language Models in Generating Synthetic HCI Research Data: a Case Study. In
+     Lawrence Erlbaum Associates, Mahwah, NJ.                                                 Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems.
+ [4] Anthropic. 2026. Claude Code: Overview (Documentation). https://docs.                    Association for Computing Machinery, New York, NY, USA. doi:10.1145/3544548.
+     anthropic.com/en/docs/agents-and-tools/claude-code/overview. Accessed 2026-              3580688
+     02-06.                                                                              [26] Qingying Hao, Licheng Luo, Steve T.K. Jan, and Gang Wang. 2021. It’s Not
+ [5] Apple. 2023. Human Interface Guidelines. https://developer.apple.com/design/             What It Looks Like: Manipulating Perceptual Hashing based Applications. In
+     human-interface-guidelines                                                               Proceedings of the 2021 ACM SIGSAC Conference on Computer and Communications
+ [6] Arcada Labs. 2026. DesignArena by Arcada Labs. https://www.designarena.ai/.              Security (Virtual Event, Republic of Korea) (CCS ’21). Association for Computing
+     Accessed 2026-02-06.                                                                     Machinery, New York, NY, USA, 69–85. doi:10.1145/3460120.3484559
+ [7] Hao Bai, Yifei Zhou, Mert Cemri, Jiayi Pan, Alane Suhr, Sergey Levine, and Aviral   [27] Aurora Harley. 2018. UX Expert Reviews. https://www.nngroup.com/articles/ux-
+     Kumar. 2024. DigiRL: Training In-The-Wild Device-Control Agents with Au-                 expert-reviews/.
+     tonomous Reinforcement Learning. In Advances in Neural Information Processing       [28] Hongliang He, Wenlin Yao, Kaixin Ma, Wenhao Yu, Yong Dai, Hongming Zhang,
+     Systems 37 (NeurIPS 2024). doi:10.52202/079017-0397                                      Zhenzhong Lan, and Dong Yu. 2024. WebVoyager: Building an End-to-End
+ [8] Stuartk Card, THOMASP MORAN, and Allen Newell. 1986. The model human                     Web Agent with Large Multimodal Models. In Proceedings of the 62nd Annual
+     processor- An engineering model of human performance. Handbook of perception             Meeting of the Association for Computational Linguistics (Volume 1: Long Papers).
+     and human performance. 2, 45–1 (1986), 1–35.                                             Association for Computational Linguistics, 6314–6330. https://aclanthology.org/
+ [9] Xiang Deng, Yu Gu, Boyuan Zheng, Shijie Chen, Samuel Stevens, Boshi                      2024.acl-long.371/
+     Wang, Huan Sun, and Yu Su. 2023.               Mind2Web: Towards a Gener-           [29] Steffen Holter, Eunyee Koh, Mustafa Doga Dogan, and Gromit Yeuk-Yin Chan.
+     alist Agent for the Web. In Advances in Neural Information Process-                      2026. UXCascade: Scalable Usability Testing with Simulated User Agents.
+     ing Systems.        https://proceedings.neurips.cc/paper_files/paper/2023/file/          arXiv:2601.15777 [cs.HC] https://arxiv.org/abs/2601.15777
+     5950bf290a1570ea401bf98882128160-Paper-Datasets_and_Benchmarks.pdf                  [30] Aleksi Ikkala, Florian Fischer, Markus Klar, Miroslav Bachinski, Arthur Fleig,
+[10] Linda Di Geronimo, Larissa Braz, Enrico Fregnan, Fabio Palomba, and Alberto              Andrew Howes, Perttu Hämäläinen, Jörg Müller, Roderick Murray-Smith, and
+     Bacchelli. 2020. UI Dark Patterns and Where to Find Them: A Study on Mobile              Antti Oulasvirta. 2022. Breathing Life Into Biomechanical User Models. In
+     Applications and User Perception. In Proceedings of the 2020 CHI Conference on           Proceedings of the 35th Annual ACM Symposium on User Interface Software and
+     Human Factors in Computing Systems (Honolulu, HI, USA) (CHI ’20). Association            Technology (Bend, OR, USA) (UIST ’22). Association for Computing Machinery,
+     for Computing Machinery, New York, NY, USA, 1–14. doi:10.1145/3313831.                   New York, NY, USA, 1–14. doi:10.1145/3526113.3545689
+     3376600                                                                             [31] Shivani Kapania, William Agnew, Motahhare Eslami, Hoda Heidari, and Sarah E.
+[11] Alan Dix. 2004. Human-computer interaction. Vol. 1. Pearson Education.                   Fox. 2025. Simulacrum of Stories: Examining Large Language Models as Qualita-
+[12] Peitong Duan, Chin-Yi Cheng, Gang Li, Bjoern Hartmann, and Yang Li. 2024.                tive Research Participants. In Proceedings of the 2025 CHI Conference on Human
+     UICrit: Enhancing Automated Design Evaluation with a UI Critique Dataset. In             Factors in Computing Systems (CHI ’25). Association for Computing Machinery,
+     Proceedings of the 37th Annual ACM Symposium on User Interface Software and              New York, NY, USA. doi:10.1145/3706598.3713220 Honorable Mention.
+     Technology (Pittsburgh, PA, USA) (UIST ’24). Association for Computing Machin-      [32] Panagiotis Kintis, Najmeh Miramirkhani, Charles Lever, Yizheng Chen, Rosa
+     ery, New York, NY, USA, Article 46, 17 pages. doi:10.1145/3654777.3676381                Romero-Gómez, Nikolaos Pitropakis, Nick Nikiforakis, and Manos Antonakakis.
+[13] Leah Findlater and Joanna McGrenere. 2007. Evaluating reduced-functionality              2017. Hiding in plain sight: A longitudinal study of combosquatting abuse. In
+     interfaces according to feature findability and awareness. In IFIP Conference on         Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications
+                                                                                                                                                                      Gao et al.
+
+
+     Security. 569–586.                                                                       Interaction INTERACT ’97, Steve Howard, Judy Hammond, and Gitte Lindgaard
+[33] Laura Klein. 2025. Why Organizations Don’t Do User Research and How to                   (Eds.). Springer, Boston, MA, 362–369. doi:10.1007/978-0-387-35175-9_58
+     Change That. Nielsen Norman Group. https://www.nngroup.com/articles/why-            [55] Yi-Hao Peng, Jeffrey P. Bigham, and Jason Wu. 2025. DesignPref: Capturing
+     organizations-dont-do-user-research/                                                     Personal Preferences in Visual Design Generation. arXiv:2511.20513 [cs.CV]
+[34] Evan Klinger and David Starkweather. 2021. pHash: The open source perceptual             https://arxiv.org/abs/2511.20513
+     hash library. https://www.phash.org/docs/                                           [56] Angel R. Puerta. 1997. A Model-Based Interface Development Environment.
+[35] Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng,                       IEEE Software 14, 4 (1997), 40–47.
+     Cody Hao Yu, Joseph E. Gonzalez, Hao Zhang, and Ion Stoica. 2023. Efficient         [57] Zehan Qi, Xiao Liu, Iat Long Iong, Hanyu Lai, Xueqiao Sun, Jiadai Sun, Xinyue
+     Memory Management for Large Language Model Serving with PagedAtten-                      Yang, Yu Yang, Shuntian Yao, Wei Xu, Jie Tang, and Yuxiao Dong. 2025. WebRL:
+     tion. In Proceedings of the ACM SIGOPS 29th Symposium on Operating Systems               Training LLM Web Agents via Self-Evolving Online Curriculum Reinforcement
+     Principles.                                                                              Learning. In International Conference on Learning Representations (ICLR).
+[36] Nathan Lambert. 2026. The RLHF Book: Reinforcement Learning from Hu-                [58] Yujia Qin, Yining Ye, Junjie Fang, Haoming Wang, Shihao Liang, Shizuo Tian,
+     man Feedback, Alignment, and Post-Training LLMs. Manning Publications.                   Junda Zhang, Jiahao Li, Yunxin Li, Shijue Huang, Wanjun Zhong, Kuanye Li,
+     https://www.manning.com/books/the-rlhf-book Manning Early Access Pro-                    Jiale Yang, Yu Miao, Woyu Lin, Longxiang Liu, Xu Jiang, Qianli Ma, Jingyu Li,
+     gram (MEAP); publication estimated Summer 2026; last updated January 2026.               Xiaojun Xiao, Kai Cai, Chuang Li, Yaowei Zheng, Chaolin Jin, Chen Li, Xiao
+[37] Chunyang Li, Yilun Zheng, Xinting Huang, Tianqing Fang, Jiahao Xu, Lihui                 Zhou, Minchao Wang, Haoli Chen, Zhaojian Li, Haihua Yang, Haifeng Liu, Feng
+     Chen, Yangqiu Song, and Han Hu. 2026. WebDevJudge: Evaluating (M)LLMs                    Lin, Tao Peng, Xin Liu, and Guang Shi. 2025. UI-TARS: Pioneering Automated
+     as Critiques for Web Development Quality. arXiv:2510.18560 [cs.SE] https:                GUI Interaction with Native Agents. arXiv:2501.12326 [cs.AI] https://arxiv.org/
+     //arxiv.org/abs/2510.18560                                                               abs/2501.12326
+[38] William Lidwell, Kritina Holden, and Jill Butler. 2010. Universal principles of     [59] Jathushan Rajasegaran, Naveen Karunanayake, Ashanie Gunathillake, Suranga
+     design, revised and updated: 125 ways to enhance usability, influence perception,        Seneviratne, and Guillaume Jourjon. 2019. A multi-modal neural embeddings ap-
+     increase appeal, make better design decisions, and teach through design. Rockport        proach for detecting mobile counterfeit apps. In The World Wide Web Conference.
+     Pub.                                                                                     3165–3171.
+[39] Hunter Lightman, Vineet Kosaraju, Yura Burda, Harri Edwards, Bowen                  [60] Shreya Shankar, JD Zamfirescu-Pereira, Björn Hartmann, Aditya Parameswaran,
+     Baker, Teddy Lee, Jan Leike, John Schulman, Ilya Sutskever, and Karl Cobbe.              and Ian Arawjo. 2024. Who validates the validators? aligning llm-assisted evalu-
+     2023. Let’s Verify Step by Step. arXiv preprint arXiv:2305.20050 (2023).                 ation of llm outputs with human preferences. In Proceedings of the 37th Annual
+     arXiv:2305.20050 [cs.LG] doi:10.48550/arXiv.2305.20050                                   ACM Symposium on User Interface Software and Technology. 1–14.
+[40] LMArena Team. 2025. WebDev Arena: A Live LLM Leaderboard for Web App                [61] Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei
+     Development. https://lmarena.ai/blog/webdev-arena/. Published 2025-03-09;                Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, and Daya Guo. 2024. DeepSeekMath:
+     contributors: Aryan Vichare, Anastasios N. Angelopoulos, Wei-Lin Chiang, Kelly           Pushing the Limits of Mathematical Reasoning in Open Language Models. arXiv
+     Tang, Luca Manolache; accessed 2026-02-06.                                               preprint arXiv:2402.03300 (2024). arXiv:2402.03300 [cs.CL] doi:10.48550/arXiv.
+[41] Yuxuan Lu, Bingsheng Yao, Hansu Gu, Jing Huang, Zheshen Jessie Wang, Yang                2402.03300
+     Li, Jiri Gesi, Qi He, Toby Jia-Jun Li, and Dakuo Wang. 2025. UXAgent: An LLM        [62] William F. Shen, Xinchi Qiu, Chenxi Whitehouse, Lisa Alazraki, Shashwat Goel,
+     Agent-Based Usability Testing Framework for Web Design. In Proceedings of the            Francesco Barbieri, Timon Willi, Akhil Mathur, and Ilias Leontiadis. 2026. Re-
+     Extended Abstracts of the CHI Conference on Human Factors in Computing Systems           thinking Rubric Generation for Improving LLM Judge and Reward Modeling for
+     (CHI EA ’25). Association for Computing Machinery, New York, NY, USA, Article            Open-ended Tasks. arXiv:2602.05125 [cs.LG] https://arxiv.org/abs/2602.05125
+     545, 12 pages. doi:10.1145/3706599.3719729                                          [63] Danqing Shi, Yujun Zhu, Jussi P. P. Jokinen, Aditya Acharya, Aini Putkonen,
+[42] Kurt Luther, Jari-Lee Tolentino, Wei Wu, Amy Pavel, Brian P. Bailey, Maneesh             Shumin Zhai, and Antti Oulasvirta. 2024. CRTypist: Simulating Touchscreen
+     Agrawala, Björn Hartmann, and Steven P. Dow. 2015. Structuring, Aggregating,             Typing Behavior via Computational Rationality. In Proceedings of the 2024 CHI
+     and Evaluating Crowdsourced Design Critique. In Proceedings of the 18th ACM              Conference on Human Factors in Computing Systems. Association for Computing
+     Conference on Computer Supported Cooperative Work & Social Computing (Van-               Machinery. doi:10.1145/3613904.3642918
+     couver, BC, Canada) (CSCW ’15). Association for Computing Machinery, New            [64] Ben Shneiderman. 2010. Designing the user interface: strategies for effective
+     York, NY, USA, 473–485. doi:10.1145/2675133.2675283                                      human-computer interaction. Pearson Education India.
+[43] Thomas Mahatody, Mouldi Sagar, and Christophe Kolski. 2010. State of the art        [65] Sijun Tan, Siyuan Zhuang, Kyle Montgomery, William Y Tang, Alejandro
+     on the cognitive walkthrough method, its variants and evolutions. Intl. Journal          Cuadron, Chenguang Wang, Raluca Ada Popa, and Ion Stoica. 2024. Judgebench:
+     of Human–Computer Interaction 26, 8 (2010), 741–785.                                     A benchmark for evaluating llm-based judges. arXiv preprint arXiv:2410.12784
+[44] Hee Seung Moon, Antti Oulasvirta, and Byungjoo Lee. 2023. Amortized Inference            (2024).
+     with User Simulations. In CHI 2023 - Proceedings of the 2023 CHI Conference on      [66] Kimi Team. 2026. Kimi K2.5: Visual Agentic Intelligence. arXiv:2602.02276 [cs.CL]
+     Human Factors in Computing Systems. ACM. doi:10.1145/3544548.3581439                     https://arxiv.org/abs/2602.02276
+[45] Jakob Nielsen. 1994. Usability engineering. Morgan Kaufmann.                        [67] Aman Singh Thakur, Kartik Choudhary, Venkat Srinik Ramayapally, Sankaran
+[46] Jakob Nielsen. 2012. Usability 101: Introduction to Usability. https://www.              Vaidyanathan, and Dieuwke Hupkes. 2025. Judging the judges: Evaluating
+     nngroup.com/articles/usability-101-introduction-to-usability/.                           alignment and vulnerabilities in llms-as-judges. In Proceedings of the Fourth
+[47] Jakob Nielsen and Thomas K. Landauer. 1993. A mathematical model of the                  Workshop on Generation, Evaluation and Metrics (GEM2 ). 404–430.
+     finding of usability problems. In Proceedings of the INTERACT ’93 and CHI ’93       [68] Maryam Tohidi, William Buxton, Ronald Baecker, and Abigail Sellen. 2006. Get-
+     Conference on Human Factors in Computing Systems (Amsterdam, The Nether-                 ting the right design and the design right. In Proceedings of the SIGCHI conference
+     lands) (CHI ’93). Association for Computing Machinery, New York, NY, USA,                on Human Factors in computing systems. 1243–1252.
+     206–213. doi:10.1145/169059.169166                                                  [69] Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yas-
+[48] Jakob Nielsen and Rolf Molich. 1990. Heuristic evaluation of user interfaces. In         mine Babaei, Nikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhos-
+     Proceedings of the SIGCHI Conference on Human Factors in Computing Systems               ale, Dan Bikel, Lukas Blecher, Cristian Canton Ferrer, Moya Chen, Guillem
+     (Seattle, Washington, USA) (CHI ’90). Association for Computing Machinery,               Cucurull, David Esiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu, Brian Fuller,
+     New York, NY, USA, 249–256. doi:10.1145/97243.97281                                      Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony Hartshorn, Saghar
+[49] OpenAI. 2023. GPT-4V(ision) System Card. https://cdn.openai.com/papers/                  Hosseini, Rui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez, Madian Khabsa,
+     GPTV_System_Card.pdf. OpenAI system card.                                                Isabel Kloumann, Artem Korenev, Punit Singh Koura, Marie-Anne Lachaux,
+[50] OpenAI. 2025. Introducing GPT-5. https://openai.com/index/introducing-gpt-5/             Thibaut Lavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier
+[51] Antti Oulasvirta, Samuli De Pascale, Janin Koch, Thomas Langerak, Jussi Joki-            Martinet, Todor Mihaylov, Pushkar Mishra, Igor Molybog, Yixin Nie, Andrew
+     nen, Kashyap Todi, Markku Laine, Manoj Kristhombuge, Yuxi Zhu, Aliaksei                  Poulton, Jeremy Reizenstein, Rashi Rungta, Kalyan Saladi, Alan Schelten, Ruan
+     Miniukovich, et al. 2018. Aalto interface metrics (AIM) a service and codebase           Silva, Eric Michael Smith, Ranjan Subramanian, Xiaoqing Ellen Tan, Binh Tang,
+     for computational GUI evaluation. In Adjunct proceedings of the 31st annual ACM          Ross Taylor, Adina Williams, Jian Xiang Kuan, Puxin Xu, Zheng Yan, Iliyan
+     symposium on user interface software and technology. 16–19.                              Zarov, Yuchen Zhang, Angela Fan, Melanie Kambadur, Sharan Narang, Aurelien
+[52] Antti Oulasvirta, Jussi PP Jokinen, and Andrew Howes. 2022. Computational                Rodriguez, Robert Stojnic, Sergey Edunov, and Thomas Scialom. 2023. Llama 2:
+     rationality as a theory of interaction. In Proceedings of the 2022 CHI Conference        Open Foundation and Fine-Tuned Chat Models. (2023). arXiv:2307.09288 [cs.CL]
+     on Human Factors in Computing Systems. 1–14.                                             doi:10.48550/arXiv.2307.09288
+[53] Joon Sung Park, Lindsay Popowski, Carrie J. Cai, Meredith Ringel Morris, Percy      [70] Daniel Toyama, Philippe Hamel, Anita Gergely, Gheorghe Comanici, Amelia
+     Liang, and Michael S. Bernstein. 2022. Social Simulacra: Creating Populated              Glaese, Zafarali Ahmed, Tyler Jackson, Shibl Mourad, and Doina Pre-
+     Prototypes for Social Computing Systems. arXiv:2208.04024 [cs.HC] https:                 cup. 2021. AndroidEnv: A Reinforcement Learning Platform for Android.
+     //arxiv.org/abs/2208.04024                                                               arXiv:2105.13231 [cs.LG] doi:10.48550/arXiv.2105.13231
+[54] Fabio Paternò, Cristiano Mancini, and Silvia Meniconi. 1997. ConcurTaskTrees:       [71] Browser Use. 2026. Browser Use: The AI browser agent. https://browser-use.com
+     A Diagrammatic Notation for Specifying Task Models. In Human-Computer
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+[72] Bryan Wang, Gang Li, and Yang Li. 2023. Enabling conversational interaction          A uxWeb Creation Prompts
+     with mobile ui using large language models. In Proceedings of the 2023 CHI
+     conference on human factors in computing systems. 1–17.                              A.1 Synthetic Website Generation
+[73] Xinyuan Wang, Bowen Wang, Dunjie Lu, Junlin Yang, Tianbao Xie, Junli Wang,
+     Jiaqi Deng, Xiaole Guo, Yiheng Xu, Chen Henry Wu, et al. 2025. Opencua: Open         We used the following prompt for GLM 4.7 when generating web-
+     foundations for computer-use agents. arXiv preprint arXiv:2508.09123 (2025).         sites clones of the 137 real-world sites from Mind2Web. This prompt
+[74] Zichao Wang and Alexa Siu. 2026. Interview-Informed Generative Agents for
+                                                                                          was determined by trial and error and manual inspection on a small
+     Product Discovery: A Validation Study. In Proceedings of the 2026 CHI Conference
+     on Human Factors in Computing Systems. ACM. Honorable Mention.                       number of test cases.
+[75] Ronald J Williams. 1992. Simple statistical gradient-following algorithms for
+     connectionist reinforcement learning. Machine learning 8, 3 (1992), 229–256.
+[76] Jason Wu, Yi-Hao Peng, Amanda Li, Amanda Swearngin, Jeffrey P. Bigham, and
+     Jeffrey Nichols. 2024. UIClip: A Data-driven Model for Assessing User Interface          You are an expert web developer and designer
+     Design. arXiv:2404.12500 [cs.HC] https://arxiv.org/abs/2404.12500                        specializing in modern websites . You are currently
+[77] Jason Wu, Amanda Swearngin, Arun Krishna Vajjala, Alan Leung, Jeffrey Nichols,           handed a barebones React . js template and your jobs
+     and Titus Barik. 2025. Improving User Interface Generation Models from De-               is to make a fully working website using React . js .
+     signer Feedback. (Sept. 2025). arXiv:2509.16779 [cs.HC] doi:10.48550/arXiv.2509.         Feel free to use lightweight libraries like Tailwind
+     16779                                                                                    CSS to enhance the design .
+[78] Wei Xiang, Hanfei Zhu, Suqi Lou, Xinli Chen, Zhenghua Pan, Yuxiao Jin, Shuyue
+     Chen, and Lingyun Sun. 2024. SimUser: Generating Usability Feedback by
+     Simulating Various Users Interacting with Mobile Applications. In Proceedings of         Requirements :
+     the CHI Conference on Human Factors in Computing Systems (CHI ’24). Association          1. Create a fully functional , modern , and responsive
+     for Computing Machinery, New York, NY, USA, 1–17. doi:10.1145/3613904.                   website design
+     3642481                                                                                  2. Use only React . js , HTML , CSS , and JavaScript , but
+[79] Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan Li, Siheng Zhao, Ruisheng             feel free to use libraries like Tailwind CSS to make
+     Cao, Toh Jing Hua, Zhoujun Cheng, Dongchan Shin, Fangyu Lei, Yitao Liu, Yiheng           the design better and make layout easier . You can
+     Xu, Shuyan Zhou, Silvio Savarese, Caiming Xiong, Victor Zhong, and Tao Yu.               look at the package . json file to see which libraries
+     2024. OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+                                                                                              are already installed and import them . However , you
+     Computer Environments. In Advances in Neural Information Processing Systems,
+     Vol. 37. doi:10.52202/079017-1650                                                        must NEVER install new packages that were not
+[80] Taofeng Xue, Chong Peng, Mianqiu Huang, Linsen Guo, Tiancheng Han, Haozhe                already installed .
+     Wang, Jianing Wang, Xiaocheng Zhang, Xin Yang, Dengchang Zhao, Jinrui Ding,              3. Include interactive elements where appropriate
+     Xiandi Ma, Yuchen Xie, Peng Pei, Xunliang Cai, and Xipeng Qiu. 2026. EvoCUA:             4. Make it production - ready and professional
+     Evolving Computer Use Agents via Learning from Scalable Synthetic Experience.            5. You must include all relevant script tags for
+     arXiv:2601.15876 [cs.AI] https://arxiv.org/abs/2601.15876                                libraries to work properly .
+[81] Bo Yang, Zhenchang Xing, Xin Xia, Chunyang Chen, Deheng Ye, and Shanping                 6. There should NEVER be any dead links or buttons
+     Li. 2021. Don’t do that! hunting down visual design smells in complex uis against
+                                                                                              that are visible but do nothing when clicked .
+     design guidelines. In 2021 IEEE/ACM 43rd international conference on software
+     engineering (ICSE). IEEE, 761–772.                                                       7. The ONLY time you are allowed to run the `npm `
+[82] Shengcheng Yu, Chunrong Fang, Ziyuan Tuo, Quanjun Zhang, Chunyang Chen,                  command is to test if the website builds with `npm
+     Zhenyu Chen, and Zhendong Su. 2025. Vision-Based Mobile App GUI Testing:                 run build ` command . You must NEVER run `npm ` under
+     A Survey. Comput. Surveys 58, 6, Article 142 (Dec. 2025), 46 pages. doi:10.1145/         any other circumstances .
+     3773027                                                                                  8. Because you will create a website with very
+[83] zai-org. 2025. GLM-4.7. https://huggingface.co/zai-org/GLM-4.7. Hugging Face             realistic mocked functionality , you will probably
+     model card; accessed 2026-02-06.                                                         need some data . ALWAYS synthetically generate
+[84] Chenchen Zhang, Yuhang Li, Can Xu, Jiaheng Liu, Ao Liu, Changzhi Zhou, Ken
+                                                                                              placeholder data that is needed by any functionality
+     Deng, Dengpeng Wu, Guanhua Huang, Kejiao Li, Qi Yi, Ruibin Xiong, Shihui
+     Hu, Yue Zhang, Yuhao Jiang, Zenan Xu, Yuanxing Zhang, Wiggin Zhou, Chayse                on the mocked website . NEVER attempt to connect to
+     Zhou, and Fengzong Lian. 2025. ArtifactsBench: Bridging the Visual-Interactive           online APIs .
+     Gap in LLM Code Generation Evaluation. arXiv preprint arXiv:2507.04952 (2025).           9. NEVER include images for which you do not have
+     doi:10.48550/arXiv.2507.04952                                                            the appropriate path to ( e . g . , the " src " attribute ).
+[85] Zhuohao (Jerry) Zhang, Eldon Schoop, Jeffrey Nichols, Anuj Mahajan, and                  You should use an API to generate a placeholder
+     Amanda Swearngin. 2025. From Interaction to Impact: Towards Safer AI Agents              instead like < img src =" https :// placehold . co /600 x400 "
+     Through Understanding and Evaluating Mobile UI Operation Impacts. In Pro-                alt =" Placeholder image " >
+     ceedings of the 30th International Conference on Intelligent User Interfaces. ACM,
+                                                                                              10. Do not define any new SVGs - you should use
+     727–744. doi:10.1145/3708359.3712153
+[86] Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu,                   icons from FontAwesome instead from the packages :
+     Yonghao Zhuang, Zi Lin, Zhuohan Li, Dacheng Li, Eric Xing, et al. 2023. Judging          @fortawesome / fontawesome - svg - core
+     llm-as-a-judge with mt-bench and chatbot arena. Advances in neural information           @fortawesome / free - solid - svg - icons
+     processing systems 36 (2023), 46595–46623.                                               @fortawesome / react - fontawesome . You can assume that
+[87] Yaowei Zheng, Richong Zhang, Junhao Zhang, Yanhan Ye, and Zheyan Luo.                    these packages are installed even though you cannot
+     2024. LlamaFactory: Unified Efficient Fine-Tuning of 100+ Language Models.               see them in a package . json in the same directory .
+     In Proceedings of the 62nd Annual Meeting of the Association for Computational           11. NEVER attempt to access any external directory
+     Linguistics (Volume 3: System Demonstrations), Yixin Cao, Yang Feng, and Deyi
+                                                                                              outside of your current directory .
+     Xiong (Eds.). Association for Computational Linguistics, Bangkok, Thailand,
+     400–410. doi:10.18653/v1/2024.acl-demos.38
+[88] Mingyuan Zhong, Ruolin Chen, Xia Chen, James Fogarty, and Jacob O Wobbrock.              Your job is to create a fully functioning clone of
+     2025. Screenaudit: Detecting screen reader accessibility errors in mobile apps           the following website : < WEBSITE_NAME >
+     using large language models. In Proceedings of the 2025 CHI Conference on Human
+     Factors in Computing Systems. 1–19.                                                      Use the current barebones React . js project with
+[89] Ruican Zhong, David W. McDonald, and Gary Hsieh. 2025. Synthetic Heuristic               React Router to implement this website , with all
+     Evaluation: A Comparison between AI- and Human-Powered Usability Evalua-                 important functionality realistically mocked . The
+     tion. arXiv:2507.02306 [cs.HC] https://arxiv.org/abs/2507.02306
+                                                                                              main React file is located at src / App . jsx and
+                                                                                              exports a component called " App ." Make sure your
+                                                                                              code conforms to this structure . Your workflow
+                                                                                              should be something like the following :
+                                                                                                                           Gao et al.
+
+
+      1. Think about the target website . Think about as              A.3    Defect-Augmented Examples
+      many flows as you can that a user would want to do
+      on this website .
+                                                                      We show four example defect-augmented sites and the usability
+      2. Implement the React . js website so that all of              principle they violate in Figure 6.
+      flows you thought are fully implemented ,
+      interactive , and using the appropriate mock data .
+      3. Run `npm run build ` command to test that website
+      compiles without any errors .
+      4. Return to step 1 and repeat until you cannot
+      think of any more flows .
+
+      When you think you are done , scan for any dead links
+      or unimplemented functionality and implement them .
+
+      Finally , when you are done , make a txt file in the
+      root directory of the React . js project ( at the same
+      level as the src / directory ) called " flows . txt " that
+      contains all of the flows that you implemented .
+
+
+
+A.2     Usability Defect Injection Prompt
+We used the following prompt to inject usability defects for our
+defect-augmented websites. For each website clone, we used this
+prompt up to eight times to inject usability defects aligned to one
+of our principles with the provided definition in §3.1.2.
+      You are an expert web developer and UI / UX designer
+      in charge of usability testing . You will be given a
+      completely 1) a completely functional website and 2)
+      potential user flows that can be performed on the
+      website . The website is implemented with React . js
+      with React Router . Your job is to introduce code
+      changes that violate a specific interaction design
+      principle , making the app less usable for that
+      princeiple , while not breaking the website .
+
+      Types of changes you can make :
+      1. Delete : // deleting UI elements
+      2. Add : // including additional UI elements
+      3. Modify : // modifying UI elements and their
+      functionality
+
+      App : < WEBSITE_NAME >
+      Flows : flows . txt
+      Principle : < PRINCIPLE >
+
+
+      Using the current React . js code in the src /
+      directory :
+      1. Consider all user flows inside the . txt file and
+      all , the critical steps to these flows , and what
+      changes can be introduced to violate the given
+      principle
+      2. Change the code in the current directory to
+      violate the given principle . Ensure these changes
+      are fully implemented , interactive , and use the
+      appropriate mock data or modified mock data
+      3. Run `npm run build ` command to test that website
+      compiles without any errors .
+      4. Run `npm run build ` to check if all changes made
+      in step 2 are implemented AND show up in the
+      modified code
+
+      When you are done , make a text file in the current
+      directory ( src /) called changes . txt listing all the
+      changes made to the application that have made it
+      more difficult to use .
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+
+
+                                                          (a) Baseline Interface (Plain synthetic clone)
+
+                                                                                                                   1                     2
+
+
+
+
+                                                                                         3
+
+
+
+
+                                                                                                                                             4
+
+
+
+
+                                                                                                               6
+     1
+
+                                                                                             5
+
+
+
+
+         2
+
+
+
+
+                                                                                                                                                 7
+
+
+
+
+                                 (b) Hierarchy                                                                         (c) Consistency
+
+
+
+
+                                                               1
+                                                                                                       1
+
+
+
+
+                                                                                                           2
+
+
+
+
+                                                                                                           3
+
+
+
+
+                            (d) Error Prevention                                                                       (e) Memory Load
+
+Figure 6: Comparison of an original clone from uxWeb and four of its defect-augmented counterparts. (a) shows the baseline
+design of a clone of the Walmart Careers job search portal. (b)-(e) illustrate different usability defects introduced to create our
+defect-augmented sites.
+                                                                                                                                                                       Gao et al.
+
+
+B   Trace Generation Prompts                                                End with exactly one final line : Action :
+                                                                            score ( < number from 0 to 100 >) .
+We used the following prompt when generating interaction traces
+on uxWeb:
+                                                                    C       Study Instructions
+    Please generate the next move according to the UI               We provided the participants with the following instructions before
+    screenshot , instruction and previous actions .                 our study:
+    Instruction :
+                                                                         • You will be shown 30 pairs of websites.
+    Conduct a usability test of this website .                           • Your task is to evaluate which website between pairs of
+                                                                            websites is more usable.
+    You have a budget of 50 actions you can perform on                   • These websites are clones of existing websites so many of
+    the website . Use it as efficiently as possible to
+                                                                            the images are text placeholders. When voting, ensure you
+    test all important flows for the website and make
+    the most accurate assessment of usability .                             are evaluating the sites based on their usability.
+                                                                         • Occasionally websites may take awhile to load or may not
+    First , list the most important user goals for this                     reload. If that is the case feel free to move on.
+    site . Then , work through at least three distinct key               • You must expand both websites using the expand (↔) but-
+    flows that cover those goals , one by one . Use
+    realistic placeholder data if you need to fill any
+                                                                            ton before you can vote.
+    fields .                                                             • Browse each site freely — scroll, click links, and explore as
+                                                                            you normally would.
+    If you are using a date picker widget in a booking                   • DO NOT enter in any personal information during your
+    flow , remember that the target date usually must be
+                                                                            exploration. Instead, you can provide with fake information
+    in the future . Today ' s date is { DATE }. If given the
+    option , you should try to use a date picker instead                    such as “John Doe, 123@demo.com, 123-456-7890”
+    of manually entering the date . The date picker                      • While you can choose ties, try and select one website over
+    control is usually located immediately to the right                     the other. There are no right or wrong answers — go with
+    of the date field .                                                     your honest impression.
+    If you encounter errors , try your best to complete               We also show a sample screen from our study in Figure 7.
+    the flow but if you cannot complete it , move onto
+    another flow .
+                                                                    App A                                          ⤢Expand         App B                                     ⤢Expand
+
+
+
+
+    Do not finish the trace until you have worked
+    through the key flows you listed .
+
+   We made the following addition to the prompt for GPT-5-mini,
+as without it, it would try to access the internet:
+    IMPORTANT : Only interact with the website provided .
+    Do not navigate to or visit any external websites or
+    domains .
+
+   We appended the following prompt at the end of the interaction
+trace for a final usability score:                                                             Please exapand and review both App A and App B before voting.
+
+
+
+
+                                                                                                        ←Left is better      Tie      Right is better→
+
+
+
+
+    Rate the website usability from 0 to 100.
+    The score should represent the probability that an              Figure 7: A screen showing sample comparison participants
+    average user can successfully use the website ' s most
+                                                                    made during our study. Participants were required to first
+    important flows .
+    You are testing a real website - the site you are               expand both iframes to explore before they could vote.
+    testing is NOT a mock / demo / educational app .
+    Review the assistant thoughts from each interaction
+    step and create a list of usability problems .
+    Each observation you make must reference a direct
+                                                                    D       Model Hyperparameters
+    quote from the thought history , and you must rate it
+    as a major or minor issue .                                             Table 2: Hyperparameters used to train our model.
+    Pay special attention to broken navigation , failed
+    page loads , non - responsive clicks , confusing flows ,
+    and unfinished core flows .                                                   Algorithm    Hyperparameter                                                  Value
+    For example , look for thoughts that say " page
+    appears to be stuck or not loading properly ," " I                            uxCUA        Effective batch size                                            8
+    need to wait briefly to ensure the page fully load " ,                                     Epochs                                                          1
+    and "I need to wait for the page to load ."
+                                                                                               Learning Rate                                                   2e-4
+    If this appears multiple times , that is a red flag
+    because the implementation might not contain that                                          LoRA                                                            32
+    functionality and only appears to be loading .                                             Margin                                                          15
+    If the thoughts contain " haven ' t successfully
+    completed " that is also a red flag .
+Training Computer Use Agents to Assess the Usability of Graphical User Interfaces
+
+
+E Additional Evaluation Results
+E.1 Technical Evaluation on uxWeb
+We provide an additional table of metrics we examined for baseline
+model performance on uxWeb. Agreement rate was computed to
+see if models made the same relative predictions as ground-truth
+labels and human judges. Model assessment was accurate if for a
+given site, it generated a lower usability score for its paired defect-
+augmented (or human-rejected) variant. Ties were counted as an
+error. The score difference is the difference between the model’s
+predicted score for the chosen and rejected sample in a pair. This can
+be roughly interpreted as the model’s “confidence” in its decision
+or how much more usable it believes the non defect-augmented
+site to be.
+
+Table 3: Model performance for usability assessment on
+uxWeb’s ground truths (first four rows) and designer prefer-
+ences (last four rows). Overall, uxCUA performs better than
+other models, providing higher agreement for plain sites and
+defect-augmented sites and for designer preferences.
+
+      Model                         AUC         Agreement Rate         Δ
+      GPT-5-mini                    0.436            0.375           -5.68
+      Kimi K2.5                     0.521            0.492            2.58
+      EvoCUA                        0.381            0.322           -6.35
+      uxCUA                         0.632            0.467            5.72
+      Condition
+      Designers + GPT-5-mini        0.592            0.504            3.83
+      Designers + Kimi K2.5         0.588            0.522            5.91
+      Designers + EvoCUA            0.522            0.435            3.44
+      Designers + uxCUA             0.607            0.530            3.90
+
+
+
+E.2     Usability Issue Report
+
+Table 4: Breakdown of the types of usability issues identified
+by uxCUA on 150 benchmark sites (ones without designer
+ratings). Overall the model identifies more usability issues
+related to feedback and control.
+
+                        Consistency     Feedback      Dialog      Prevention
+  Plain                 4.29%           42.3%         1.23%       6.13%
+  Defect-Augmented      5.8%            45.3%         1.7%        8.6%
+
+                        Control         Reversal      Memory      Hierarchy
+  Plain                 30.7%           –             1.22%       14.1 %
+  Defect-Augmented      25.7%           0.05%         0.97%       11.8 %
+

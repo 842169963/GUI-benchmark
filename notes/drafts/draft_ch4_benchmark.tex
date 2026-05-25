@@ -18,8 +18,9 @@ must satisfy. Sections~\ref{sec:track-a-construction}
 and~\ref{sec:track-b-construction} document the construction of the two
 tracks introduced in Chapter~\ref{chap:methodology}: the screenshot-based
 reproduction track that reuses UIClip resources, and the
-requirement-driven generation track built on top of Design2Code-HARD and
-self-authored requirements. Section~\ref{sec:item-schema} defines the
+requirement-driven generation track built primarily on a reduced
+Vision2Web Level~1/Level~2 subset, with Design2Code retained as a
+static UI-to-code reference point. Section~\ref{sec:item-schema} defines the
 on-disk item schema and the result-submission format consumed by the
 public leaderboard. Section~\ref{sec:rubric} introduces the four-dimensional
 GUI quality rubric, including the anchor descriptions that operationalise
@@ -141,26 +142,41 @@ a rendered screenshot, and a serialised DOM snapshot.
 
 \subsection{Requirement Sources}
 
-\paragraph{Source 1: Design2Code-HARD curation.}
-The Design2Code-HARD set~\cite{design2code} contains 80 hand-curated web
-pages averaging 158 HTML tags each. Of these, approximately 50 are
-selected, filtering out pages whose interactivity is too minimal to
-support a derived task (e.g.\ pure marketing pages with no forms or
-state-changing controls). For each selected page, the reference HTML is
-converted into a natural-language requirement through a two-step
-procedure: an LLM produces a draft description of structure, content,
-and visible affordances, and the author then revises the draft for
-clarity, removes references to specific styling, and adds explicit
-functional expectations.
+\paragraph{Source 1: Vision2Web Level~1/Level~2 curation.}
+Vision2Web~\cite{vision2web} is used as the primary Track~B source
+because it already frames website generation as a hierarchy from static
+visual implementation to interactive frontend behaviour and full-stack
+development. This structure aligns closely with the thesis objective of
+comparing static GUI-quality signals with dynamic task-validation
+signals on the same generated interfaces.
 
-\paragraph{Source 2: Self-authored requirements.}
-Five to ten additional requirements are written by the author to
-broaden coverage in two directions under-represented in
-Design2Code-HARD. The first is form-heavy task interfaces (sign-up,
-checkout, settings) in which interactive evaluation has clear success
-criteria. The second is mobile-first layouts, since Design2Code-HARD is
-predominantly desktop web. Each self-authored requirement is reviewed
-by one peer for ambiguity before inclusion.
+The thesis uses a reduced subset of Level~1 static webpage tasks and
+Level~2 interactive frontend tasks. Level~1 items provide controlled
+visual prototypes and requirements for static rubric scoring. Level~2
+items additionally provide interaction-oriented requirements and
+testable functional expectations, making them suitable for the dynamic
+validation procedure in Chapter~\ref{chap:dynamic}. Level~3 full-stack
+tasks are excluded because backend state, deployment, authentication,
+and long-horizon workflow requirements would shift the project from GUI
+quality evaluation into full-stack software engineering evaluation.
+
+The pilot subset contains approximately 10--20 tasks. Items are selected
+for clear visual requirements, local renderability, and the presence of
+at least one short interaction task with an unambiguous success
+criterion. If the pilot is successful, the formal subset may be expanded
+within the time and annotation budget.
+
+\paragraph{Source 2: Design2Code and author-written reserve items.}
+Design2Code~\cite{design2code} is retained as a static UI-to-code
+reference point and as a reserve source for simple reproduction cases.
+It is no longer the main Track~B source because it is primarily a
+screenshot-to-code benchmark and does not provide the same direct link
+between visual quality and functional validation as Vision2Web. A small
+set of author-written form-heavy requirements may be added only if the
+selected Vision2Web subset lacks enough clear dynamic-validation cases.
+These reserve requirements are kept intentionally simple so that
+failures can be attributed to interface quality rather than ambiguous
+task wording.
 
 \subsection{Generation}
 
@@ -374,10 +390,10 @@ coursework in human--computer interaction or visual design, recruited
 from the author's department. This pool is sufficient for the planned
 sample size and avoids the procurement and quality-control overheads of
 crowdsourcing. A contingency plan to recruit additional annotators
-through Prolific at \$16/hour, following the protocol used by
-Design2Code~\cite{design2code}, is held in reserve in case any primary
-annotator becomes unavailable or the inter-rater reliability targets
-are not met after a second pilot.
+through Prolific at \$16/hour, following comparable web-interface
+annotation practice in Design2Code~\cite{design2code}, is held in
+reserve in case any primary annotator becomes unavailable or the
+inter-rater reliability targets are not met after a second pilot.
 
 \subsection{Annotator Instructions}
 

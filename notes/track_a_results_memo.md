@@ -66,4 +66,33 @@ Interpretation: rubric guidance did not improve pairwise reliability in this set
 
 ## Next Experiment
 
-Possible next step: test whether a stronger anti-position-bias instruction or structured JSON output reduces the B-position preference, but avoid over-expanding Track A before starting the Track B rubric pipeline.
+Track A now has one cross-provider comparison model. Further Track A expansion should be avoided before starting the Track B rubric pipeline.
+
+## Cross-Model Check: Claude Sonnet 4.5
+
+Claude result file: `scripts/results/track_a_eval_chatanywhere-anthropic_claude-sonnet-4-5-20250929_zeroshot_20260519_153820.json`
+
+Condition: zero-shot pairwise prompt, Claude Sonnet 4.5 via ChatAnywhere Anthropic-compatible `/v1/messages`, same clean85 subset, order-swap enabled.
+
+| Metric | GPT-4o zero-shot clean85 | Claude Sonnet 4.5 zero-shot clean85 |
+|--------|--------------------------|-------------------------------------|
+| Raw accuracy | **62.4%** | **55.3%** |
+| Accuracy when good image is A | **38.8%** | **20.0%** |
+| Accuracy when good image is B | **85.9%** | **90.6%** |
+| Consistency rate | **52.9%** | **29.4%** |
+| Position bias rate | **47.1%** | **70.6%** |
+| Corrected accuracy on consistent pairs | **73.3%** | **68.0%** |
+| Chose A / Chose B | **45 / 125** | **25 / 145** |
+
+Interpretation: the second-image preference is not unique to GPT-4o. Claude Sonnet 4.5 shows an even stronger B-position preference on the same caption-matched clean85 subset, choosing B in 145/170 calls. This strengthens the Track A methodological claim: single-order pairwise GUI judging is unreliable across modern multimodal judge models and must be controlled with order-swap or treated only as a weak baseline.
+
+## Interpretation Boundary: Dataset Noise
+
+The Track A clean85 subset should not be presented as a definitive measurement of true GUI-design ability. The pairs are **caption-matched UIClip-human-derived pairs**, not raw human pairwise preference labels. Even after manual removal of 15/100 mismatch or low-quality pairs, the remaining pairs may still contain noisy or weak contrasts: some `poor design`, `bad contrast`, or `bad proximity` examples may not be globally worse than their matched `well-designed` counterpart.
+
+This limits what Track A can claim. The safest thesis framing is:
+
+- Track A is a reduced, noisy UIClip-style reproduction and methodological baseline.
+- The strong order effects should be interpreted as evidence that single-order pairwise GUI judging is unreliable in this setting.
+- Track A should not be used as the main evidence about absolute model GUI-aesthetic capability.
+- The main contribution should move to Track B, where requirements, generated interfaces, human rubric labels, and dynamic validation are controlled by the thesis pipeline.

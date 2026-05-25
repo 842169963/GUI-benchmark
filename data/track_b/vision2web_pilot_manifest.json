@@ -1,0 +1,343 @@
+{
+  "created_at": "2026-05-19T16:20:40.652361",
+  "source_dataset": "zai-org/Vision2Web",
+  "license": "CC-BY-NC-SA-4.0",
+  "scope": {
+    "included": [
+      "Level 1 static webpage",
+      "Level 2 interactive frontend"
+    ],
+    "excluded": [
+      "Level 3 full-stack website"
+    ],
+    "reason": "Level 3 introduces backend state, deployment, authentication, and long-horizon workflow complexity outside the thesis scope."
+  },
+  "selection_summary": {
+    "frontend_level2_dynamic_items": 10,
+    "webpage_level1_static_controls": 4,
+    "total_items": 14
+  },
+  "items": [
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "1daycloud",
+      "workflow_steps": 7,
+      "num_test_cases": 6,
+      "resources_count": 35,
+      "prototypes": [
+        "academy.jpg",
+        "clickapp.jpg",
+        "contact.jpg",
+        "digital_cards.jpg",
+        "home.jpg",
+        "services.jpg"
+      ],
+      "prompt_preview": "I want to build a OneDay Cloud website. When someone opens the site, they arrive at the homepage which serves as the main entry point to all the platform's services and products. The homepage has a navigation menu at the top that provides access to different sections of the website.\n\nFrom the homepage, if I click on the \"App Store\" option in the navigation menu, it takes me to the App Store page. Within the App Store, I can access different applications including OneClick App and the Digital Bus...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/1daycloud",
+      "normalized_item_dir": "data/track_b/items/F01_1daycloud",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F01_1daycloud"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "401trucksource",
+      "workflow_steps": 6,
+      "num_test_cases": 6,
+      "resources_count": 79,
+      "prototypes": [
+        "Body_Shop.jpg",
+        "Homepage.jpg",
+        "New_Trucks_Inventory.jpg",
+        "Parts_Department.jpg",
+        "Service_Center.jpg",
+        "Used_Trucks_Inventory.jpg"
+      ],
+      "prompt_preview": "I want to build a 401 Trucksource website. When someone opens the site, the first thing they see is a Homepage that displays a header menu with multiple main navigation options including TRUCKS, SERVICE, PARTS, BODY SHOP, and CONTACT. The Homepage features rotating carousels showcasing new Mack trucks, new Volvo trucks, and used vehicle options, along with call-to-action buttons like \"BROWSE ALL NEW TRUCKS\", \"BROWSE ALL USED TRUCKS\", \"SCHEDULE SERVICE\", and \"SET UP RENTAL ACCOUNT\".\n\nIf I click o...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/401trucksource",
+      "normalized_item_dir": "data/track_b/items/F02_401trucksource",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F02_401trucksource"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "about_gitlab",
+      "workflow_steps": 6,
+      "num_test_cases": 4,
+      "resources_count": 109,
+      "prototypes": [
+        "company.jpg",
+        "customers.jpg",
+        "gitlab_duo.jpg",
+        "homepage.jpg",
+        "platform.jpg",
+        "pricing.jpg"
+      ],
+      "prompt_preview": "I want to build a GitLab website. When someone opens the site, the first thing they see is a homepage with a large hero section that says \"Build software with native AI at every step\" and includes buttons to \"Get started\" and \"Contact sales\". The homepage has a primary navigation menu at the top with links to Platform, Product, Pricing, Resources, and Company. If I click the \"Platform\" link in the navigation menu, it takes me to the Platform page that describes GitLab as an AI-powered DevSecOps ...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/about_gitlab",
+      "normalized_item_dir": "data/track_b/items/F03_about_gitlab",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F03_about_gitlab"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "academy_govloop",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 160,
+      "prototypes": [
+        "career_category.jpg",
+        "cloud_category.jpg",
+        "cybersecurity_category.jpg",
+        "data_analytics_category.jpg",
+        "homepage.jpg",
+        "search_results.jpg"
+      ],
+      "prompt_preview": "I want to build a GovLoop Academy website. When someone opens the site, the first thing they see is a homepage that describes the platform as free online learning for government employees. The homepage displays multiple content categories organized vertically, including Featured Videos, Quick Explainers, Management Minutes with Mika, Citizen Experience & Digital Services, Cloud, Cybersecurity, Data and Analytics, Automation and AI, Modernization and Optimization, Project Management, Career, Defe...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/academy_govloop",
+      "normalized_item_dir": "data/track_b/items/F04_academy_govloop",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F04_academy_govloop"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "balancingbirthbaby",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 18,
+      "prototypes": [
+        "Birth Doula Services.jpg",
+        "Blog.jpg",
+        "Class Calendar.jpg",
+        "Homepage.jpg",
+        "Prenatal Classes.jpg",
+        "Shop.jpg"
+      ],
+      "prompt_preview": "I want to build a Balancing Birth to Baby website that provides childbirth education and doula services in the Waterloo Region. When someone opens the site, they see a homepage with a hero section saying \"Everything is about to change... And, we're here to help!\" The main navigation menu at the top has several categories including Classes & Events, Doula, Birth Coaching, Shop, About, Blog, and a shopping cart icon.\n\nIf I click on \"Classes & Events\" in the main menu, I can see a dropdown menu wit...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/balancingbirthbaby",
+      "normalized_item_dir": "data/track_b/items/F05_balancingbirthbaby",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F05_balancingbirthbaby"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "community_dynamics",
+      "workflow_steps": 5,
+      "num_test_cases": 6,
+      "resources_count": 48,
+      "prototypes": [
+        "blogs.jpg",
+        "business_central_forum.jpg",
+        "homepage.jpg",
+        "sales_customer_experience_forum.jpg",
+        "supply_chain_forum.jpg"
+      ],
+      "prompt_preview": "I want to build a Microsoft Dynamics 365 Community website. When someone opens the site, they land on the homepage which displays a hero banner with the tagline \"Get answers. Solve problems. Work smarter\" and a prominent call-to-action to explore forums. The homepage shows discussion forum categories organized by product area, including Customer experience (Sales, Customer Insights, CRM), Service, Supply chain, Finance, and Small and medium business (Business Central). At the top of the page, th...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/community_dynamics",
+      "normalized_item_dir": "data/track_b/items/F06_community_dynamics",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F06_community_dynamics"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "community_hpe",
+      "workflow_steps": 4,
+      "num_test_cases": 7,
+      "resources_count": 45,
+      "prototypes": [
+        "ai_unlocked_blog.jpg",
+        "greenlake_community.jpg",
+        "homepage.jpg",
+        "storage_forum.jpg"
+      ],
+      "prompt_preview": "I want to build an HPE Community website. When someone opens the site, the first thing they see is a homepage that displays featured content in a carousel at the top, showing HPE Tech Tips Videos and storage-related articles. Below the carousel, there is a call-to-action banner encouraging users to \"Join the conversation with experts and colleagues\" with a \"Register With HPE Community\" button. The main content area shows \"Community Discussions\" with a dropdown to filter by \"New Responses\", displ...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/community_hpe",
+      "normalized_item_dir": "data/track_b/items/F07_community_hpe",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F07_community_hpe"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "copenhagenmarathon",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 169,
+      "prototypes": [
+        "elite_program.jpg",
+        "homepage.jpg",
+        "race_day_info.jpg",
+        "race_route.jpg",
+        "training_resources.jpg",
+        "volunteer_signup.jpg"
+      ],
+      "prompt_preview": "I want to build a Copenhagen Marathon website. When someone opens the site, the first thing they see is a homepage displaying the race date (May 10, 2026 at 9:30 AM) with a countdown timer and a status showing the event is sold out. The homepage has a main navigation menu at the top with sections like Elite, Løbet (The Race), Træning (Training), København (Copenhagen), and FAQ. There is also a secondary menu with links to Presse (Press), Velgørenhed (Charity), Arkiv (Archive), Om os (About Us), ...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/copenhagenmarathon",
+      "normalized_item_dir": "data/track_b/items/F08_copenhagenmarathon",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F08_copenhagenmarathon"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "elections_bc",
+      "workflow_steps": 6,
+      "num_test_cases": 5,
+      "resources_count": 37,
+      "prototypes": [
+        "2024_provincial_election.jpg",
+        "2026_local_elections.jpg",
+        "homepage.jpg",
+        "local_election_forms.jpg",
+        "resources_and_reports.jpg",
+        "voter_registration.jpg"
+      ],
+      "prompt_preview": "I want to build an Elections BC website. When someone opens the site, they see a homepage with five main navigation sections: Provincial Elections, Candidates & Parties, Local Elections, Events & Services, and Resources. The homepage also features a prominent call-to-action button \"Register to Vote\" in the header, along with featured content blocks including a large banner for the 2024 Provincial Election Report with a \"Learn more\" button, and three smaller content cards for \"2026 General Local ...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/elections_bc",
+      "normalized_item_dir": "data/track_b/items/F09_elections_bc",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F09_elections_bc"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "frontend",
+      "level": "Level 2",
+      "task_name": "gourmania",
+      "workflow_steps": 6,
+      "num_test_cases": 4,
+      "resources_count": 50,
+      "prototypes": [
+        "cookbooks.jpg",
+        "culinary_solutions.jpg",
+        "homepage.jpg",
+        "recipe_detail.jpg",
+        "tips.jpg",
+        "videos.jpg"
+      ],
+      "prompt_preview": "I want to build a Gourmania culinary website. When someone opens the site, the first thing they see is a homepage with a welcoming banner, featured cookbooks including \"The Brain Boosting Diet\", \"Healthy Helpings\", and \"The Silver Platter\", and sections for \"What's Cooking\", \"Favourite Holiday Recipes\", \"Recipe Categories\", and \"Browse Videos\". The homepage displays favourite holiday recipes with images showing dishes like Gefilte Fish, Hamentaschen, Challah, and other recipes. Each recipe image...",
+      "local_raw_dir": "data/track_b/vision2web_raw/frontend/gourmania",
+      "normalized_item_dir": "data/track_b/items/F10_gourmania",
+      "use_for_static": true,
+      "use_for_dynamic": true,
+      "notes": "",
+      "item_id": "F10_gourmania"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "webpage",
+      "level": "Level 1",
+      "task_name": "aihw",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 0,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "prompt_preview": null,
+      "local_raw_dir": "data/track_b/vision2web_raw/webpage/aihw",
+      "normalized_item_dir": "data/track_b/items/W01_aihw",
+      "use_for_static": true,
+      "use_for_dynamic": false,
+      "notes": "",
+      "item_id": "W01_aihw"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "webpage",
+      "level": "Level 1",
+      "task_name": "aws",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 1,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "prompt_preview": null,
+      "local_raw_dir": "data/track_b/vision2web_raw/webpage/aws",
+      "normalized_item_dir": "data/track_b/items/W02_aws",
+      "use_for_static": true,
+      "use_for_dynamic": false,
+      "notes": "",
+      "item_id": "W02_aws"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "webpage",
+      "level": "Level 1",
+      "task_name": "eventbrite",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 9,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "prompt_preview": null,
+      "local_raw_dir": "data/track_b/vision2web_raw/webpage/eventbrite",
+      "normalized_item_dir": "data/track_b/items/W03_eventbrite",
+      "use_for_static": true,
+      "use_for_dynamic": false,
+      "notes": "",
+      "item_id": "W03_eventbrite"
+    },
+    {
+      "source": "zai-org/Vision2Web",
+      "config": "webpage",
+      "level": "Level 1",
+      "task_name": "ebay",
+      "workflow_steps": 3,
+      "num_test_cases": 0,
+      "resources_count": 3,
+      "prototypes": [
+        "desktop.jpg",
+        "mobile.jpg",
+        "tablet.jpg"
+      ],
+      "prompt_preview": null,
+      "local_raw_dir": "data/track_b/vision2web_raw/webpage/ebay",
+      "normalized_item_dir": "data/track_b/items/W04_ebay",
+      "use_for_static": true,
+      "use_for_dynamic": false,
+      "notes": "",
+      "item_id": "W04_ebay"
+    }
+  ]
+}

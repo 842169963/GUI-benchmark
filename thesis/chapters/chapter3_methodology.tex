@@ -17,55 +17,54 @@ dataset, tasks, metrics, and expected outputs.
 \label{sec:rqs}
 
 The central concern of this thesis is how the quality of LLM-generated
-graphical user interfaces can be evaluated with a reusable multi-metric
-benchmark and leaderboard. The evaluation combines static visual and
-requirement-based metrics with dynamic functionality signals, while using
-human annotations and LLM-based evaluators as measurement instruments rather
-than as the main object of the leaderboard. Four research questions
+graphical user interfaces can be compared with a reusable multi-metric
+benchmark and leaderboard. The primary leaderboard ranks generated GUI
+submissions, aggregated by generator model and requirement set. Static
+visual and requirement-based metrics, dynamic functionality signals, human
+review, and LLM-based scoring are used as measurement instruments rather
+than as the main objects of comparison. Four research questions
 operationalise this concern.
 
 \paragraph{RQ1 -- UIClip-style baseline and pairwise evaluation limits.}
 \begin{quote}
 \textit{What does a reduced UIClip-style reproduction reveal about
-modern multimodal models in pairwise GUI-quality judgement, and which
-methodological controls are needed before such judgements can be used
-inside a GUI evaluation benchmark?}
+pairwise GUI-quality judgement, and what limitations motivate a shift
+toward a generated-GUI leaderboard with richer metrics?}
 \end{quote}
 This question targets the reproduction aspect of the study
 (Track~A, Section~\ref{sec:track-a}).
 It uses the UIClip dataset as an anchor for pairwise screenshot
-evaluation, but its role is methodological: to establish a baseline,
-identify limitations such as position bias, and motivate the move from
-single binary preferences toward richer multi-metric GUI evaluation.
+evaluation, but its role is methodological and limited: to establish a
+baseline, identify weaknesses of single binary preferences, and motivate
+the move toward richer multi-metric evaluation of generated interfaces.
 
 \paragraph{RQ2 -- Static multi-metric quality of LLM-generated GUIs.}
 \begin{quote}
-\textit{How can LLM-generated GUIs be evaluated with static
-multi-dimensional metrics, and how well do automated or LLM-based scores
-align with human ratings across visual structure, information clarity,
+\textit{How can generated GUI submissions be compared with static
+multi-dimensional metrics across visual structure, information clarity,
 and requirement fidelity?}
 \end{quote}
 This question is centred on Track~B (Section~\ref{sec:track-b}), where
-different generator models produce interfaces from the same requirements.
-It examines whether the static portion of the leaderboard can provide
-interpretable per-dimension quality signals rather than only a single
-aggregate score.
+different generator models produce interfaces from the same requirements,
+prototype screenshots, and assets. It examines whether the static portion
+of the leaderboard can provide interpretable per-dimension quality signals
+rather than only a single aggregate score.
 
-\paragraph{RQ3 -- Evaluation method reliability and cost.}
+\paragraph{RQ3 -- Generation protocol and evaluation feasibility.}
 \begin{quote}
-\textit{Among the tested judging strategies -- zero-shot prompting,
-rubric-guided prompting, order-swapped pairwise comparisons, and
-repeated sampling -- which configurations provide the most reliable and
-cost-effective measurement signals for the leaderboard?}
+\textit{Which generation protocol, validity gates, and scoring components
+provide reproducible and cost-effective measurements for a generated-GUI
+leaderboard?}
 \end{quote}
-This question is answered across both tracks but remains a methodological
-supporting question.
-It draws on the LLM-as-a-judge literature~\cite{llm_judge,
-li-etal-2025-generation,shi-etal-2025-judging} to select strategies
-known to affect judge reliability, and applies them systematically
-to the GUI evaluation setting. Bias analysis is therefore treated as a
-control and reporting requirement rather than as the thesis's central
-contribution.
+This question is answered mainly through Track~B and remains a
+methodological supporting question. It fixes the leaderboard unit as the
+generated HTML submission, requires the same generation prompt version
+within a comparison batch, records exact generator metadata, and applies
+rendering and static validity gates before scoring. The
+LLM-as-a-judge literature~\cite{llm_judge,
+li-etal-2025-generation,shi-etal-2025-judging} is used only to motivate
+caution when automated scorers are used; judge-model bias is acknowledged
+as a limitation rather than studied as the thesis's main object.
 
 \paragraph{RQ4 -- Static and dynamic GUI quality signals.}
 \begin{quote}
@@ -113,11 +112,13 @@ by generator model and requirement set. Evaluator models, prompts, and
 human annotations are part of the evaluation protocol used to compute
 the metrics; they are not the main entities being ranked.
 
-Human annotations provide the reference labels for both tracks.
+Human review provides an independent quality reference for selected
+items, but the leaderboard unit remains the generated GUI submission.
 Track~A reuses the preference labels published with the UIClip dataset,
 so no new annotation is required for pairwise tasks on that track.
-Track~B requires fresh human rubric scores, collected according to the
-annotation protocol described in the benchmark chapter.
+Track~B may include fresh human rubric scores for calibration and
+qualitative validation, collected according to the annotation protocol
+described in the benchmark chapter.
 
 All experiments are documented with exact model identifiers, API version
 dates, prompt text, random seeds, and output files to support
@@ -129,15 +130,16 @@ reproducibility.
     [Figure 3.1: End-to-end pipeline.\\
     Left: Track A (UIClip pairs $\rightarrow$ pairwise judging $\rightarrow$ RQ1).\\
     Centre: Track B (requirements $\rightarrow$ GUI generation $\rightarrow$ rendering
-    $\rightarrow$ static multi-metric scoring $\rightarrow$ RQ2, RQ3).\\
+    $\rightarrow$ static multi-metric scoring $\rightarrow$ RQ2).\\
     Right: Track B dynamic branch (executable HTML $\rightarrow$ task derivation
     $\rightarrow$ action plan elicitation $\rightarrow$ DOM validation
     $\rightarrow$ RQ4).\\
     Bottom: leaderboard artifact.]}
   \caption{End-to-end evaluation pipeline.
            Track~A supports reproduction (RQ1).
-           Track~B supports static multi-metric assessment (RQ2, RQ3)
-           and dynamic plan validation (RQ4).}
+           Track~B supports static multi-metric assessment (RQ2),
+           protocol feasibility checks (RQ3), and dynamic plan validation
+           (RQ4).}
   \label{fig:pipeline}
 \end{figure}
 
@@ -151,9 +153,8 @@ A random sample of 50 to 100 pairs is selected, stratified to cover
 the range of quality contrasts present in the original dataset.
 
 No new human annotation is collected for Track~A.
-The original UIClip preference labels serve as ground-truth reference,
-and agreement between each evaluator model and those labels constitutes
-the alignment measure.
+The original UIClip preference labels serve as a lightweight reference
+for the reduced reproduction.
 This design makes Track~A lightweight and directly comparable to
 the UIClip publication while keeping the main thesis contribution --
 a static and dynamic leaderboard for LLM-generated GUIs -- concentrated
@@ -165,32 +166,42 @@ in Track~B.
 \subsection{Requirement Sources}
 
 Track~B requirements are collected from two sources.
-The primary source is the Design2Code-HARD subset~\cite{design2code},
-which contains 80 challenging real-world webpages.
-For each selected page, the corresponding HTML reference is used to
-derive a concise natural language requirement that describes the
-intended layout, content, and functionality without specifying
-implementation details.
-Approximately 50 to 60 pages are selected after filtering out items
-whose interactive functionality cannot be meaningfully assessed
-through DOM inspection alone.
+The primary source is a reduced subset of Vision2Web~\cite{vision2web},
+a hierarchical benchmark for visual website development with static,
+interactive frontend, and full-stack levels.
+This thesis uses only Level~1 static webpage tasks and Level~2
+interactive frontend tasks.
+Level~3 full-stack tasks are excluded because they introduce backend
+state, deployment, and long-horizon engineering requirements that are
+outside the scope of a controlled GUI-quality benchmark.
 
-A secondary set of 5 to 10 requirements is written manually to cover
-scenarios underrepresented in Design2Code-HARD, specifically
-form-heavy interfaces and simplified mobile-style layouts.
-These types support more tractable dynamic task derivation
-(Section~\ref{sec:dynamic-method}) and reduce reliance on a single
-source.
+For each selected Vision2Web task, the provided visual prototype,
+structured requirement, and available assets are used as the generation
+input. Level~1 items support static rubric scoring; Level~2 items also
+support dynamic task-validation because they include interaction-oriented
+requirements and testable functional expectations.
+Approximately 10 to 20 tasks are used for the pilot phase, with a
+possible expansion to a small formal subset after rendering and
+annotation feasibility have been verified.
+
+Design2Code~\cite{design2code} is retained as a static UI-to-code
+reference point and as a backup source for simple webpage reproduction
+cases, but it is no longer the primary Track~B data source.
+A small set of author-written form-heavy requirements may be added only
+if the selected Vision2Web subset lacks enough clear dynamic-validation
+cases.
 
 \subsection{Interface Generation}
 
 Each requirement is submitted to two or three generator models,
 producing a set of generated HTML implementations per requirement.
-The generator models are drawn from the same pool as the evaluator models
-(Section~\ref{sec:static-method}) where feasible, but generator identity
-and evaluator identity are recorded separately. The leaderboard compares the
-quality of the generated interfaces; evaluator behaviour is analysed only as
-part of the evaluation methodology.
+For any direct generator comparison, the same generation prompt version,
+input screenshots, requirement text, workflow checks, viewport policy,
+temperature, and output-budget policy are used wherever the provider
+allows it. Generator identity, provider, model identifier, date, prompt
+identifier, and key parameters are recorded in metadata. The leaderboard
+compares the quality of the generated interfaces; automated scorers and
+human review are used only to compute or audit the metrics.
 
 \subsection{Rendering Pipeline}
 
@@ -207,20 +218,18 @@ the input to both the static and dynamic evaluation modules.
 \section{Static Evaluation Methodology}
 \label{sec:static-method}
 
-\subsection{Model Selection}
+\subsection{Scoring Instruments}
 
-Four evaluator models are tested to span a range of capability levels.
-Two closed-source multimodal models represent the current
-state of the art; one open-weight multimodal model is included to
-allow reproducibility without API access; and one smaller or older
-multimodal model serves as a weaker baseline that makes the
-relationship between model capability and evaluator quality visible.
-Exact model identifiers and access dates are recorded in the
-reproducibility appendix.
+Static evaluation can combine human rubric scores, deterministic checks,
+and LLM-based rubric scoring. These instruments are used to score
+generated GUI submissions, not to create a separate evaluator leaderboard.
+When LLM-based scorers are used, exact model identifiers, access dates,
+prompt identifiers, and outputs are recorded in the reproducibility
+appendix.
 
 \subsection{Prompting Conditions}
 
-Two prompting conditions are applied to every model.
+Two scoring prompt formats may be used.
 
 \textit{Zero-shot} prompting presents the model with the interface
 screenshot and a minimal instruction to indicate which of two
@@ -233,22 +242,24 @@ dimension definitions and per-level score anchors, and requires the
 model to return a structured JSON response containing one integer score
 per dimension and a one-sentence rationale.
 This condition tests whether explicit guidance improves alignment with
-human ratings.
+the rubric definitions and produces more interpretable scoring outputs.
 
-\subsection{Reliability Conditions}
+\subsection{Scoring Safeguards}
 
-Two reliability conditions are applied on top of the prompting conditions.
+Two safeguards are applied where they are relevant to the scoring format.
 
-\textit{Order-swapped pairwise comparison} repeats each pairwise
-judgement with the two interface screenshots presented in the reverse
-order~\cite{shi-etal-2025-judging}.
+\textit{Order-swapped pairwise comparison} is used only for Track~A
+pairwise reproduction or for optional pairwise audits. It repeats each
+pairwise judgement with the two interface screenshots presented in the
+reverse order~\cite{shi-etal-2025-judging}.
 If a model labels interface~A as better when it appears first but
 interface~B as better when it appears first, the judgement is
 classified as position-biased.
-The position-bias rate is computed per model and per prompting condition.
+The position-bias rate is computed per scoring model and prompting
+condition for audit purposes.
 
-\textit{Repeated sampling} submits each prompt three times with a
-non-zero sampling temperature.
+\textit{Repeated sampling} submits selected scoring prompts three times
+with a non-zero sampling temperature.
 The self-consistency rate measures the proportion of items on which
 all three runs produce the same judgement.
 
@@ -318,22 +329,33 @@ the RQ4 correlation analysis if they cannot be resolved.
 \section{Metrics}
 \label{sec:metrics}
 
-\paragraph{Human-model agreement (pairwise).}
-Cohen's $\kappa$ measures agreement between an evaluator model's pairwise
-preference and the human majority label, correcting for chance.
+\paragraph{Track A agreement (pairwise).}
+Cohen's $\kappa$ measures agreement between a pairwise judgement and the
+UIClip-derived reference label, correcting for chance. This metric is used
+only for the reduced Track~A reproduction and optional scoring audits.
 
-\paragraph{Human-model correlation (rubric).}
-Spearman's $\rho$ measures rank correlation between model rubric scores
-and human rubric scores, computed per rubric dimension and reported
-both individually and averaged.
+\paragraph{Static rubric score.}
+The static leaderboard score is computed from per-dimension rubric scores
+covering visual structure, information clarity, requirement fidelity, and
+interaction-relevant affordances. Where both human and automated scores
+are available, Spearman's $\rho$ is reported as a calibration statistic
+rather than as the main leaderboard target.
 
 \paragraph{Position-bias rate.}
 The proportion of pairwise items on which the model's preference
-reverses between the original and order-swapped presentation.
+reverses between the original and order-swapped presentation. This is
+reported for Track~A and optional pairwise audits, not as a central
+Track~B result.
 
 \paragraph{Self-consistency rate.}
 The proportion of items on which all three repeated-sampling runs
 produce the same judgement or score.
+
+\paragraph{Generation validity rate.}
+The proportion of generated submissions that pass the static validity
+gate: complete HTML, non-truncated script and style blocks, implemented
+route identifiers, defined click handlers, and clickable workflow-required
+controls.
 
 \paragraph{Plan-success rate.}
 The proportion of action steps in a plan that pass all three
@@ -349,9 +371,9 @@ fail a task and a visually plain interface can still be functionally
 successful.
 
 \paragraph{API cost.}
-Total token cost in USD per model per condition, computed from
-provider pricing at the time of the experiment and used to
-characterise the alignment-cost trade-off addressed in RQ3.
+Total token cost in USD per generator and scoring component, computed
+from provider pricing at the time of the experiment and used to
+characterise the feasibility trade-off addressed in RQ3.
 
 \section{Research Question -- Method Map}
 \label{sec:rq-map}
@@ -377,11 +399,11 @@ the primary metrics, and the results section that reports the findings.
     \addlinespace
     2 & Static multi-metric quality of generated GUIs
       & Track~B & Rubric scoring
-      & Human-model Spearman $\rho$ per dimension; leaderboard scores \\
+      & Static rubric scores per dimension; optional human/automated calibration \\
     \addlinespace
-    3 & Reliable and cost-effective evaluation methodology
-      & Track~A + B & Pairwise + rubric
-      & $\kappa$; $\rho$; position-bias rate; self-consistency rate; API cost \\
+    3 & Reproducible and cost-effective generation/evaluation protocol
+      & Track~B & Generation + rendering + scoring
+      & Generation validity rate; render success; scorer self-consistency; API cost \\
     \addlinespace
     4 & Relationship between static and dynamic quality signals
       & Track~B & Rubric + action plan validation

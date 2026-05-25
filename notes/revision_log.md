@@ -438,3 +438,44 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 5. **§6.8** — Downgraded from committed section to "TIME-PERMITTING OPTIONAL cross-check"; added explicit status note to prevent scope inflation; page estimate adjusted to 9–11 pages.
 6. **Part 0 §"static and dynamic"** — Changed "dynamic agent 任务测试" to "dynamic task validation / action-plan validation" for terminology consistency with Plan B.
 7. **Part 3 item 4** — Updated "Dynamic agent 选择" open question to reflect current status: the only remaining decision is whether to run the optional §6.8 Plan A pilot.
+
+## 2026-05-21
+
+### Prompt preservation policy and appendix established
+
+- Created `notes/prompt_preservation_policy.md` — defines which prompts must be saved (result/protocol-affecting only), required metadata fields, versioning rule, and storage locations.
+- Created `AGENTS.md` at repo root — concise standing instruction for all agents (including Codex) to follow the prompt preservation policy.
+- Created `thesis/appendices/prompt_templates.tex` with `\chapter{Prompt Templates and Experimental Metadata}` containing:
+  - `TA-PAIR-ZS-v1`: zero-shot pairwise visual design prompt (gpt-4o + claude-sonnet-4-5)
+  - `TA-PAIR-RUBRIC-v1`: rubric-guided pairwise prompt (gpt-4o)
+  - Both entries now include full metadata (models, parameters, dates, source lines, result file paths).
+- Wired appendix into `thesis/master_thesis.tex` via `\appendix` + `\include{appendices/prompt_templates}`, positioned after `\bibliography{}` (standard thesis convention).
+- Appendix prompt text verified to match `scripts/track_a_eval.py:44-68` exactly.
+
+## 2026-05-19
+
+### Track B source update — Vision2Web replaces Design2Code-HARD as main substrate
+
+- Reframed Track B around a reduced **Vision2Web Level 1 / Level 2** subset because Vision2Web directly supports the thesis's static-vs-dynamic GUI-quality question: static visual website generation plus interaction/function-oriented verification.
+- Demoted Design2Code-HARD from the main Track B data source to a static UI-to-code related-work reference and reserve source for simple reproduction cases.
+- Explicitly excluded Vision2Web Level 3 full-stack tasks from the main scope because backend state, deployment, authentication, and long-horizon workflow requirements would turn the thesis into a full-stack agent benchmark rather than a GUI-quality evaluation benchmark.
+- Updated [notes/thesis_outline.md](D:/master_thesis/notes/thesis_outline.md), [thesis/chapters/chapter3_methodology.tex](D:/master_thesis/thesis/chapters/chapter3_methodology.tex), and [notes/drafts/draft_ch4_benchmark.tex](D:/master_thesis/notes/drafts/draft_ch4_benchmark.tex) to reflect the new Track B data-source decision.
+- Added `vision2web` BibTeX entries to [thesis/references.bib](D:/master_thesis/thesis/references.bib) and [proposal/references.bib](D:/master_thesis/proposal/references.bib).
+
+## 2026-05-25
+
+### Leaderboard scope clarified as generator ranking
+
+- Confirmed the main leaderboard object as generated GUI submissions aggregated by generator model, not judge models.
+- Updated [notes/thesis_outline.md](D:/master_thesis/notes/thesis_outline.md) so `RQ2` focuses on static multi-metric comparison of generated submissions and `RQ3` focuses on reproducible generation/evaluation protocol rather than judge-method reliability.
+- Updated [thesis/chapters/chapter3_methodology.tex](D:/master_thesis/thesis/chapters/chapter3_methodology.tex) to demote LLM-as-a-judge from thesis object to optional scoring instrument / audit signal.
+- Updated [thesis/chapters/chapter2_background_related_work.tex](D:/master_thesis/thesis/chapters/chapter2_background_related_work.tex) to frame judge-model bias as a limitation of automated scoring, not as the central research contribution.
+- Updated [notes/track_b_vision2web_pilot_plan.md](D:/master_thesis/notes/track_b_vision2web_pilot_plan.md) to require same-prompt generator comparisons and to mark the current Claude `TB-GEN-v4` artifact as a smoke result rather than the fair comparison baseline against Qwen `TB-GEN-v6`.
+
+### Compact Track B prompt smoke tests
+
+- Added `--prompt-id` support to [scripts/generate_track_b_ui.py](D:/master_thesis/scripts/generate_track_b_ui.py) so `TB-GEN-v6`, `TB-GEN-v7`, and `TB-GEN-v8` can remain reproducible without silently replacing old prompt versions.
+- Created `TB-GEN-v7` to test whether compact prompt wording can avoid ChatAnywhere HTTP 524 without increasing `max_tokens`. Claude generated an artifact at `max_tokens=20000`, but static gate failed because `Local Forms` was implemented as an inert `div`.
+- Created `TB-GEN-v8` with exact workflow-label-to-route mappings and explicit `<a>` / `<button>` requirements. Claude and GWDG/SAIA Qwen fallback both generated valid `F09_elections_bc` artifacts at `max_tokens=20000`, and both passed `scripts/check_track_b_generation.py`.
+- Updated [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with full `TB-GEN-v7` and `TB-GEN-v8` prompt templates and metadata.
+- Added a project cost-control note to [AGENTS.md](D:/master_thesis/AGENTS.md): use the free GWDG/SAIA API key for future model-call smoke tests before paid/proxy providers whenever feasible.

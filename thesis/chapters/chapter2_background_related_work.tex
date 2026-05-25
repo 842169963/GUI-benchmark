@@ -6,21 +6,27 @@
 \label{sec:gap}
 
 The preceding sections have reviewed GUI quality assessment, LLM-generated
-interfaces, LLM-as-a-judge methodology, and multimodal web agents.
+interfaces, LLM-as-a-judge methodology as an evaluation tool, and
+multimodal web agents.
 Table~\ref{tab:related-work} places the most relevant prior works along
 seven dimensions that together characterise a comprehensive GUI quality
 evaluation framework.
 Taken together, three observations motivate the present thesis.
 
-\paragraph{No prior work provides a multi-metric leaderboard for LLM-generated GUIs.}
+\paragraph{Existing website-generation benchmarks do not directly answer generator-leaderboard questions.}
 UIClip~\cite{uiclip} demonstrated that vision-language models can perform
 pairwise UI comparison, but it relies on models that predate the current
 generation of multimodal LLMs and limits evaluation to a binary preference.
 The LLM-as-a-judge literature~\cite{llm_judge,li-etal-2025-generation}
-has established systematic judge evaluation for text, yet this methodology
-has not been transferred into a reusable benchmark for comparing the
-quality of generated graphical user interfaces across static and dynamic
-metrics.
+has established scalable evaluation methods for text, yet those methods
+also introduce known bias and calibration concerns. In this thesis they
+are therefore treated as practical scoring instruments rather than as the
+main leaderboard target.
+Vision2Web~\cite{vision2web} moves closer to this thesis by evaluating
+visual website development with both visual judging and agent-based
+verification, but its primary object is coding-agent website development
+rather than a thesis-specific, multi-metric leaderboard for comparing
+generated GUI submissions across static and dynamic metrics.
 
 \paragraph{Requirement fidelity and rubric-based assessment are largely absent from GUI evaluation.}
 Design2Code~\cite{design2code} evaluates how faithfully generated code
@@ -44,9 +50,11 @@ executable so that static and dynamic evaluations can be performed on the
 same set of items.
 
 The present thesis addresses all three gaps simultaneously by combining
-a two-track benchmark, a rubric-based human annotation protocol, a systematic
-evaluation methodology with bias and reliability analysis, and a static-plus-dynamic
-leaderboard for comparing the quality of LLM-generated GUIs.
+a two-track benchmark, a rubric-based scoring protocol, controlled
+generation metadata, validity gates, and a static-plus-dynamic leaderboard
+for comparing the quality of LLM-generated GUIs. Judge-model bias and
+human-label subjectivity are acknowledged as limitations of the scoring
+process, not as the central object of the leaderboard.
 
 \begin{landscape}
 \begin{table}[p]
@@ -76,6 +84,8 @@ leaderboard for comparing the quality of LLM-generated GUIs.
       & $\times$ & \checkmark & $\times$ & \checkmark & $\triangle$ & $\times$ & $\times$ \\
     Design2Code~\cite{design2code}
       & $\triangle$ & \checkmark & $\times$ & \checkmark & \checkmark & $\times$ & \checkmark \\
+    Vision2Web~\cite{vision2web}
+      & $\triangle$ & \checkmark & $\triangle$ & $\triangle$ & \checkmark & \checkmark & \checkmark \\
     MT-Bench / Chatbot Arena~\cite{llm_judge}
       & $\triangle$ & --- & $\triangle$ & \checkmark & --- & --- & $\triangle$ \\
     LLM-as-a-Judge survey~\cite{li-etal-2025-generation}

@@ -5,7 +5,7 @@
 Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex)），并由 GPT 生成了一份非常详细的章节大纲（[notes/thesis_summary_outline.md](notes/thesis_summary_outline.md)，约 550 行，10 章）。老师在 [Teacher's suggestion.txt](Teacher's%20suggestion.txt) 中给出了 5 条主线建议：(1) 用现代多模态 LLM 重做 UIClip；(2) 从 pairwise 升级到多维评估；(3) 改进 LLM-as-a-judge 方法；(4) 扩展到动态/交互式 UI；(5) 设计 benchmark + leaderboard。
 
 本计划文件做两件事：
-1. **整合一份精简、可执行的整体论文大纲**（基于 GPT 大纲，但根据 proposal、Design2Code 等参考文献做了取舍和补强）。
+1. **整合一份精简、可执行的整体论文大纲**（基于 GPT 大纲，但根据 proposal、Design2Code、Vision2Web 等参考文献做了取舍和补强）。
 2. **提出我的批评性意见**，特别是 scope、风险、最小可交付版本（MVT）等老师建议中没明说但我认为关键的问题。
 
 ---
@@ -13,12 +13,12 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 ## Part 0 — 用户已确认的关键决策（2026-04-29 更新）
 
 1. **章节数**：采用 8 章版本
-2. **Track B 数据源**：混合（Design2Code-HARD 主体 + 5–10 条自建 requirement）
+2. **Track B 数据源（2026-05-19 更新）**：以 **Vision2Web Level 1/Level 2 reduced subset** 为主体；Design2Code-HARD 降为静态 UI-to-code 相关工作/备用参照；Level 3 full-stack 不进主线
 3. **Leaderboard**：上线 Hugging Face Space（最简实现：展示不评估）
 4. **Dynamic 模块**：是论文重要组成（老师明确要求），不是 add-on
 5. **Track A**：**保留但缩小范围**（用户决策 2026-04-29）。理由：现在还不确定后续走向，留作 fallback 与 UIClip 锚点。**起步范围**：直接复用 UIClip 公开 pair 数据 50–100 对，**不做新的人工标注**，只让 LLM judges 跑一遍并报告与 UIClip 的差距。Track A 后期可视情况扩展或砍掉。
 6. **整体策略**：**先锁定一个"大概可行"的 starting scope，开工后再裁剪**——不在动笔前过度决策。
-7. **Primary novelty axis（2026-05-18 更新）**：**multi-metric static + dynamic leaderboard for evaluating LLM-generated GUIs**。Leaderboard 的主要对象不是 judge model，而是不同 LLM / generator model 生成出来的 GUI 质量。LLM-as-a-judge、人类标注、bias control 是评价方法与可靠性控制，不是论文最终排名的主角。uxCUA（Gao et al. 2026；摘要见 [notes/uxCUA_short_codex_note.md](D:/master_thesis/notes/uxCUA_short_codex_note.md) 与 [notes/paper_notes_dynamic_usability_cua.md](D:/master_thesis/notes/paper_notes_dynamic_usability_cua.md)）在**动态 CUA usability assessment** 方向上与本论文有较大重叠，应避免将"CUA-based 动态可用性评估"作为本论文的新颖点来宣称。但 uxCUA **未覆盖**的领域仍然开放且显著：面向 LLM-generated GUI 的多指标 benchmark、static + dynamic 评分、requirement fidelity、以及 HF Space leaderboard。**Artifact contribution = benchmark + HF Space leaderboard**；**empirical centerpiece = static/dynamic GUI quality signals 的关系、互补与分歧**。Mobile/desktop UI 仅作 Ch8.7 future work，不进主轴。
+7. **Primary novelty axis（2026-05-25 更新）**：**generator leaderboard for LLM-generated GUIs with static + dynamic metrics**。Leaderboard 的主要对象明确是不同 LLM / generator model 生成出来的 GUI submission 质量，不是 judge model。LLM-as-a-judge、人类标注、bias control 只作为评分工具、校准信号与局限讨论；不研究“哪个 judge 最可靠”作为主问题。uxCUA（Gao et al. 2026；摘要见 [notes/uxCUA_short_codex_note.md](D:/master_thesis/notes/uxCUA_short_codex_note.md) 与 [notes/paper_notes_dynamic_usability_cua.md](D:/master_thesis/notes/paper_notes_dynamic_usability_cua.md)）在**动态 CUA usability assessment** 方向上与本论文有重叠，应避免将"CUA-based 动态可用性评估"作为本论文的新颖点来宣称。但 uxCUA **未覆盖**的领域仍然开放且显著：面向 LLM-generated GUI submissions 的多指标 benchmark、static + dynamic 评分、requirement fidelity、以及 HF Space generator leaderboard。**Artifact contribution = benchmark + generator leaderboard**；**empirical centerpiece = static/dynamic GUI quality signals 的关系、互补与分歧**。Mobile/responsive UI 暂不作为硬性 gate，放入 limitation / future work。
 
 ### 关于 dynamic 实现方式（建议但未最终决定）
 两种实现路径，建议**起步用方案 B（轻量），跑通后视情况决定要不要升级到方案 A**：
@@ -55,7 +55,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **Purpose**: 让读者在 5 分钟内理解为什么这个问题值得做、本论文做了什么、以及和 UIClip 的关系。
 
 **1.1 Motivation**
-- LLM 已能产出 UI mockup + 前端代码，引 Design2Code 与 Designer Feedback 的实证数字
+- LLM 已能产出 UI mockup + 前端代码，引 Design2Code、Vision2Web 与 Designer Feedback 的实证数字
 - GUI 质量 ≠ 视觉吸引力，还包括 usability / 任务完成 / requirement 满足
 - 三类 stakeholder 都需要可信的 GUI 评估：设计师（迭代反馈）、开发者（自动化测试）、AI 研究者（模型对比）
 - **Positioning vs uxCUA**: 近期工作（uxCUA, Gao et al. 2026）已证明专门训练的 computer-use agent 能够通过交互式探索给 GUI 输出 usability 分数。该工作确立了动态可用性评估的价值，但其产出是**单一训练好的 agent / usability model**。本论文的主贡献不同：它面向 LLM-generated GUIs，构建一套可复现的 static + dynamic 多指标 benchmark 和 leaderboard，用来比较不同生成模型产出的 GUI 质量。LLM judge 与 human feedback 是打分方法，不是 leaderboard 的主要排名对象。
@@ -63,7 +63,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **1.2 Problem Statement**
 - 现有 screenshot-based 方法（UIClip）的三重局限：仅 pairwise / 旧模型 / 纯静态
 - LLM-as-a-judge 在文本领域成熟，但在 UI 视觉领域几乎空白
-- 没有一个 benchmark 同时覆盖：现代多模态 judge + 多维 rubric + requirement-driven 生成 UI + 静态-动态评估配对
+- 没有一个 benchmark 同时覆盖：requirement-driven 生成 UI + 多维 rubric + 静态-动态评估配对 + generator leaderboard submission flow
 
 **1.3 Research Questions** (preview, full statement in §3.1)
 - 4 个 RQ 列表（不展开）
@@ -72,7 +72,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - **C1 (artifact contribution)**: A public multi-metric benchmark and Hugging Face Space leaderboard for evaluating the quality of LLM-generated GUIs, combining static rubric scores and dynamic task-validation outcomes.
 - **C2**: Two-track evaluation design（Track A UIClip-style reduced baseline + Track B requirement-driven generated GUIs）operationalizing the benchmark.
 - **C3**: A 4-dimensional GUI quality rubric grounded in Nielsen heuristics, ISO 9241-11, and **Shneiderman's 8 Golden Rules**（后者是 uxCUA defect 分类的理论基础，对 D4 Interaction Quality 尤其相关）.
-- **C4**: Reliability controls for the evaluation pipeline, including prompting strategy ablation, order-swap, repeated sampling, and position-bias reporting. 这些是方法保障，不作为论文主创新点。
+- **C4**: Controlled generation and evaluation protocol, including fixed prompt versions within each comparison batch, saved generator metadata, static validity gates, rendering checks, and optional scorer reliability audits. 这些是方法保障，不作为论文主创新点。
 - **C5** ⭐ (empirical centerpiece): A focused empirical study of the relationship between static quality scores and dynamic task-validation outcomes on the same generated UIs（RQ4）。这里不预设二者必须一致，而是分析相关、互补和分歧案例。
 
 **1.5 Thesis Structure**
@@ -80,7 +80,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **Figures**: Fig 1.1 整体 framework 概览（two-track + static + dynamic + leaderboard）
 **Tables**: Table 1.1 Contributions ↔ Chapters 对照
-**Cites**: UIClip, Designer Feedback, Design2Code, MT-Bench
+**Cites**: UIClip, Designer Feedback, Design2Code, Vision2Web, MT-Bench
 
 **Out of scope**: 不在 introduction 中给具体数字，那放到 results。
 
@@ -103,8 +103,9 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **2.3 LLM-Generated UIs**
 - 2.3.1 Design2Code: 484 webpages, prompting methods, automatic metrics (CLIP score, block-match)
-- 2.3.2 Designer Feedback: pairwise rankings ~50% agreement (本论文的关键论据)
-- 2.3.3 Implications: richer feedback formats matter
+- 2.3.2 Vision2Web: hierarchical visual website development benchmark; Level 1 static webpage, Level 2 interactive frontend, Level 3 full-stack; visual score + functional score / agent verification
+- 2.3.3 Designer Feedback: pairwise rankings ~50% agreement (本论文的关键论据)
+- 2.3.4 Implications: richer feedback formats matter
 
 **2.4 LLM-as-a-Judge**
 - 2.4.1 MT-Bench / Chatbot Arena: foundation
@@ -128,7 +129,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **2.6 Research Gap**
 - 一段 narrative，再用一张矩阵 table 强化
 - 矩阵列：[work] × [evaluation material / generated GUI quality / multidim metrics / human labels / requirement fidelity / dynamic interaction / **public benchmark+leaderboard** / **evaluation reliability controls**]
-- 行：UIClip / Designer Feedback / MT-Bench / VisualWebArena / Design2Code / **uxCUA** / **This thesis**
+- 行：UIClip / Designer Feedback / MT-Bench / VisualWebArena / Design2Code / **Vision2Web** / **uxCUA** / **This thesis**
 - **uxCUA 行的差异化标注**：dynamic interaction ✓、designer human labels ✓、uxWeb dataset/benchmark ✓、但产出重点是 trained CUA usability model，不是面向 LLM-generated GUI 的多指标 leaderboard；没有 public leaderboard submission flow，也不以 requirement-driven GUI generation model comparison 为主。
 - **This thesis 行的独特交叉单元**：LLM-generated GUI quality ✓ **AND** static + dynamic metrics ✓ **AND** public benchmark+leaderboard ✓ **AND** evaluation reliability controls ✓ — 这组交集是本论文主轴。
 
@@ -145,8 +146,8 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **3.1 Research Questions**
 - 完整 4 RQ 措辞（每个 RQ 含 1–2 个 sub-question）：
   - **RQ1** (Track A, baseline): What does a reduced UIClip-style reproduction reveal about pairwise GUI judging and its methodological limits?
-  - **RQ2** (Track B, static metrics): How can LLM-generated GUIs be evaluated with static multi-dimensional metrics, and how well do automated / LLM-based scores align with human ratings?
-  - **RQ3** (evaluation methodology): Which prompting, order-control, and repeated-sampling settings provide reliable and cost-effective measurement signals for the leaderboard?
+  - **RQ2** (Track B, static metrics): How can generated GUI submissions be compared with static multi-dimensional metrics across visual structure, information clarity, and requirement fidelity?
+  - **RQ3** (generation/evaluation protocol): Which generation protocol, validity gates, and scoring components provide reproducible and cost-effective measurements for a generated-GUI leaderboard?
   - **RQ4** ⭐ (static-dynamic relationship, empirical centerpiece): For generated executable web UIs, how are static quality scores related to dynamic functionality and task-validation outcomes, and where do the two signals complement or diverge? 这里不写成 "是否一致"，因为 static 和 dynamic 本来衡量不同方面。
 
 **3.2 Overall Study Design**
@@ -162,7 +163,8 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - Purpose: numerical anchor，不做新标注
 
 **3.4 Track B: Requirement-driven Generated UIs**
-- Data sources: Design2Code-HARD (~50–60 selected) + 5–10 self-built requirements
+- Data sources: Vision2Web Level 1/2 reduced subset（pilot 10–20 tasks；正式视可行性扩展）+ 少量 form-heavy reserve requirements only if needed
+- Excluded: Vision2Web Level 3 full-stack（backend / deployment / long-horizon workflow 超出 GUI-quality benchmark 范围）
 - Generation: 2–3 generator models per requirement → 100–200 generated UIs（pilot 后定）
 - Tasks: rubric scoring + dynamic action plan validation
 - Reference: human rubric scores + automated dynamic outcomes
@@ -209,10 +211,12 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 4.2.4 No new annotation; reuse UIClip ground-truth labels
 
 **4.3 Track B Construction**
-- 4.3.1 Requirement source 1: Design2Code-HARD curation
-  - 从 80 examples 筛选 ~50 个，过滤掉 dynamic-impossible 的页面
-  - 把 reference HTML 反向写成自然语言 requirement（半自动 + 人工修订）
-- 4.3.2 Requirement source 2: 5–10 self-built (form-heavy + mobile UI 优先)
+- 4.3.1 Requirement source 1: Vision2Web Level 1/2 curation
+  - Level 1 用于 static visual/rubric scoring
+  - Level 2 用于 interaction/function-oriented dynamic validation
+  - 先选 10–20 个 pilot tasks，过滤掉无法本地渲染、依赖外部服务、或成功标准不清楚的项目
+  - 明确不做 Level 3 full-stack，避免 scope 膨胀
+- 4.3.2 Requirement source 2: Design2Code/static reserve + 少量 form-heavy 自建 requirement（仅在 Vision2Web 动态案例不足时补）
 - 4.3.3 Generator models: 2–3 个（与 judge 模型可重叠也可不重叠，决策记录在 §5.1）
 - 4.3.4 Rendering pipeline: Playwright headless → screenshot + DOM dump
 - 4.3.5 Item storage: `track_b/{item_id}/{requirement.md, generated.html, screenshot.png, dom.json, generator_meta.json}`
@@ -258,7 +262,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 ### Chapter 5 — Automated GUI Evaluation Experiments (~10–12 pages)
 
-**Purpose**: 定义并执行自动评分 / LLM-as-evaluator 实验，为 generated GUI leaderboard 产生 static metrics，并回答 RQ1、RQ2、RQ3 的方法论部分。
+**Purpose**: 定义并执行 generated GUI submissions 的 static scoring / validity gate / optional LLM scoring audit，为 generator leaderboard 产生 static metrics，并回答 RQ1、RQ2、RQ3 的方法论部分。
 
 **5.1 Model Selection**
 - 2 closed-source: Claude (Sonnet/Opus latest)、GPT-4o 或继任
@@ -357,7 +361,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 **Figures**: Fig 6.1 Dynamic pipeline; Fig 6.2 Example action plan + validation outcome; **Fig 6.3 Plan A pilot navigation metrics scatter（新增）**
 **Tables**: Table 6.1 Task examples; Table 6.2 Failure taxonomy with examples; **Table 6.3 Plan A pilot results 5–10 items（新增）**
 
-**Cites**: VisualWebArena (作 Plan A 的对比), Design2Code (Track B 数据基础), **uxCUA / Gao et al. 2026 (Plan A 的代表性参考 + navigation metrics 来源)**
+**Cites**: VisualWebArena (作 Plan A 的对比), Vision2Web (Track B 数据基础), Design2Code (静态 UI-to-code 参照), **uxCUA / Gao et al. 2026 (Plan A 的代表性参考 + navigation metrics 来源)**
 
 ---
 
@@ -380,11 +384,11 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - 哪些维度模型表现最好，哪些最差
 - D3 (Requirement Fidelity) 与 D4 (Interaction Quality) 的特殊讨论
 
-**7.4 RQ3: Evaluation Strategy and Reliability**
-- Zero-shot vs rubric-guided：alignment 提升多少
-- Order-swap：position consistency 数字
-- Repeated sampling：self-consistency 数字
-- Cost vs alignment trade-off
+**7.4 RQ3: Generation Protocol and Evaluation Feasibility**
+- 同一批 generator comparison 必须使用同一 generation prompt version（例如 `TB-GEN-v6`）
+- 报告 static gate pass rate、render success rate、token budget / timeout / fallback 情况
+- LLM scoring 的 self-consistency / position-bias 只作为 optional audit，不作为主排名对象
+- Cost vs usable-submission trade-off
 
 **7.5 RQ4: Static-Dynamic Relationship ⭐**
 - Scatter: static rubric scores vs plan success rate
@@ -408,8 +412,8 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 
 **Purpose**: 综合解读结果，明示 limitations，指 future work，收尾。
 
-**8.1 What Makes a Reliable GUI Judge?**
-- 综合 RQ1–RQ3 给出实践建议（哪个 model + 哪个 strategy combination 是 best practice）
+**8.1 What Makes a Strong Generated GUI Submission?**
+- 综合 RQ1–RQ3 给出实践建议（哪些 generator / protocol / validation settings 更适合进入 leaderboard）
 
 **8.2 Pairwise vs Rubric vs Requirement Fidelity**
 - 三种 task format 各自的强项与失效场景
@@ -433,7 +437,7 @@ Xinyang 已经完成 thesis proposal（[thesis_proposal.tex](thesis_proposal.tex
 - Plan B 不是真 agent execution
 - Annotator pool 有限
 - 仅静态截图 + DOM，未涵盖动效与可访问性
-- **Untrained judge**（2026-05-14 新增）：本论文评估的是 off-the-shelf 多模态 LLM 作为 judge，未训练专门的 CUA-style usability model。所观察到的性能上限应被解读为"现成模型上限"，而非"问题本质上限"——uxCUA 即是反例。
+- **Automated scorer limitations**（2026-05-25 更新）：本论文的主排名对象是 generated GUI submissions，而不是 judge model。若使用 off-the-shelf 多模态 LLM 作为评分工具，其偏差、prompt sensitivity 和 position bias 只作为 scoring limitation / audit signal 报告，不声称解决 LLM-as-a-judge 可靠性问题。
 - **Subjective human labels**（2026-05-14 新增）：GUI 质量判断本身高度主观。uxCUA 报告 designer-preference Krippendorff's α = 0.308（[notes/uxCUA_short_codex_note.md §5](D:/master_thesis/notes/uxCUA_short_codex_note.md)）。因此本论文将"human alignment"作为方向性信号而非 ground truth，对应的描述与解读必须保留这一边界。
 - **Plan B vs Plan A semantic gap**（2026-05-14 新增）：action-plan validation 衡量的是"是否存在一条可解析的 plan"，并非"真实用户是否能完成"。§6.8 pilot 缓解但不能完全消除此 gap；full-scale Plan A 是显式 future work（§8.7）。
 
@@ -493,18 +497,19 @@ Ch2 (基础知识) ──┐
 ### 意见 2 ⭐⭐ Scope 警告：当前设计对 master thesis 偏大（dynamic 已确认必做后，更需收缩其他部分）
 用户已确认 dynamic + HF Space leaderboard 都是必做项，这意味着**其他部分的 scope 必须收紧**，否则不可能按时交付。建议：
 - **Track A**：使用 UIClip 现有公开数据，不再自建当代截图集（节省人工标注成本）
-- **Track B 规模**：50–80 个 generated UI 即可（Design2Code-HARD 80 个为上限参考）
+- **Track B 规模**：先做 Vision2Web Level 1/2 的 10–20 task pilot；正式版控制在约 30–50 个 generated UI 起步，不碰 Level 3 full-stack
 - **模型数**：3 个闭源 + 1 个开源 + 1 个 weaker baseline，不要更多
 - **Prompting 策略**：zero-shot, rubric-guided, order-swap, repeated 这 4 个为必做；few-shot 和 aggregation 列为"时间允许时做"
 - **HF Space**：MVP 版本即可（gradio 静态展示 + 下载结果文件），不必做在线评估
 - **关键时间节点**：建议 Ch4 数据 + 标注必须在论文写作期前 1/3 时间完成，否则后续都没法做
 
 ### 意见 3 Track B（生成 pipeline）的工程量被低估
-- Design2Code 论文用了 484 个手工筛选的 webpage、84 种 HTML 标签、平均 158 个 tag。要让本论文 Track B 有意义，至少需要：
-  - 20–50 条 requirement（自己写或改编）
-  - 每条 requirement × 3–5 个 generator 模型 → 60–250 个 generated UI
-  - 每个都要渲染、截图、保留可执行版本
-- 建议：**直接复用 Design2Code-HARD（80 examples）作为 reference + requirement source**，不要自己从头构造，省下大量工程时间。reference 文件夹里已经有这篇论文，可以引用其方法。
+- Vision2Web 比 Design2Code 更贴合主线，但工程量也更大：Level 2 涉及交互、测试用例和功能验证；Level 3 full-stack 会把项目变成完整网站开发评测，必须排除。
+- 要让本论文 Track B 有意义，起步只需要：
+  - 10–20 个 Vision2Web Level 1/2 pilot tasks
+  - 每条 task × 2 个 generator 模型 → 20–40 个 generated UI
+  - 每个都要渲染、截图、DOM dump、保留可执行版本
+- 建议：**Vision2Web Level 1/2 做主数据源，Design2Code-HARD 只作为静态 UI-to-code 参照/备用**。这样更贴合 static score vs dynamic success 的论文主线，同时避免从零构造动态任务。
 
 ### 意见 4 Human annotation 的预算与招募现实问题
 - 6 维 × 5 分 + pairwise，单 item 人工时间 ≈ 3–5 分钟
@@ -548,7 +553,7 @@ GPT 大纲的 6 个 RQ 里 RQ4（"哪些维度最可靠"）和 RQ5（"requiremen
 ### 意见 10 风险与缓解
 | 风险 | 概率 | 影响 | 缓解 |
 | --- | --- | --- | --- |
-| Track B 生成质量太差，rubric 区分度不够 | 中 | 中 | 复用 Design2Code-HARD；保留 human-curated UI 作 control |
+| Track B 生成质量太差，rubric 区分度不够 | 中 | 中 | 使用 Vision2Web Level 1/2 子集；保留 Design2Code/static reserve 和 human-curated prototype 作 control |
 | Annotator 招募失败 | 中 | 高 | 提前与导师/同学敲定；准备 Prolific 备份预算 |
 | API 成本超支（多模型 × 多策略 × 重复采样） | 高 | 中 | 实验前估算成本上限；用 Claude/Gemini 的 batch API；先小样本 pilot |
 | Computer-use agent 不稳定 | 高 | 低（dynamic 是 add-on） | 缩小 dynamic 子集；明确报告 agent failure rate |
@@ -562,7 +567,7 @@ GPT 大纲的 6 个 RQ 里 RQ4（"哪些维度最可靠"）和 RQ5（"requiremen
 
 1. **Annotation 资源**：是否能保证 ≥3 个 annotator？预算从哪里来（同学/Prolific/HCI lab）？
 2. **Rubric 维度**：保留当前 6 维，还是允许 pilot 后调整为 4–5 维？
-3. **Track B 自建那 5–10 条 requirement 覆盖什么场景**？建议：mobile UI（Design2Code 主要是桌面 web），或者 form-heavy 任务界面（更利于 dynamic agent 任务设计）。
+3. **Track B reserve requirements 是否需要自建**？建议先看 Vision2Web Level 2 是否已有足够 form-heavy / interaction-heavy 案例；不足时只补 3–5 条简单表单任务。
 4. **§6.8 Optional Plan A pilot**：是否保留 5–10 item 的 optional Plan A cross-check（time-permitting）？若决定不做，§8.6 限制中补充说明即可，无需选择 dynamic agent；若决定做，建议直接用 Anthropic computer use API（代码量最小，和主线 LLM judge 调用方式一致）。
 
 ---
@@ -573,7 +578,8 @@ GPT 大纲的 6 个 RQ 里 RQ4（"哪些维度最可靠"）和 RQ5（"requiremen
 - [references.bib](references.bib) — 需要补充 Nielsen / ISO 9241 等基础文献
 - [notes/thesis_summary_outline.md](notes/thesis_summary_outline.md) — GPT 详细版大纲（保留作 reference）
 - [notes/revision_log.md](notes/revision_log.md) — 每次结构变更要记录
-- [reference/degin2code front-end automatedv3.pdf](reference/degin2code%20front-end%20automatedv3.pdf) — Track B pipeline 的方法论模板
+- [literature/papers/Vision2Web A Hierarchical Benchmark for Visual Website Development with.pdf](D:/master_thesis/literature/papers/Vision2Web%20A%20Hierarchical%20Benchmark%20for%20Visual%20Website%20Development%20with.pdf) — Track B pipeline 的新主参考
+- [reference/degin2code front-end automatedv3.pdf](reference/degin2code%20front-end%20automatedv3.pdf) — 静态 UI-to-code 参照
 
 ## Part 5 — Verification Plan
 
@@ -581,9 +587,9 @@ GPT 大纲的 6 个 RQ 里 RQ4（"哪些维度最可靠"）和 RQ5（"requiremen
 1. 起草 Ch2 related work matrix（1 页 table），让导师审过
 2. 写 Ch3 RQ 终稿，与导师确认
 3. 跑 pilot annotation（10–20 items, 3 annotators），验证 IRR ≥ 0.5
-4. 跑 pilot LLM-as-judge experiment（1 模型 × 1 策略 × 20 items），验证 prompt 模板可用
+4. 跑 Track B generator pilot（同一 prompt version，例如 `TB-GEN-v6`，至少 Claude + Qwen × 2–3 items），验证 generation prompt、static gate、rendering 和 metadata 模板可用
 5. 估算总 API 成本和人工成本，写入 thesis progress log
 
 ---
 
-*Plan authored 2026-04-29. 大纲与意见基于 thesis_proposal.tex（v2026-04-10）、Teacher's suggestion.txt、notes/thesis_summary_outline.md、references.bib、reference/Design2Code 论文。*
+*Plan authored 2026-04-29. 大纲与意见基于 thesis_proposal.tex（v2026-04-10）、Teacher's suggestion.txt、notes/thesis_summary_outline.md、references.bib、Design2Code 与 Vision2Web 论文。*

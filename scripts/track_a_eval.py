@@ -18,6 +18,8 @@ import os
 import random
 import re
 import time
+import urllib.error
+import urllib.request
 from collections import defaultdict
 from datetime import datetime
 from io import BytesIO
@@ -267,11 +269,64 @@ def ask_pairwise_anthropic(client, model, img_a, img_b, prompt, max_tokens):
     return "".join(parts).strip()
 
 
+def ask_pairwise_chatanywhere_anthropic(client, model, img_a, img_b, prompt, max_tokens):
+    endpoint = client["endpoint"]
+    api_key = client["api_key"]
+    payload = {
+        "model": model,
+        "max_tokens": max_tokens,
+        "temperature": 0,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {"type": "text", "text": "Image A:"},
+                {"type": "image", "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": pil_to_b64(img_a),
+                }},
+                {"type": "text", "text": "Image B:"},
+                {"type": "image", "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": pil_to_b64(img_b),
+                }},
+            ],
+        }],
+    }
+    request = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "content-type": "application/json",
+            "anthropic-version": "2023-06-01",
+            "x-api-key": api_key,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"HTTP {exc.code}: {body}") from exc
+
+    parts = [
+        block.get("text", "")
+        for block in data.get("content", [])
+        if block.get("type") == "text"
+    ]
+    return "".join(parts).strip()
+
+
 def ask_pairwise(provider, client, model, img_a, img_b, prompt, max_tokens):
     if provider == "openai":
         return ask_pairwise_openai(client, model, img_a, img_b, prompt, max_tokens)
     if provider == "anthropic":
         return ask_pairwise_anthropic(client, model, img_a, img_b, prompt, max_tokens)
+    if provider == "chatanywhere-anthropic":
+        return ask_pairwise_chatanywhere_anthropic(client, model, img_a, img_b, prompt, max_tokens)
     raise ValueError(f"Unknown provider: {provider}")
 
 
@@ -450,6 +505,20 @@ def build_client(provider):
         client = Anthropic(api_key=api_key, base_url=base_url) if base_url else Anthropic(api_key=api_key)
         return client, base_url or "https://api.anthropic.com"
 
+    if provider == "chatanywhere-anthropic":
+        api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")
+        if not api_key:
+            raise SystemExit("ERROR: ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN not set.")
+        base_url = os.environ.get("ANTHROPIC_BASE_URL") or "https://api.chatanywhere.tech/v1"
+        base_url = base_url.rstrip("/")
+        if base_url.endswith("/v1/messages"):
+            endpoint = base_url
+        elif base_url.endswith("/v1"):
+            endpoint = f"{base_url}/messages"
+        else:
+            endpoint = f"{base_url}/v1/messages"
+        return {"api_key": api_key, "endpoint": endpoint}, endpoint
+
     raise SystemExit(f"ERROR: unknown provider {provider!r}. Use openai or anthropic.")
 
 
@@ -458,7 +527,8 @@ def main():
     parser.add_argument("--dataset", default=DEFAULT_DATASET)
     parser.add_argument("--split", default="train")
     parser.add_argument("--n", type=int, default=50)
-    parser.add_argument("--provider", choices=["openai", "anthropic"], default="openai")
+    parser.add_argument("--provider", choices=["openai", "anthropic", "chatanywhere-anthropic"],
+                        default="openai")
     parser.add_argument("--model", default="gpt-4o")
     parser.add_argument("--strategy", choices=list(STRATEGIES.keys()), default="zeroshot")
     parser.add_argument("--seed", type=int, default=42)

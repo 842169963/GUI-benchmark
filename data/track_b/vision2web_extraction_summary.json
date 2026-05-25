@@ -1,0 +1,118 @@
+{
+  "frontend": [
+    {
+      "task": "1daycloud",
+      "file_count": 43,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "401trucksource",
+      "file_count": 87,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "about_gitlab",
+      "file_count": 117,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "academy_govloop",
+      "file_count": 168,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "balancingbirthbaby",
+      "file_count": 26,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "community_dynamics",
+      "file_count": 55,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "community_hpe",
+      "file_count": 51,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "copenhagenmarathon",
+      "file_count": 177,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "elections_bc",
+      "file_count": 45,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "gourmania",
+      "file_count": 58,
+      "has_prompt": true,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    }
+  ],
+  "webpage": [
+    {
+      "task": "aihw",
+      "file_count": 4,
+      "has_prompt": false,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "aws",
+      "file_count": 5,
+      "has_prompt": false,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "ebay",
+      "file_count": 7,
+      "has_prompt": false,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    },
+    {
+      "task": "eventbrite",
+      "file_count": 13,
+      "has_prompt": false,
+      "has_workflow": true,
+      "has_prototypes": true,
+      "has_resources": true
+    }
+  ]
+}

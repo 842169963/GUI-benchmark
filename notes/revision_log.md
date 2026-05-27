@@ -477,5 +477,19 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 - Added `--prompt-id` support to [scripts/generate_track_b_ui.py](D:/master_thesis/scripts/generate_track_b_ui.py) so `TB-GEN-v6`, `TB-GEN-v7`, and `TB-GEN-v8` can remain reproducible without silently replacing old prompt versions.
 - Created `TB-GEN-v7` to test whether compact prompt wording can avoid ChatAnywhere HTTP 524 without increasing `max_tokens`. Claude generated an artifact at `max_tokens=20000`, but static gate failed because `Local Forms` was implemented as an inert `div`.
 - Created `TB-GEN-v8` with exact workflow-label-to-route mappings and explicit `<a>` / `<button>` requirements. Claude and GWDG/SAIA Qwen fallback both generated valid `F09_elections_bc` artifacts at `max_tokens=20000`, and both passed `scripts/check_track_b_generation.py`.
+- Created `TB-GEN-v9` after `TB-GEN-v8` proved item-specific on `F03_about_gitlab`. The script now extracts workflow click labels from each item's `workflow.json`; `TB-GEN-v9` passed GWDG/Qwen smoke gates on `F03_about_gitlab` and `F10_gourmania` at `max_tokens=20000`.
+- Fixed `scripts/check_track_b_generation.py` workflow-label extraction so quoted labels and "related to ..." actions are not double-counted as malformed labels such as `"Platform"` or `button or`.
 - Updated [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with full `TB-GEN-v7` and `TB-GEN-v8` prompt templates and metadata.
+- Updated [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) again with the full `TB-GEN-v9` prompt template and metadata.
 - Added a project cost-control note to [AGENTS.md](D:/master_thesis/AGENTS.md): use the free GWDG/SAIA API key for future model-call smoke tests before paid/proxy providers whenever feasible.
+
+## 2026-05-26
+
+### Track B v10 workflow-control map
+
+- Created `TB-GEN-v10` for Track B GUI generation. It keeps the prompt template fixed across items and models, but automatically fills a per-item `{workflow_controls}` slot with label/context/route mappings derived from each item's `workflow.json` and prototype route ids.
+- Added dry-run checks for `F03_about_gitlab`, `F09_elections_bc`, and `F10_gourmania`; the derived workflow-control maps correctly differ by scenario, e.g. GitLab-specific controls are not reused for elections or restaurant items.
+- Updated [scripts/generate_track_b_ui.py](D:/master_thesis/scripts/generate_track_b_ui.py), [notes/track_b_vision2web_pilot_plan.md](D:/master_thesis/notes/track_b_vision2web_pilot_plan.md), and [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with the new prompt version.
+- Ran `TB-GEN-v10` on `F03_about_gitlab` using GWDG/SAIA `qwen3.6-35b-a3b` at `max_tokens=20000`. The artifact was complete and stopped normally, but failed the static gate because the mapped `GitLab Duo` control was rendered as `Learn about Duo` rather than exact visible text.
+- Created `TB-GEN-v11` to preserve `TB-GEN-v10` as-used and clarify that each mapped `Label` is exact required visible text and each mapped route must be used exactly in `data-route-target` and `onclick`.
+- Ran `TB-GEN-v11` on `F03_about_gitlab` using GWDG/SAIA `qwen3.6-35b-a3b` at `max_tokens=20000`. The run hit `finish_reason=length` with 20,000 completion tokens after 283.32 seconds, leaving incomplete HTML and failing the static gate. This suggests that stronger wording alone increased output pressure; the next prompt should reduce input/output scope rather than adding more prose.

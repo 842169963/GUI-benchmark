@@ -248,6 +248,220 @@ Available local resource paths:
 Prototype screenshots are attached after this text in this order:
 {prototype_list}
 """,
+    "TB-GEN-v9": """\
+Prompt ID: TB-GEN-v9
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The following exact workflow click labels were extracted from the workflow checks. Every label below must appear as visible text inside an <a> or <button> element:
+{workflow_click_targets}
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every workflow control must include data-route-target="<route_id>" and onclick="showPage('<route_id>')".
+- If a click target is a feature phrase such as "GitLab Duo", use that feature phrase as the visible label.
+- Choose the route target from the route contract that best matches the label and workflow validation.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the extracted workflow click labels.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
+    "TB-GEN-v10": """\
+Prompt ID: TB-GEN-v10
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The workflow-control map below was derived automatically from this item's workflow and prototype routes. It is item-specific; do not reuse labels or routes from other scenarios.
+{workflow_controls}
+- Every mapped workflow control must appear as visible text inside an <a> or <button> element.
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every mapped workflow control must include the mapped data-route-target value and onclick="showPage('<mapped_route_id>')".
+- If the same visible label appears with different contexts, create one control in each matching card/banner/menu context and route each one to its mapped route.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the workflow-control map.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
+    "TB-GEN-v11": """\
+Prompt ID: TB-GEN-v11
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The workflow-control map below was derived automatically from this item's workflow and prototype routes. It is item-specific; do not reuse labels or routes from other scenarios.
+{workflow_controls}
+- In each map entry, the Label value is the exact visible text that must appear inside an <a> or <button>. Do not replace it with a synonym or a longer phrase.
+- Every mapped workflow control must appear as visible text inside an <a> or <button> element.
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every mapped workflow control must include data-route-target="<mapped_route_id>" and onclick="showPage('<mapped_route_id>')", using the mapped Route value exactly.
+- If the same visible label appears with different contexts, create one control in each matching card/banner/menu context and route each one to its mapped route.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the workflow-control map.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
 }
 
 
@@ -319,6 +533,151 @@ def collect_prototypes(item_dir, max_prototypes):
     return sorted(files, key=route_order)[:max_prototypes]
 
 
+def extract_workflow_click_targets(workflow):
+    labels = []
+    for check in workflow:
+        for content in check.get("content", []):
+            for action in content.get("actions", []):
+                if not isinstance(action, str):
+                    continue
+                label = label_from_click_action(action)
+                if label:
+                    labels.append(label)
+    seen = set()
+    unique = []
+    for label in labels:
+        key = label.lower()
+        if key and key not in seen:
+            seen.add(key)
+            unique.append(label)
+    return unique
+
+
+def label_from_click_action(action):
+    lower = action.lower()
+    if lower.startswith("browser:") or "click" not in lower:
+        return None
+    quoted = re.findall(r'"([^"]+)"', action)
+    if quoted:
+        return quoted[0].strip()
+    related = re.search(r"related to ([A-Za-z0-9 .&'/-]+?)(?: in | on | from |$)", action)
+    if related:
+        label = related.group(1).strip()
+        return re.sub(r"\s+", " ", label)
+    named = re.search(r"named\s+\"([^\"]+)\"", action)
+    if named:
+        return named.group(1).strip()
+    match = re.search(
+        r"Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)",
+        action,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        label = match.group(1).strip()
+        label = re.sub(r"\s+", " ", label)
+        return label
+    return None
+
+
+def route_terms(route_id):
+    terms = re.findall(r"[a-z0-9]+", route_id.lower())
+    return [term for term in terms if term not in {"and", "the", "page", "homepage", "home"}]
+
+
+def fuzzy_overlap(left_terms, right_terms):
+    count = 0
+    for left in left_terms:
+        for right in right_terms:
+            if left == right or left[:5] == right[:5] or left.startswith(right[:5]) or right.startswith(left[:5]):
+                count += 1
+                break
+    return count
+
+
+def text_terms(text):
+    terms = re.findall(r"[a-z0-9]+", text.lower())
+    stop = {
+        "a", "an", "and", "are", "button", "card", "click", "content", "displays",
+        "from", "heading", "in", "is", "link", "menu", "navigation", "on", "page",
+        "successfully", "the", "to", "verify", "with",
+    }
+    return [term for term in terms if term not in stop]
+
+
+def best_route_for_control(label, action, context, route_ids, prototype_routes):
+    candidates = [route for route in route_ids if route not in {"home", "homepage", "index", "landing"}]
+    if not candidates:
+        candidates = route_ids
+
+    label_set = set(text_terms(label))
+    action_set = set(text_terms(action))
+    context_set = set(text_terms(context))
+    best_route = None
+    best_score = -1
+    for route in candidates:
+        terms = set(route_terms(route))
+        score = fuzzy_overlap(label_set, terms) * 6
+        score += fuzzy_overlap(action_set, terms) * 4
+        score += fuzzy_overlap(context_set, terms)
+        route_text = " ".join(route_terms(route))
+        if label.lower() in route_text or route_text in label.lower():
+            score += 4
+        if route in prototype_routes:
+            score += 1
+        if score > best_score:
+            best_score = score
+            best_route = route
+    if best_score <= 0 and len(prototype_routes) == 1:
+        only_route = next(iter(prototype_routes))
+        if only_route in route_ids:
+            return only_route, best_score
+    return best_route or route_ids[0], best_score
+
+
+def derive_workflow_controls(workflow, route_ids):
+    controls = []
+    for check in workflow:
+        prototype_routes = set((check.get("prototype") or {}).keys())
+        for content in check.get("content", []):
+            content_context = " ".join([
+                str(content.get("objective", "")),
+                " ".join(str(value) for value in content.get("validations", [])),
+            ])
+            for action in content.get("actions", []):
+                if not isinstance(action, str):
+                    continue
+                label = label_from_click_action(action)
+                if not label:
+                    continue
+                route, score = best_route_for_control(label, action, content_context, route_ids, prototype_routes)
+                controls.append({
+                    "label": label,
+                    "route": route,
+                    "context": action,
+                    "score": score,
+                })
+
+    best_by_context = {}
+    for control in controls:
+        key = (control["label"].lower(), control["route"], control["context"].lower())
+        existing = best_by_context.get((control["label"].lower(), control["context"].lower()))
+        if existing and existing["score"] >= control["score"]:
+            continue
+        best_by_context[(control["label"].lower(), control["context"].lower())] = control
+    return list(best_by_context.values())
+
+
+def workflow_controls_text(controls):
+    if not controls:
+        return "- No workflow controls were extracted."
+    lines = []
+    for control in controls:
+        lines.append(
+            f"- Label: {control['label']} | Route: {control['route']} | Context: {control['context']}"
+        )
+    return "\n".join(lines)
+
+
 def image_to_b64(path):
     return base64.b64encode(path.read_bytes()).decode("ascii")
 
@@ -330,7 +689,8 @@ def image_media_type(path):
 
 def build_prompt(item_dir, args):
     requirement = read_text(item_dir / "requirement.md")
-    workflow = json.dumps(read_json(item_dir / "workflow.json"), indent=2, ensure_ascii=False)
+    workflow_data = read_json(item_dir / "workflow.json")
+    workflow = json.dumps(workflow_data, indent=2, ensure_ascii=False)
     meta = read_json(item_dir / "source_meta.json")
     resources = collect_resource_paths(item_dir, args.max_resources)
     prototypes = collect_prototypes(item_dir, args.max_prototypes)
@@ -342,7 +702,11 @@ def build_prompt(item_dir, args):
         resource_text = "- No local resources were found."
 
     prototype_text = "\n".join(f"- {path.name}" for path in prototypes)
+    click_targets = extract_workflow_click_targets(workflow_data)
+    click_target_text = "\n".join(f"- {target}" for target in click_targets) or "- No workflow click labels were extracted."
     route_ids = [path.stem for path in prototypes]
+    workflow_controls = derive_workflow_controls(workflow_data, route_ids)
+    workflow_control_text = workflow_controls_text(workflow_controls)
     route_contract = "\n".join(
         f"- Create <section id=\"{route_id}\" data-track-route> for prototype {path.name}."
         for route_id, path in zip(route_ids, prototypes)
@@ -362,6 +726,8 @@ def build_prompt(item_dir, args):
         workflow=limited_text(workflow, args.workflow_char_limit),
         resource_paths=resource_text,
         prototype_list=prototype_text,
+        workflow_click_targets=click_target_text,
+        workflow_controls=workflow_control_text,
         route_contract=route_contract,
         route_ids_json=json.dumps(route_ids, ensure_ascii=False),
     )

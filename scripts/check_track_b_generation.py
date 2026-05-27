@@ -62,11 +62,31 @@ def workflow_labels(workflow):
     for block in workflow:
         for case in block.get("content", []):
             for action in case.get("actions", []):
+                if not isinstance(action, str):
+                    continue
+                lower = action.lower()
+                if lower.startswith("browser:") or "click" not in lower:
+                    continue
+
                 quoted = re.findall(r'"([^"]{2,80})"', action)
-                labels.update(label.strip() for label in quoted)
+                if quoted:
+                    labels.update(label.strip() for label in quoted)
+                    continue
+
+                related = re.search(
+                    r"related to ([A-Za-z0-9 .&'/-]+?)(?: in | on | from |$)",
+                    action,
+                    flags=re.IGNORECASE,
+                )
+                if related:
+                    label = related.group(1).strip()
+                    label = re.sub(r"\s+", " ", label)
+                    if 2 <= len(label) <= 80:
+                        labels.add(label)
+                    continue
 
                 match = re.search(
-                    r"Click the (.+?)(?: button| link| navigation menu item| in the| from the|$)",
+                    r"Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)",
                     action,
                     flags=re.IGNORECASE,
                 )

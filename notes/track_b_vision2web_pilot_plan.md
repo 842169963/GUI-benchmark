@@ -108,6 +108,9 @@ These are static-only controls for rubric scoring and rendering pipeline checks.
    - [ ] Run Claude with the same `TB-GEN-v6` prompt on `F09_elections_bc` to create a fair same-prompt comparison against the valid Qwen fallback artifact. Two ChatAnywhere attempts on 2026-05-25 (`claude_sonnet45_v6_smoke`, `claude_sonnet45_v6_smoke_retry`) failed with HTTP 524 before writing artifacts; retry later or use a more stable Anthropic-compatible provider.
    - [x] Created `TB-GEN-v7` as a compact prompt while keeping `max_tokens=20000`. Claude wrote an artifact, but the static gate failed because `Local Forms` was implemented as an inert `div`.
    - [x] Created `TB-GEN-v8` with exact workflow-label-to-route mappings and explicit `<a>` / `<button>` requirements. Both Claude and GWDG/SAIA Qwen fallback generated valid `F09_elections_bc` artifacts at `max_tokens=20000`, and both passed the static gate.
+   - [x] Created `TB-GEN-v9` after `TB-GEN-v8` proved too item-specific for `F03_about_gitlab`. `TB-GEN-v9` extracts workflow click labels from each item's `workflow.json` and uses stricter compactness limits.
+   - [x] Created `TB-GEN-v10` with an automatically derived per-item workflow-control map. The fixed template now receives label/context/route mappings from each item's own `workflow.json` and prototype route ids, which avoids both `TB-GEN-v8` item-specific hard-coding and `TB-GEN-v9` generator-side route guessing.
+   - [x] Created `TB-GEN-v11` after the first `TB-GEN-v10` GWDG/Qwen `F03_about_gitlab` smoke generated complete HTML but failed the static gate because the mapped `GitLab Duo` control was rendered as `Learn about Duo`. `TB-GEN-v11` clarifies that each mapped `Label` is exact required visible button/link text and that each mapped route must be used exactly in `data-route-target` and `onclick`.
 5. [ ] Render each generated UI with Playwright and save:
    - `generated.html`
    - `screenshot.png`
@@ -191,12 +194,27 @@ Generation-gate boundary for `TB-GEN-v6`:
 - Not hard checks in the current phase: mobile overflow, fully functional secondary navigation items that are not in the workflow, and real downloadable PDF files when the dataset does not provide PDF assets.
 - Interpretation: missing secondary pages or real PDF downloads should be reported as generated-UI quality limitations, but they should not block the smoke pipeline unless the workflow explicitly requires that interaction.
 
+`TB-GEN-v8` / `TB-GEN-v9` compact-prompt smoke results:
+
+| Item | Run | Provider/model | Prompt | Max tokens | Prompt tokens | Completion tokens | Finish | Elapsed | Static gate |
+| --- | --- | --- | --- | ---: | ---: | ---: | --- | ---: | --- |
+| F09_elections_bc | `gwdg_qwen36_35b_v8_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v8 | 20000 | 24,527 | 12,066 | stop | 73.84s | pass |
+| F09_elections_bc | `claude_sonnet45_v8_smoke` | ChatAnywhere `claude-sonnet-4-5-20250929` | TB-GEN-v8 | 20000 | 13,937 | 6,779 | end_turn | 114.42s | pass |
+| F03_about_gitlab | `gwdg_qwen36_35b_v8_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v8 | 20000 | 83,066 | 20,000 | length | 192.59s | fail |
+| F03_about_gitlab | `gwdg_qwen36_35b_v9_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v9 | 20000 | 82,940 | 11,372 | stop | 96.91s | pass |
+| F10_gourmania | `gwdg_qwen36_35b_v9_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v9 | 20000 | 39,640 | 8,661 | stop | 98.45s | pass |
+| F03_about_gitlab | `gwdg_qwen36_35b_v10_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v10 | 20000 | 83,033 | 12,533 | stop | 96.27s | fail |
+| F03_about_gitlab | `gwdg_qwen36_35b_v11_smoke` | GWDG `qwen3.6-35b-a3b` | TB-GEN-v11 | 20000 | 83,081 | 20,000 | length | 283.32s | fail |
+
 Recommended immediate next step:
 
-- Treat `TB-GEN-v8` as the current same-prompt comparison candidate because it avoids the Claude 524 timeout seen with `TB-GEN-v6`, fixes the inert-control failure seen with `TB-GEN-v7`, and works for both Claude and Qwen fallback at `max_tokens=20000`.
+- Treat `TB-GEN-v9` as the current generalized same-prompt comparison candidate because it avoids `TB-GEN-v8`'s item-specific workflow labels and passed GWDG/Qwen smoke tests on both `F03_about_gitlab` and `F10_gourmania` at `max_tokens=20000`.
+- Prompt template rule: keep the generator prompt template fixed across items and generator models, but populate item-specific prompt content automatically from benchmark metadata: normalized requirement, workflow checks, prototype route identifiers, local resources, and extracted workflow-control mappings.
+- Workflow-control mappings are per-item derived data, not global manual rules. For example, `F03_about_gitlab` can map `Platform -> platform`, `Pricing -> pricing`, `Company -> company`, and `GitLab Duo -> gitlab_duo`; an elections, restaurant, or shopping item should receive its own labels and route ids from its own `workflow.json` and `prototypes/`.
+- Current implementation status: `TB-GEN-v11` fills a `{workflow_controls}` slot with explicit per-item label/context/route mappings before model generation and makes mapped labels exact visible-text requirements. Dry-run checks produced plausible mappings for `F03_about_gitlab`, `F09_elections_bc`, and `F10_gourmania`; the next step is GWDG/Qwen smoke generation at `max_tokens=20000`.
 - Use the free GWDG/SAIA API key first for future prompt smoke tests to reduce cost. Use paid/proxy providers only after the prompt and gate are validated or when the experiment specifically requires that provider.
 - Treat the generator leaderboard unit as the generated HTML submission, aggregated by generator model and requirement set. The benchmark item supplies the fixed screenshots, requirement, workflow checks, and assets; submitters provide the executable UI artifact and generator metadata.
-- Run `qwen3.6-35b-a3b` and Claude with `TB-GEN-v8` on 2-3 diverse Track B items before expanding to the full pilot.
+- Run `qwen3.6-35b-a3b` with `TB-GEN-v11` on one or two more diverse Track B items, then run Claude with the same `TB-GEN-v11` batch only after the free GWDG smoke tests remain stable.
 
 ## Thesis Framing
 

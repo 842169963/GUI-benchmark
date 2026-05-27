@@ -198,7 +198,16 @@ producing a set of generated HTML implementations per requirement.
 For any direct generator comparison, the same generation prompt version,
 input screenshots, requirement text, workflow checks, viewport policy,
 temperature, and output-budget policy are used wherever the provider
-allows it. Generator identity, provider, model identifier, date, prompt
+allows it. The prompt template is fixed across items and generator
+models. Item-specific prompt content is populated automatically from the
+benchmark item metadata, including the normalised requirement, workflow
+checks, prototype route identifiers, local resources, and extracted
+workflow-control mappings. These mappings are derived per item rather
+than hand-written as global rules, because the required controls depend
+on the scenario. For example, a GitLab item may map ``GitLab Duo'' to a
+GitLab-specific route, while an elections or shopping item would expose
+different workflow controls and routes. Generator identity, provider,
+model identifier, date, prompt
 identifier, and key parameters are recorded in metadata. The leaderboard
 compares the quality of the generated interfaces; automated scorers and
 human review are used only to compute or audit the metrics.

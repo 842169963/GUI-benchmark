@@ -108,8 +108,8 @@ Reply with ONLY the letter A or B on the last line. Nothing else.
 Track B generation prompts changed repeatedly during smoke testing. To keep
 the appendix focused on reproducibility rather than serving as a full prompt
 archive, this appendix gives the complete text for the reproducible
-templates currently used in smoke testing, \texttt{TB-GEN-v6} and
-\texttt{TB-GEN-v7}. Earlier versions remain recoverable
+templates currently used in smoke testing, \texttt{TB-GEN-v6} through
+\texttt{TB-GEN-v10}. Earlier versions remain recoverable
 from source templates, generated-run metadata, and revision notes when they are
 needed to interpret a pilot artifact.
 
@@ -127,6 +127,9 @@ needed to interpret a pilot artifact.
 \texttt{TB-GEN-v6} & Reproducible smoke template & Made desktop workflow fidelity the hard generation target and clarified handling of unavailable downloadable assets. & Full text below \\
 \texttt{TB-GEN-v7} & Compact same-prompt comparison template & Keeps the same route/workflow contract as v6 but instructs models to produce a shorter complete implementation to reduce truncation and gateway-timeout risk. & Full text below \\
 \texttt{TB-GEN-v8} & Compact gated comparison template & Adds explicit exact workflow-label-to-route mappings and forbids inert elements for workflow-required controls after v7 produced an inert Local Forms control. & Full text below \\
+\texttt{TB-GEN-v9} & Generalized compact gated template & Replaces item-specific workflow labels with labels extracted from each item's workflow JSON and further limits content length for high-complexity screenshot inputs. & Full text below \\
+\texttt{TB-GEN-v10} & Per-item workflow-control-map template & Replaces route guessing with automatically derived per-item label/context/route mappings while keeping the prompt template fixed across items and models. & Full text below \\
+\texttt{TB-GEN-v11} & Exact mapped-label workflow template & Preserves v10 after a failed smoke run and clarifies that mapped labels are exact required visible text and mapped routes must be used exactly. & Full text below \\
 \bottomrule
 \end{tabularx}
 \caption{Summary of Track B GUI generation prompt versions. Only the current
@@ -455,6 +458,346 @@ function showPage(routeId) {
   if (history.replaceState) {
     history.replaceState(null, '', '#' + routeId);
   }
+  setTimeout(function() { window.scrollTo(0, 0); }, 0);
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+\end{verbatim}
+\endgroup
+
+\subsection{TB-GEN-v9: Generalized Compact Workflow-Control-Gated Generation Prompt}
+\label{app:prompt-tb-gen-v9}
+
+\textbf{Purpose:} Generalized compact Track B GUI generation prompt created
+after \texttt{TB-GEN-v8} worked for \texttt{F09\_elections\_bc} but overfit
+that item by hard-coding its workflow labels. This version extracts workflow
+click labels from each item's workflow JSON, includes them in the prompt, and
+tightens compactness limits for high-complexity screenshot inputs.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, GUI generation
+  \item \textbf{Prompt ID:} TB-GEN-v9
+  \item \textbf{Version change:} revises TB-GEN-v8 by replacing fixed
+  Elections BC workflow labels with per-item extracted labels, adding
+  workflow-label extraction support in \texttt{scripts/generate\_track\_b\_ui.py},
+  and further reducing route-level content limits
+  \item \textbf{Models planned/used:} \texttt{qwen3.6-35b-a3b} via GWDG/SAIA
+  for free smoke tests before paid/proxy providers
+  \item \textbf{Input modalities:} normalized requirement text, Vision2Web
+  workflow JSON, extracted workflow click labels, local resource-path list,
+  route contract, and prototype screenshots
+  \item \textbf{Message structure:} system message plus one user message
+  containing text and prototype images
+  \item \textbf{Decoding parameters:} temperature = 0.2, max\_tokens = 20000
+  for smoke tests
+  \item \textbf{Dataset:} \texttt{zai-org/Vision2Web}, reduced Level 1 /
+  Level 2 pilot subset
+  \item \textbf{Source:} \texttt{scripts/generate\_track\_b\_ui.py}
+  \item \textbf{First use:} 2026-05-26, Europe/Berlin
+  \item \textbf{First valid results:} \texttt{F03\_about\_gitlab} and
+  \texttt{F10\_gourmania} with \texttt{gwdg\_qwen36\_35b\_v9\_smoke}
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.
+Create a polished, working website implementation that can be opened directly from a local index.html file.
+
+User:
+Prompt ID: TB-GEN-v9
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The following exact workflow click labels were extracted from the workflow checks. Every label below must appear as visible text inside an <a> or <button> element:
+{workflow_click_targets}
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every workflow control must include data-route-target="<route_id>" and onclick="showPage('<route_id>')".
+- If a click target is a feature phrase such as "GitLab Duo", use that feature phrase as the visible label.
+- Choose the route target from the route contract that best matches the label and workflow validation.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the extracted workflow click labels.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() { window.scrollTo(0, 0); }, 0);
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+\end{verbatim}
+\endgroup
+
+\subsection{TB-GEN-v10: Per-Item Workflow-Control-Map Generation Prompt}
+\label{app:prompt-tb-gen-v10}
+
+\textbf{Purpose:} Generalized compact Track B GUI generation prompt created
+after \texttt{TB-GEN-v9} showed that extracted click labels alone still leave
+route selection to the generator. This version fills a per-item
+\texttt{\{workflow\_controls\}} slot with automatically derived
+label/context/route mappings from the item's workflow JSON and prototype route
+identifiers. The template remains fixed across items and generator models; only
+the benchmark item context varies.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, GUI generation
+  \item \textbf{Prompt ID:} TB-GEN-v10
+  \item \textbf{Version change:} revises TB-GEN-v9 by replacing generator-side
+  route guessing with automatically derived per-item workflow-control mappings
+  and adding support for repeated visible labels with different contexts
+  \item \textbf{Models planned/used:} \texttt{qwen3.6-35b-a3b} via GWDG/SAIA
+  for free smoke tests before paid/proxy providers
+  \item \textbf{Input modalities:} normalized requirement text, Vision2Web
+  workflow JSON, derived workflow-control map, local resource-path list, route
+  contract, and prototype screenshots
+  \item \textbf{Message structure:} system message plus one user message
+  containing text and prototype images
+  \item \textbf{Decoding parameters:} temperature = 0.2, max\_tokens = 20000
+  for smoke tests
+  \item \textbf{Dataset:} \texttt{zai-org/Vision2Web}, reduced Level 1 /
+  Level 2 pilot subset
+  \item \textbf{Source:} \texttt{scripts/generate\_track\_b\_ui.py}
+  \item \textbf{First use:} 2026-05-26, Europe/Berlin
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.
+Create a polished, working website implementation that can be opened directly from a local index.html file.
+
+User:
+Prompt ID: TB-GEN-v10
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The workflow-control map below was derived automatically from this item's workflow and prototype routes. It is item-specific; do not reuse labels or routes from other scenarios.
+{workflow_controls}
+- Every mapped workflow control must appear as visible text inside an <a> or <button> element.
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every mapped workflow control must include the mapped data-route-target value and onclick="showPage('<mapped_route_id>')".
+- If the same visible label appears with different contexts, create one control in each matching card/banner/menu context and route each one to its mapped route.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the workflow-control map.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() { window.scrollTo(0, 0); }, 0);
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+\end{verbatim}
+\endgroup
+
+\subsection{TB-GEN-v11: Exact Mapped-Label Workflow-Control Prompt}
+\label{app:prompt-tb-gen-v11}
+
+\textbf{Purpose:} Revised per-item workflow-control-map prompt created after
+the first \texttt{TB-GEN-v10} smoke run generated complete HTML but failed the
+static gate because the mapped \texttt{GitLab Duo} control appeared as
+\texttt{Learn about Duo}. This version preserves \texttt{TB-GEN-v10} as used
+and clarifies that mapped labels are exact visible-text requirements.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, GUI generation
+  \item \textbf{Prompt ID:} TB-GEN-v11
+  \item \textbf{Version change:} revises TB-GEN-v10 by stating that each
+  mapped \texttt{Label} is exact visible text and that each mapped
+  \texttt{Route} must be used exactly in \texttt{data-route-target} and
+  \texttt{onclick}
+  \item \textbf{Models planned/used:} \texttt{qwen3.6-35b-a3b} via GWDG/SAIA
+  for free smoke tests before paid/proxy providers
+  \item \textbf{Input modalities:} normalized requirement text, Vision2Web
+  workflow JSON, derived workflow-control map, local resource-path list, route
+  contract, and prototype screenshots
+  \item \textbf{Message structure:} system message plus one user message
+  containing text and prototype images
+  \item \textbf{Decoding parameters:} temperature = 0.2, max\_tokens = 20000
+  for smoke tests
+  \item \textbf{Dataset:} \texttt{zai-org/Vision2Web}, reduced Level 1 /
+  Level 2 pilot subset
+  \item \textbf{Source:} \texttt{scripts/generate\_track\_b\_ui.py}
+  \item \textbf{First use:} 2026-05-26, Europe/Berlin
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.
+Create a polished, working website implementation that can be opened directly from a local index.html file.
+
+User:
+Prompt ID: TB-GEN-v11
+
+Build a minimal complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced as ../../resources/<subpath>.
+- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.
+- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+
+Mandatory workflow controls:
+- The workflow-control map below was derived automatically from this item's workflow and prototype routes. It is item-specific; do not reuse labels or routes from other scenarios.
+{workflow_controls}
+- In each map entry, the Label value is the exact visible text that must appear inside an <a> or <button>. Do not replace it with a synonym or a longer phrase.
+- Every mapped workflow control must appear as visible text inside an <a> or <button> element.
+- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.
+- Every mapped workflow control must include data-route-target="<mapped_route_id>" and onclick="showPage('<mapped_route_id>')", using the mapped Route value exactly.
+- If the same visible label appears with different contexts, create one control in each matching card/banner/menu context and route each one to its mapped route.
+- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the workflow-control map.
+
+Strict compactness limits:
+- Use one shared header and one shared footer only.
+- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.
+- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.
+- Do not copy long requirement text. Use short labels and short summaries.
+- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.
+- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
   setTimeout(function() { window.scrollTo(0, 0); }, 0);
 }
 document.addEventListener('DOMContentLoaded', function() {

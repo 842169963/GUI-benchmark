@@ -479,3 +479,12 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 - Created `TB-GEN-v8` with exact workflow-label-to-route mappings and explicit `<a>` / `<button>` requirements. Claude and GWDG/SAIA Qwen fallback both generated valid `F09_elections_bc` artifacts at `max_tokens=20000`, and both passed `scripts/check_track_b_generation.py`.
 - Updated [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with full `TB-GEN-v7` and `TB-GEN-v8` prompt templates and metadata.
 - Added a project cost-control note to [AGENTS.md](D:/master_thesis/AGENTS.md): use the free GWDG/SAIA API key for future model-call smoke tests before paid/proxy providers whenever feasible.
+
+## 2026-05-27
+
+### Leaderboard metric design draft
+
+- Created [notes/leaderboard_metric_design.md](D:/master_thesis/notes/leaderboard_metric_design.md) to record the working design of the GUI-quality leaderboard metric system.
+- Captured both the original 3-layer / 11-indicator draft (Technical pre-check + 6 static Likert dimensions + 4 dynamic indicators, mapped to ISO 9241-11, ISO/IEC 25010, WCAG 2.2, Lavie & Tractinsky, VisAWI, WebQual, UIClip, UI-Bench, FrontendBench, ArtifactsBench) and the revised 4-layer proposal that (a) merges the 6 static dimensions to 3 anchored Likert dimensions (Functional Completeness, Layout & Hierarchy, Visual Quality), (b) moves Basic Accessibility off the Likert scale to rule-based `axe-core` / Lighthouse checks, (c) defines an explicit composite aggregation `0.4 * static + 0.2 * a11y + 0.4 * dynamic` with all four numbers reported, and (d) adds pairwise comparison + Elo as a robustness check alongside Likert.
+- Recorded the open questions (weighting, composite hyper-parameters, reference step count availability, minimum submissions per item for Elo) and a pilot plan that includes a FC / LH / VQ correlation analysis to test whether the three-dimension merge is empirically justified.
+- The MLLM-as-judge prompt for the three anchored Likert dimensions and the pairwise comparison is **not yet written**. When written, it must be saved verbatim to [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with an explicit prompt id (e.g. `LB-JUDGE-v1`), per the project's appendix-prompt rule.

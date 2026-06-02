@@ -57,16 +57,44 @@ def html_ids(html):
     return set(value for _, value in re.findall(r"\bid\s*=\s*(['\"])(.*?)\1", html, flags=re.IGNORECASE))
 
 
-def workflow_labels(workflow):
-    labels = set()
+def workflow_label_groups(workflow):
+    exact_labels = set()
+    semantic_labels = set()
     for block in workflow:
         for case in block.get("content", []):
             for action in case.get("actions", []):
+                if not isinstance(action, str):
+                    continue
+                lower = action.lower()
+                if lower.startswith("browser:") or "click" not in lower:
+                    continue
+
                 quoted = re.findall(r'"([^"]{2,80})"', action)
-                labels.update(label.strip() for label in quoted)
+                if quoted:
+                    exact_labels.update(label.strip() for label in quoted)
+                    continue
+
+                related = re.search(
+                    r"related to ([A-Za-z0-9 .&'/-]+?)(?: in | on | from |$)",
+                    action,
+                    flags=re.IGNORECASE,
+                )
+                if related:
+                    label = related.group(1).strip()
+                    label = re.sub(r"\s+", " ", label)
+                    if 2 <= len(label) <= 80:
+                        semantic_labels.add(label)
+                    continue
+
+                named = re.search(r"named\s+\"([^\"]+)\"", action, flags=re.IGNORECASE)
+                if named:
+                    label = named.group(1).strip()
+                    if 2 <= len(label) <= 80:
+                        exact_labels.add(label)
+                    continue
 
                 match = re.search(
-                    r"Click the (.+?)(?: button| link| navigation menu item| in the| from the|$)",
+                    r"Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)",
                     action,
                     flags=re.IGNORECASE,
                 )
@@ -74,8 +102,11 @@ def workflow_labels(workflow):
                     label = match.group(1).strip()
                     label = re.sub(r"\s+", " ", label)
                     if 2 <= len(label) <= 80 and not label.lower().startswith("learn more button in"):
-                        labels.add(label)
-    return sorted(labels)
+                        semantic_labels.add(label)
+    return {
+        "exact": sorted(exact_labels),
+        "semantic": sorted(semantic_labels - exact_labels),
+    }
 
 
 def clickable_texts(html):
@@ -152,7 +183,9 @@ def run_gate(item_dir, run_dir):
     add(checks, "warning", "track_b_routes_self_test", "__TRACK_B_ROUTES" in html,
         "Generated page should expose window.__TRACK_B_ROUTES for cheap route introspection.")
 
-    labels = workflow_labels(workflow)
+    label_groups = workflow_label_groups(workflow)
+    labels = label_groups["exact"]
+    semantic_labels = label_groups["semantic"]
     clickables = clickable_texts(html)
     missing_labels = [label for label in labels if label.lower() not in clickables]
     add(checks, "error", "workflow_clickable_labels_present", not missing_labels,
@@ -161,6 +194,10 @@ def run_gate(item_dir, run_dir):
     inert_labels = [label for label in labels if label.lower() in clickables and not has_working_clickable(label, clickables)]
     add(checks, "error", "workflow_clickables_not_inert", not inert_labels,
         f"Workflow click labels found only as inert controls: {inert_labels}.")
+
+    missing_semantic_labels = [label for label in semantic_labels if label.lower() not in clickables]
+    add(checks, "warning", "semantic_workflow_click_labels_present", not missing_semantic_labels,
+        f"Semantic workflow click descriptions not found as exact <a> or <button> text: {missing_semantic_labels}.")
 
     failed_errors = [check for check in checks if check["level"] == "error" and not check["passed"]]
     failed_warnings = [check for check in checks if check["level"] == "warning" and not check["passed"]]

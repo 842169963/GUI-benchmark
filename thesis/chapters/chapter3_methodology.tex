@@ -78,7 +78,7 @@ Prior work has evaluated GUI quality from screenshots
 or evaluated agents on web tasks, but the two lines of research
 have not been connected on the same set of interfaces.
 RQ4 addresses this gap by pairing a static rubric score vector
-with a dynamic plan-success rate for every Track~B item
+with dynamic workflow-validation measurements for every Track~B item
 and analysing both correlations and mismatch cases. The goal is not to
 assume that static and dynamic metrics should be identical, but to
 understand what each signal captures about the quality of generated GUIs.
@@ -101,10 +101,10 @@ Track~A items undergo static evaluation only.
 natural language requirements.
 Every Track~B interface is kept in executable form so that it can be
 assessed both statically -- through rubric-based scoring -- and
-dynamically, through LLM-derived interaction plans that are validated
-against the rendered DOM.
+dynamically, through workflow-derived route and content validation
+against the rendered HTML.
 The key design principle is that the same interface receives both a
-static rubric score vector and a dynamic plan-success measurement,
+static rubric score vector and dynamic workflow-validation measurements,
 forming the paired data needed to answer RQ4.
 
 The primary leaderboard unit is the generated GUI submission, aggregated
@@ -132,13 +132,13 @@ reproducibility.
     Centre: Track B (requirements $\rightarrow$ GUI generation $\rightarrow$ rendering
     $\rightarrow$ static multi-metric scoring $\rightarrow$ RQ2).\\
     Right: Track B dynamic branch (executable HTML $\rightarrow$ task derivation
-    $\rightarrow$ action plan elicitation $\rightarrow$ DOM validation
+    $\rightarrow$ workflow route simulation $\rightarrow$ content validation
     $\rightarrow$ RQ4).\\
     Bottom: leaderboard artifact.]}
   \caption{End-to-end evaluation pipeline.
            Track~A supports reproduction (RQ1).
            Track~B supports static multi-metric assessment (RQ2),
-           protocol feasibility checks (RQ3), and dynamic plan validation
+           protocol feasibility checks (RQ3), and dynamic workflow validation
            (RQ4).}
   \label{fig:pipeline}
 \end{figure}
@@ -203,6 +203,12 @@ identifier, and key parameters are recorded in metadata. The leaderboard
 compares the quality of the generated interfaces; automated scorers and
 human review are used only to compute or audit the metrics.
 
+The current Track~B pilot uses \texttt{TB-GEN-v9} as the frozen
+generation prompt. Earlier and later prompt variants are treated as
+diagnostic smoke-test iterations unless they are explicitly introduced as
+separate experimental conditions. This avoids confounding generator
+quality with prompt-version changes.
+
 \subsection{Rendering Pipeline}
 
 Generated HTML files are rendered using a headless browser
@@ -214,6 +220,15 @@ error that prevents visible content from loading are excluded and
 replaced.
 The rendered screenshot and the DOM snapshot together constitute
 the input to both the static and dynamic evaluation modules.
+
+Before scoring, generated files also pass a static validity gate. The
+gate checks complete HTML, implemented route identifiers, defined route
+handlers, and clickable controls for workflow-required actions. Exact
+visible-label matching is enforced as a hard requirement only when the
+source workflow contains an explicitly quoted label. For semantic targets
+such as a link related to a named feature, route reachability is the hard
+criterion and an exact-label mismatch is recorded as a diagnostic warning
+rather than an automatic generation failure.
 
 \section{Static Evaluation Methodology}
 \label{sec:static-method}
@@ -268,60 +283,62 @@ all three runs produce the same judgement.
 
 \subsection{Approach}
 
-A computer-use agent that executes browser actions introduces two
-confounded sources of noise: failures caused by the interface itself
-and failures caused by the agent's own planning or grounding
-limitations.
-Disentangling these sources is difficult and adds substantial
-engineering overhead.
+Full computer-use agents introduce two confounded sources of noise:
+failures caused by the interface itself and failures caused by the
+agent's own planning, perception, or grounding limitations.
+Disentangling these sources would add substantial engineering overhead
+and would make the pilot harder to interpret.
 
-Instead, this thesis uses \textit{action plan elicitation}:
-an evaluator model is given the rendered screenshot, the DOM snapshot,
-and a short task description derived from the original requirement,
-and is asked to produce an ordered action plan -- a JSON list of
-steps, each specifying an action type, a CSS or ARIA target selector,
-and an optional value.
-A deterministic validation script then checks whether each step in
-the plan is feasible: whether the target element exists in the DOM,
-whether the selector resolves to a unique element, and whether a
-form-submission step reaches a plausible end state.
-This design isolates interface quality from agent execution variability
-and produces a binary feasibility verdict for each action step,
-giving a plan-success rate per item.
+The current Track~B dynamic pilot therefore uses deterministic
+\textit{workflow route simulation}. For each Vision2Web Level~2 item,
+the original \texttt{workflow.json} provides click actions and validation
+expectations. The evaluator maps workflow click targets to the generated
+HTML route controls, simulates the corresponding route transitions, and
+then checks whether the destination route contains the expected content
+evidence. The report separates route success from content-validation
+success so that navigation failures are not conflated with missing or
+incorrect destination content.
 
-Full computer-use agent execution -- where an agent autonomously
-interacts with the live rendered page -- is left as a future extension.
+Action-plan elicitation with an evaluator model remains a possible
+extension for cases where no source workflow exists. In that setting, an
+evaluator model would produce a JSON action plan from the screenshot,
+DOM snapshot, and task description, and a deterministic validator would
+check the plan. This thesis treats that model-derived plan approach as
+secondary to the workflow-derived evaluator whenever Vision2Web workflow
+metadata is available.
 
 \subsection{Task Derivation}
 
-One to two tasks are derived from each Track~B requirement.
-A task is a single imperative sentence with an unambiguous success
-criterion that can be checked by inspecting the DOM or a screenshot
-of the expected end state.
-Example tasks include filling and submitting a contact form, selecting
-an item from a navigation menu, or entering a search query.
-Tasks are written by the author and cross-checked by one independent
-reviewer to confirm clarity and feasibility.
+For Vision2Web Level~2 items, dynamic tasks are derived first from the
+provided workflow actions and validations. Each workflow case is treated
+as an interaction task with an expected route or content outcome. When a
+workflow validation depends on visual or CSS state, such as an active
+navigation tab, the pilot records this as a limitation of text-only route
+simulation and reserves it for browser DOM/CSS or visual validation.
+
+For additional author-written or static-only items, one to two tasks may
+be derived from the requirement text. Such tasks must be single
+imperative sentences with unambiguous success criteria that can be
+checked by inspecting the DOM or a screenshot of the expected end state.
 
 \subsection{Failure Taxonomy}
 
-Action plan failures are classified into four categories to support
+Dynamic workflow failures are classified into four categories to support
 interpretable analysis of RQ4.
 
-\textbf{F1 -- Interface failure}: the target element is absent from
-the DOM, the layout prevents meaningful interaction, or a required
-interactive component is not implemented.
+\textbf{F1 -- Route failure}: a workflow-required control is absent,
+not clickable, or does not reach the expected route.
 
-\textbf{F2 -- Plan failure}: the element exists but the model's selector
-does not resolve correctly, or the action sequence does not reach the
-target state despite the interface being technically functional.
+\textbf{F2 -- Content-validation failure}: the route is reachable, but
+the destination content does not contain the expected evidence.
 
-\textbf{F3 -- Ambiguity}: the task description admits multiple valid
-interpretations and the model's plan addresses a different valid
-interpretation than the one used by the validator.
+\textbf{F3 -- Validation-model limitation}: the expected evidence
+requires browser state, CSS, screenshots, or visual recognition beyond
+the current deterministic text/route evaluator.
 
-\textbf{F4 -- Tool failure}: the validation script itself produces
-an error unrelated to the interface or the plan.
+\textbf{F4 -- Tool or provider failure}: the validation script,
+renderer, or generation provider fails before a generated interface can
+be evaluated.
 
 Cases in category~F3 and F4 are reviewed manually and excluded from
 the RQ4 correlation analysis if they cannot be resolved.
@@ -335,10 +352,15 @@ UIClip-derived reference label, correcting for chance. This metric is used
 only for the reduced Track~A reproduction and optional scoring audits.
 
 \paragraph{Static rubric score.}
-The static leaderboard score is computed from per-dimension rubric scores
-covering visual structure, information clarity, requirement fidelity, and
-interaction-relevant affordances. Where both human and automated scores
-are available, Spearman's $\rho$ is reported as a calibration statistic
+The static leaderboard component is computed from per-dimension rubric
+scores. The current working rubric groups static judgement into
+functional completeness, layout and hierarchy, and visual quality, with
+requirement fidelity considered inside functional completeness for
+Track~B. These dimensions are treated as pilot scoring components rather
+than a final fixed leaderboard formula. Final score weights and any
+composite metric are left to the calibration phase; until then, component
+scores are reported separately. Where both human and automated scores are
+available, Spearman's $\rho$ is reported as a calibration statistic
 rather than as the main leaderboard target.
 
 \paragraph{Position-bias rate.}
@@ -355,16 +377,24 @@ produce the same judgement or score.
 The proportion of generated submissions that pass the static validity
 gate: complete HTML, non-truncated script and style blocks, implemented
 route identifiers, defined click handlers, and clickable workflow-required
-controls.
+controls. Exact visible-label mismatches for semantic workflow targets
+are reported as warnings unless the source workflow specified an explicit
+quoted label.
 
-\paragraph{Plan-success rate.}
-The proportion of action steps in a plan that pass all three
-feasibility checks (existence, unique resolution, state transition).
-Averaged across steps within an item to obtain an item-level score.
+\paragraph{Dynamic workflow success.}
+Dynamic success is reported with three related quantities. Route success
+is the proportion of workflow cases in which the generated interface
+reaches the expected route. Content-validation success is the proportion
+of workflow cases in which the reached route contains the expected
+content evidence. Task success rate is the proportion of workflow cases
+that satisfy both route and content validation. These quantities are
+reported separately during the pilot because they diagnose different
+failure modes.
 
 \paragraph{Static-dynamic relationship.}
 Spearman's $\rho$ between the item-level static rubric score
-(aggregate and per-dimension) and the item-level plan-success rate,
+(aggregate and per-dimension) and the item-level dynamic workflow
+success metrics,
 computed across all Track~B items. In addition, mismatch cases are
 reported qualitatively, because a visually strong interface can still
 fail a task and a visually plain interface can still be functionally
@@ -406,8 +436,8 @@ the primary metrics, and the results section that reports the findings.
       & Generation validity rate; render success; scorer self-consistency; API cost \\
     \addlinespace
     4 & Relationship between static and dynamic quality signals
-      & Track~B & Rubric + action plan validation
-      & Spearman $\rho$ (static-dynamic); plan-success rate; mismatch categories \\
+      & Track~B & Rubric + workflow validation
+      & Spearman $\rho$ (static-dynamic); route/content/task success; mismatch categories \\
     \bottomrule
   \end{tabular}
 \end{table}

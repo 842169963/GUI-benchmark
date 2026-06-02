@@ -4,9 +4,47 @@ Working notes for the GUI-quality leaderboard metric system used by this
 thesis. Records both the original draft and the revised proposal so the
 design rationale and trade-offs are visible in the final write-up.
 
+Current note: the broader four-layer design below is retained as a candidate
+metric system, but the current Track B implementation baseline is the smaller
+three-layer protocol in `notes/track_b_benchmark_protocol.md`: static technical
+gate, dynamic route success, and content validation success. The supervisor
+discussion should decide whether visual-quality and accessibility layers become
+part of the main leaderboard or remain auxiliary diagnostics.
+
 Status: **draft** — not yet implemented in any scorer. Decisions here
 should be validated by a small pilot before being committed to the
 methodology chapter or to any leaderboard run.
+
+## 0. Current Track B protocol baseline
+
+The current implemented Track B pilot uses a fixed-item benchmark protocol:
+
+- the benchmark owns item-specific screenshots, requirements, workflows,
+  assets, route expectations, and validation rules;
+- submitters provide only the executable generated UI artifact for the
+  corresponding item;
+- evaluation is performed with item-specific checks, not arbitrary open-ended
+  user scenarios.
+
+Implemented layers:
+
+| Layer | Status | Output |
+| --- | --- | --- |
+| Static technical gate | Implemented in `scripts/check_track_b_generation.py` | pass/fail + warnings |
+| Dynamic route success | Implemented in `scripts/run_track_b_dynamic_workflow.py` | `route_success_rate` |
+| Content validation success | Implemented in `scripts/run_track_b_dynamic_workflow.py` | `content_validation_success_rate` |
+
+Pilot results for `TB-GEN-v9` + GWDG/SAIA `qwen3.6-35b-a3b`:
+
+| Item | Static gate | Route success | Content validation | Task success |
+| --- | --- | ---: | ---: | ---: |
+| F01_1daycloud | pass | 1.000 | 0.750 | 0.750 |
+| F03_about_gitlab | pass | 1.000 | 1.000 | 1.000 |
+| F10_gourmania | pass | 1.000 | 0.875 | 0.875 |
+
+Open decision: whether the final leaderboard stops at these implemented
+functional layers or adds the broader visual-quality/accessibility layers
+described below.
 
 ## 1. Original draft (rejected as-is)
 

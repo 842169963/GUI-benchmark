@@ -103,7 +103,8 @@ This includes:
 
 - GUI generation prompts
 - LLM-as-a-judge prompts
-- dynamic action-plan elicitation prompts
+- LLM-based dynamic validation prompts, if dynamic validation later uses an
+  LLM-generated plan or oracle
 - human annotation instructions
 - output schemas that constrain model responses used in metrics
 

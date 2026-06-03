@@ -123,10 +123,13 @@ If the experiment later includes a stable executor with richer per-step data,
 the dynamic score may be expanded to a weighted mean, but the thesis should
 state that change explicitly.
 
-The current implementation may use lightweight workflow or action-plan
-validation. A future implementation may use a browser-based computer-use agent.
-The metric schema should stay stable: change the executor, not the metric
-schema.
+The current implementation may use deterministic route simulation or
+browser-workflow validation. Route simulation checks route/content evidence from
+the generated artifact, while browser-workflow validation opens the artifact in
+Chromium, executes workflow clicks with Playwright, and validates visible
+destination content. A future implementation may use a browser-based
+computer-use agent. The metric schema should stay stable: change the executor,
+not the metric schema.
 
 ## Efficiency Score
 

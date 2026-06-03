@@ -247,10 +247,13 @@ execution success, button functionality success, form completion success,
 state-change success, retry count, failure localization, and robustness or
 pass@k.
 
-The current implementation may use lightweight workflow or action-plan
-validation. A future implementation may replace the executor with a real
-browser-based computer-use agent, but the metric schema should remain stable:
-change the executor, not the metric schema.
+The current implementation separates the dynamic metric schema from the
+executor. Early pilot runs may use deterministic route simulation, while the
+browser workflow evaluator executes the same workflow cases in Chromium with
+Playwright, clicks generated controls, and validates visible destination
+content. A future implementation may replace this evaluator with a real
+computer-use agent, but the metric schema should remain stable: change the
+executor, not the metric schema.
 
 \subsection{Efficiency Score}
 
@@ -281,16 +284,21 @@ visible and are interpreted separately.
 \section{Dynamic Validation Strategy}
 \label{sec:dynamic-method}
 
-The thesis first implements lightweight dynamic validation rather than heavy
+The thesis first implements workflow-based dynamic validation rather than heavy
 real-agent execution. This choice keeps the pipeline reproducible and avoids
 confounding generated-interface quality with the planning or grounding failures
 of a separate agent.
 
 For Vision2Web-derived Level~2 items, dynamic tasks can be derived from
 workflow actions and validations. The evaluator checks whether the generated
-artifact supports the expected route, form, state, or content outcome. Current
-route or workflow simulation results are treated as lightweight dynamic
-validation, not as a full real-agent usability study.
+artifact supports the expected route, form, state, or content outcome. The
+current pipeline distinguishes deterministic route simulation from
+browser-workflow validation. Route simulation reads the generated artifact and
+checks route/content evidence without driving a real browser. Browser-workflow
+validation opens the generated HTML in Chromium, executes workflow clicks with
+Playwright, records route success, and validates visible destination content.
+Both are dynamic validation signals, but neither is presented as a full
+real-agent usability study.
 
 Real-agent execution remains an optional future upgrade or small cross-check
 after the main pipeline is stable. If added later, the same task success and

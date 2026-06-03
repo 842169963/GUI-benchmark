@@ -49,12 +49,13 @@ Answering this question requires a benchmark that keeps generated interfaces
 executable so that static and dynamic evaluations can be performed on the
 same set of items.
 
-The present thesis addresses all three gaps simultaneously by combining
-a two-track benchmark, a rubric-based scoring protocol, controlled
-generation metadata, validity gates, and a static-plus-dynamic leaderboard
-for comparing the quality of LLM-generated GUIs. Judge-model bias and
-human-label subjectivity are acknowledged as limitations of the scoring
-process, not as the central object of the leaderboard.
+The present thesis addresses all three gaps simultaneously by centring the
+benchmark on controlled generation of executable web interfaces, standardized
+artifact scoring, model-level aggregation, and a static-plus-dynamic
+leaderboard for comparing generator LLMs. UIClip-style pairwise judgement is
+retained only as a small baseline or sanity check. LLM-based scorers and human
+review are treated as scoring instruments and audit signals rather than as the
+main leaderboard target.
 
 \begin{landscape}
 \begin{table}[p]
@@ -98,7 +99,7 @@ process, not as the central object of the leaderboard.
       & $\times$ & \checkmark & $\times$ & \checkmark & $\triangle$ & \checkmark & \checkmark \\
     \midrule
     \textbf{This thesis}
-      & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+      & \checkmark & \checkmark & $\triangle$ & $\triangle$ & \checkmark & \checkmark & \checkmark \\
     \bottomrule
   \end{tabular}
 \end{table}

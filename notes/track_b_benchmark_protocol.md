@@ -77,12 +77,16 @@ Output: pass/fail plus diagnostic warnings.
 
 Purpose: test whether workflow actions can reach the expected route or section.
 
-Current evaluator: `scripts/run_track_b_dynamic_workflow.py`,
-`route-simulation-v1`.
+Current evaluators:
 
-This evaluator parses the generated HTML, identifies clickable workflow
-controls, simulates route transitions through `data-route-target`, and records
-whether the final route matches the route implied by the action.
+- `scripts/run_track_b_dynamic_workflow.py`, `route-simulation-v1`
+- `scripts/run_track_b_browser_workflow.js`, `browser-workflow-v1`
+
+The route-simulation evaluator parses the generated HTML, identifies clickable
+workflow controls, simulates route transitions through `data-route-target`, and
+records whether the final route matches the route implied by the action. The
+browser-workflow evaluator opens the generated HTML in Chromium, executes
+workflow clicks with Playwright, and records the resulting visible route.
 
 Output:
 
@@ -94,17 +98,23 @@ Output:
 Purpose: test whether the reached route contains the content evidence required
 by the original `workflow.json` validations.
 
-Current evaluator: `scripts/run_track_b_dynamic_workflow.py`,
-`route-simulation-v1`.
+Current evaluators:
 
-The current implementation uses deterministic HTML/text/DOM-structure
-heuristics, such as:
+- `scripts/run_track_b_dynamic_workflow.py`, `route-simulation-v1`
+- `scripts/run_track_b_browser_workflow.js`, `browser-workflow-v1`
+
+The current route-simulation implementation uses deterministic
+HTML/text/DOM-structure heuristics, such as:
 
 - quoted heading/text presence
 - image/grid counts
 - form-field counts
 - card-like element counts
 - branding/logo text or image-alt evidence
+
+The browser-workflow evaluator applies the same validation intent after real
+browser interaction and can check visible text, DOM state, image/card/form
+counts, and active navigation state.
 
 Output:
 
@@ -160,13 +170,13 @@ whether a model produces a complete, statically valid artifact.
 
 ## Not Yet Final
 
-The current evaluator is enough for a reproducible pilot layer, but it is not
-the final full browser evaluator.
+The current browser-workflow evaluator is enough for a reproducible pilot
+layer, but it is not a full autonomous computer-use agent.
 
 Remaining work:
 
-- Convert some content checks to real browser/DOM/CSS assertions, especially
-  active tab or highlighted navigation state.
+- Expand browser/DOM/CSS assertions for cases that route simulation cannot
+  check robustly.
 - Decide whether the final leaderboard should include only the three core
   layers above, or add static visual quality and accessibility layers.
 - Decide whether route/content dynamic scores should be reported separately or

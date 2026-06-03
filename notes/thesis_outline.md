@@ -35,9 +35,10 @@ metadata.
   instruments. They are not the leaderboard ranking target.
 - Judge bias is treated as a reliability audit of scoring, not as a standalone
   thesis track.
-- Heavy real-agent execution is out of scope for the immediate implementation.
-  The dynamic metric schema should remain compatible with a future real-agent
-  executor, but the first implementation uses lightweight validation.
+- Heavy autonomous real-agent execution is out of scope for the immediate
+  implementation. The dynamic metric schema should remain compatible with a
+  future real-agent executor, but the first implementation uses route
+  simulation and browser-workflow validation.
 - Mobile and native app evaluation are future work unless explicitly added
   later. The current benchmark focuses on web interfaces and web apps.
 
@@ -207,9 +208,10 @@ Candidate submetrics:
 - failure localization
 - robustness or pass@k
 
-The first implementation may use lightweight workflow or action-plan validation.
-The metric schema should also support a future browser-based real-agent
-executor. The intended rule is: change the executor, not the metric schema.
+The first implementation may use deterministic route simulation or
+browser-workflow validation with Playwright. The metric schema should also
+support a future browser-based real-agent executor. The intended rule is:
+change the executor, not the metric schema.
 
 ### Efficiency Metrics
 

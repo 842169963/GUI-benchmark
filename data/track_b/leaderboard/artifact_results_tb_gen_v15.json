@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-06-04T21:47:59.418436+00:00",
+  "prompt_id_filter": "TB-GEN-v15",
+  "direct_evaluation_target": "generated UI/Web app artifact",
+  "leaderboard_ranking_target": "generator LLM/model configuration",
+  "artifact_count": 1,
+  "eligible_artifact_count": 1,
+  "provider_failures": [],
+  "artifacts": [
+    {
+      "item_id": "F10_gourmania",
+      "run": "gwdg_qwen3_omni_30b_v15_f10_smoke",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v15",
+      "prompt_id": "TB-GEN-v15",
+      "artifact": {
+        "html": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v15_f10_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v15_f10_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.8461538461538461,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 2,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v15_f10_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 1,
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 1,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 1,
+        "case_count": 8,
+        "passed_case_count": 8,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v15_f10_smoke\\browser_workflow_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "pending_cost_reference",
+        "input_tokens": 39946,
+        "output_tokens": 6643,
+        "total_tokens": 46589,
+        "finish_reason": "stop",
+        "elapsed_seconds": 64.83,
+        "max_tokens_setting": 20000
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    }
+  ]
+}

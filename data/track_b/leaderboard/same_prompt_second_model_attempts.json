@@ -1,0 +1,142 @@
+{
+  "date": "2026-06-04",
+  "purpose": "Track attempts to add a second generator model to the same-prompt TB-GEN-v9 leaderboard demo.",
+  "prompt_id": "TB-GEN-v9",
+  "benchmark_item_scope": [
+    "F10_gourmania"
+  ],
+  "baseline_model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v9",
+  "conclusion": "No second model is eligible yet. Two GWDG multimodal models and one cheap GPT model produced artifacts, but all failed the static technical gate because workflow-required clickable labels were missing. Other cheap/provider attempts either failed before artifact creation or were unavailable.",
+  "attempts": [
+    {
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "provider_endpoint": "chatanywhere-openai-compatible",
+      "artifact_created": true,
+      "generation_status": "success",
+      "finish_reason": "stop",
+      "total_tokens": 214600,
+      "elapsed_seconds": 102.95,
+      "static_gate_passed": false,
+      "failed_static_gate_checks": [
+        "workflow_clickable_labels_present"
+      ],
+      "missing_workflow_clickable_labels": [
+        "FAVOURITE HOLIDAY RECIPES",
+        "Gefilte Fish"
+      ],
+      "dynamic_evaluation_run": false,
+      "eligible_for_leaderboard": false,
+      "artifact_dir": "data/track_b/items/F10_gourmania/generated/openai_gpt4omini_v9_f10_smoke",
+      "gate_report": "data/track_b/items/F10_gourmania/generated/openai_gpt4omini_v9_f10_smoke/gate_report.json"
+    },
+    {
+      "run": "openai_gpt41mini_v9_f10_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "provider_endpoint": "chatanywhere-openai-compatible",
+      "artifact_created": false,
+      "generation_status": "provider_error",
+      "error_summary": "HTTP 503 service unavailable before artifact creation.",
+      "eligible_for_leaderboard": false
+    },
+    {
+      "run": "openai_gpt52_v9_f10_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "openai",
+      "model": "gpt-5.2",
+      "provider_endpoint": "chatanywhere-openai-compatible",
+      "artifact_created": false,
+      "generation_status": "aborted_cost_control",
+      "error_summary": "Started accidentally while checking stronger GPT options and terminated before artifact creation to keep the smoke test cheap.",
+      "eligible_for_leaderboard": false
+    },
+    {
+      "run": "claude_haiku3_v9_f10_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "chatanywhere-anthropic",
+      "model": "claude-3-haiku-20240307",
+      "artifact_created": false,
+      "generation_status": "provider_error",
+      "error_summary": "HTTP 404: model unsupported or unavailable on the configured ChatAnywhere Anthropic endpoint.",
+      "eligible_for_leaderboard": false
+    },
+    {
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "gwdg-openai",
+      "model": "qwen3-omni-30b-a3b-instruct",
+      "artifact_created": true,
+      "generation_status": "success",
+      "finish_reason": "stop",
+      "total_tokens": 44997,
+      "elapsed_seconds": 57.26,
+      "static_gate_passed": false,
+      "failed_static_gate_checks": [
+        "workflow_clickable_labels_present"
+      ],
+      "missing_workflow_clickable_labels": [
+        "FAVOURITE HOLIDAY RECIPES",
+        "Gefilte Fish"
+      ],
+      "dynamic_evaluation_run": false,
+      "eligible_for_leaderboard": false,
+      "artifact_dir": "data/track_b/items/F10_gourmania/generated/gwdg_qwen3_omni_30b_v9_smoke",
+      "gate_report": "data/track_b/items/F10_gourmania/generated/gwdg_qwen3_omni_30b_v9_smoke/gate_report.json"
+    },
+    {
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "gwdg-openai",
+      "model": "internvl3.5-30b-a3b",
+      "artifact_created": true,
+      "generation_status": "success",
+      "finish_reason": "stop",
+      "total_tokens": 21859,
+      "elapsed_seconds": 143.79,
+      "static_gate_passed": false,
+      "failed_static_gate_checks": [
+        "workflow_clickable_labels_present"
+      ],
+      "missing_workflow_clickable_labels": [
+        "FAVOURITE HOLIDAY RECIPES",
+        "Gefilte Fish"
+      ],
+      "dynamic_evaluation_run": false,
+      "eligible_for_leaderboard": false,
+      "artifact_dir": "data/track_b/items/F10_gourmania/generated/gwdg_internvl35_30b_v9_smoke",
+      "gate_report": "data/track_b/items/F10_gourmania/generated/gwdg_internvl35_30b_v9_smoke/gate_report.json"
+    },
+    {
+      "run": "gwdg_qwen3_coder_30b_v9_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "gwdg-openai",
+      "model": "qwen3-coder-30b-a3b-instruct",
+      "artifact_created": false,
+      "generation_status": "provider_error",
+      "error_summary": "HTTP 400: model is not multimodal for this image-conditioned Track B generation task.",
+      "eligible_for_leaderboard": false
+    },
+    {
+      "run": "claude_sonnet45_v9_f10_smoke",
+      "item_id": "F10_gourmania",
+      "provider": "chatanywhere-anthropic",
+      "model": "claude-sonnet-4-5-20250929",
+      "artifact_created": false,
+      "generation_status": "provider_timeout",
+      "error_summary": "HTTP 524 gateway timeout before artifact creation.",
+      "eligible_for_leaderboard": false
+    }
+  ],
+  "updated_outputs": [
+    "data/track_b/leaderboard/artifact_results_all.json",
+    "data/track_b/leaderboard/model_leaderboard_all.json",
+    "data/track_b/leaderboard/model_leaderboard_all.md",
+    "data/track_b/leaderboard/artifact_results_tb_gen_v9.json",
+    "data/track_b/leaderboard/model_leaderboard_tb_gen_v9.json",
+    "data/track_b/leaderboard/model_leaderboard_tb_gen_v9.md"
+  ]
+}

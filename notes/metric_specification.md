@@ -21,7 +21,24 @@ The leaderboard uses four category scores:
 An optional Overall Score can be reported, but category-specific rankings remain
 visible.
 
-All category scores should be normalized to `[0, 1]` before aggregation.
+### Score normalization (shared rule)
+
+Different layers use different measuring instruments on purpose — binary
+checklists for structural/visual checks, narrow anchored scales for graded
+judgements, task success rate for dynamic behavior, and tool violation counts
+for accessibility. What is unified is the **output scale**: every submetric is
+normalized to `[0, 1]` before aggregation, and each submetric records its
+normalization formula. Common cases:
+
+| Instrument | Raw | Normalized to [0,1] |
+| --- | --- | --- |
+| Binary checklist | passed / total | already 0–1 |
+| Narrow scale `1..max` | value `x` | `(x - 1) / (max - 1)` |
+| Task success | successful tasks / total | already 0–1 |
+| Accessibility tool | passed checks / total | already 0–1 |
+
+A category score is the mean of its normalized submetrics; the leaderboard
+aggregates category scores across items into model-level rows.
 
 ## Static Technical Score
 
@@ -60,19 +77,82 @@ That belongs to dynamic evaluation.
 Static visual metrics evaluate standardized screenshots, not source code and not
 agent trace screenshots.
 
-Candidate dimensions:
+### Design decision (2026-06-04)
 
-| Dimension | Definition |
+The earlier seven-dimension list was reduced for two reasons grounded in the
+literature:
+
+1. **Holistic aesthetic judgement is too subjective for a reproducible
+   leaderboard metric.** LLM judges agree poorly with humans on raw aesthetic
+   ratings out of the box (Beauty-in-the-Eye-of-AI reports LLM-human alignment
+   far below human-human agreement before calibration). A single "overall
+   aesthetic quality" score would inject high judge variance into the ranking.
+   Holistic aesthetics is therefore moved to **future work**, or reported only
+   as an optional, non-weighted diagnostic accompanied by human-correlation
+   validation.
+2. **Anything with an objective rule or formula should not be LLM-judged.**
+   Contrast has a deterministic WCAG formula computable from the actual CSS
+   colors; it is moved to the automated accessibility metrics (see below) and
+   removed from LLM visual scoring.
+
+The LLM judge therefore scores **four objective-leaning visual dimensions**:
+
+| Dimension | Covers (old dims merged) | Grounding |
+| --- | --- | --- |
+| Layout & Visual Hierarchy | visual hierarchy + spacing/alignment | MLLM-as-UI-Judge (Visual Hierarchy); VisAWI (Simplicity) |
+| Information Organization / Clarity | information organization | MLLM-as-UI-Judge (Clarity) |
+| Typography & Readability | typography/readability (contrast removed) | WebDevJudge (UI Quality) |
+| Visual Consistency | consistency | WebDevJudge (visual consistency); VisAWI (Craftsmanship) |
+
+### Scoring method (binary checklist preferred)
+
+Each dimension is scored by decomposing it into binary (yes/no) sub-questions
+answered by the MLLM judge from the screenshot, not by asking for a raw 1–5
+score. Binary checklist decomposition gives higher inter-judge agreement and
+lower variance than a holistic Likert rating (CheckEval). Example for Layout &
+Visual Hierarchy:
+
+| Sub-question | Pass condition |
 | --- | --- |
-| Visual hierarchy | Important content is visually prioritized and scannable. |
-| Information organization | Related information is grouped and page structure is understandable. |
-| Typography/readability | Text size, weight, line length, and contrast support reading. |
-| Contrast | Foreground/background and key controls have sufficient visual separation. |
-| Spacing/alignment | Layout spacing and alignment are consistent and not cluttered. |
-| Consistency | Repeated components, navigation, colors, and typography are coherent. |
-| Aesthetic quality | The interface appears polished and appropriate for the domain. |
+| Is there a clear primary element / visual focus? | yes |
+| Are elements free of overlap or misalignment? | yes |
+| Does alignment follow a consistent grid? | yes |
+| Is spacing consistent across the page? | yes |
 
-Screenshot protocol:
+```text
+dimension_score = passed_sub_questions / total_sub_questions   # 0–1
+```
+
+Where a dimension genuinely cannot be decomposed and a graded judgement is
+needed, use a **narrow 3–5 level scale with explicit behavioral anchors**, never
+a wide 1–9 scale. Wide scales suffer LLM central-tendency bias (higher variance,
+lower agreement); narrow anchored scales are more reliable. A graded score `x`
+on a `1..max` scale normalizes as `(x - 1) / (max - 1)`.
+
+### Rating-scale policy
+
+The reported scoring uses a narrow anchored scale. A wide scale (e.g. 1–9) or a
+verbal-label scale is used **only** as a deliberate condition when recording
+rating-scale sensitivity (see Reliability Audit), not as the production scale.
+
+### Reliability levers (optional)
+
+Two cheap calibration levers from the literature may be applied to the visual
+judge and recorded:
+
+- **Few-shot anchoring**: include a small number of human-scored example
+  screenshots in the judge prompt to align the model's notion of good/bad.
+- **Confidence filtering**: discard or flag low-confidence judgements rather
+  than forcing a score; report how many judgements were retained.
+
+### Human-correlation validation
+
+LLM visual scores are not assumed reliable. On a small subset, the same
+screenshots are scored by humans and the LLM-human correlation
+(Pearson/Spearman) is reported. This validation is the evidence that the visual
+score is trustworthy, and it is recorded under the Reliability Audit.
+
+### Screenshot protocol
 
 1. Render the generated app locally.
 2. Visit every predefined route listed in `visual_pages.json`.
@@ -85,18 +165,55 @@ Screenshot protocol:
 Recommended aggregation:
 
 ```text
-page_visual_score = mean(visual dimensions for that page)
+page_visual_score = mean(four dimension_scores for that page)   # each 0–1
 Static Visual Score = mean(page_visual_score over predefined visual pages)
 ```
 
 Agent trace screenshots are stored only for debugging and dynamic failure
 analysis. They are not the primary input for static visual scoring.
 
+## Accessibility Score (automated, rule-based)
+
+Accessibility is evaluated by a **free, local, deterministic tool**
+(`axe-core` via Playwright, or Lighthouse), not by an LLM. This is cheaper than
+LLM judging (no tokens), more accurate, reproducible, and immune to judge bias.
+It still contributes to the leaderboard — it lives in the automated technical /
+accessibility category rather than the LLM visual category.
+
+Tool-checkable rule items include:
+
+| Rule item | Source |
+| --- | --- |
+| Color contrast (text and controls) | WCAG 2.2 contrast formula on actual CSS colors |
+| Image alt text present | WCAG / axe-core |
+| Form controls have labels | WCAG / axe-core |
+| Buttons/links have accessible names | WCAG / axe-core |
+| Heading order is sensible (no skipped levels) | axe-core |
+| Document language declared | axe-core |
+| Correct ARIA usage | axe-core |
+| Landmark regions present | axe-core |
+
+Why contrast is not LLM-judged: the formula needs the exact foreground and
+background luminance, which the tool reads from the DOM/CSS. An LLM can only
+estimate colors from a screenshot, so giving it the formula does not help.
+
+```text
+Accessibility Score = passed_rule_checks / total_applicable_rule_checks   # 0–1
+```
+
+Alternatively report `1 - min(1, weighted_violations / N_elements)`. Either way
+the output is normalized to `[0, 1]`.
+
 ## Dynamic Score
 
 Dynamic metrics evaluate interaction behavior. A metric is dynamic when it
 requires clicking, typing, navigating, submitting, waiting for state changes, or
 validating task completion.
+
+A task counts as successful **iff its required route is reached AND the
+destination content validation passes**. Route success and content validation
+are recorded separately for diagnosis, but `task_success` is their conjunction
+per task.
 
 Candidate submetrics:
 
@@ -174,24 +291,38 @@ Overall Score =
 + 0.15 * Efficiency Score
 ```
 
-This weighting is a starting proposal. The thesis must also report
-category-specific rankings and cost-performance plots because users may
+This weighting is a starting proposal and should be treated as a hyper-parameter
+to be sensitivity-tested, not a justified final value. The thesis must also
+report category-specific rankings and cost-performance plots because users may
 prioritize different trade-offs.
+
+Open design note: cost is primarily a **Pareto-plot axis** (cost vs. quality),
+so including an Efficiency Score *inside* the weighted Overall risks
+double-counting cost (once in the ranking, once on the plot axis). Whether
+Efficiency stays a weighted Overall component or becomes purely a Pareto axis is
+deferred to the formal-spec stage.
 
 ## Reliability Audit Metrics
 
-Reliability and bias checks audit the scoring protocol. They are not the main
-leaderboard objective.
+Reliability and bias checks audit the scoring protocol. They are **not** a
+separate research direction in this thesis and do not require dedicated study
+effort. The scope is limited to **recording biases as they appear during the
+evaluation runs** and applying known controls when they do (order-swap,
+individual rather than batched judging, narrow anchored scale). A larger
+systematic bias study (position / scale / anchoring / cross-model) is noted only
+as an optional future extension that the supervisor suggested; it is out of
+scope for the main thesis.
 
-Candidate audit metrics:
+Candidate audit fields recorded alongside runs:
 
 - repeated scoring consistency
 - order-swap sensitivity for pairwise comparisons when used
 - rating-scale sensitivity if feasible
 - judge model variance
 - invalid or refusal rate
+- LLM-human correlation on the small visual-validation subset
 
-These metrics should be reported separately from generator-model quality.
+These fields are reported separately from generator-model quality.
 
 ## Aggregation Level
 

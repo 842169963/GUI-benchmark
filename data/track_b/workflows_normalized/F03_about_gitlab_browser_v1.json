@@ -1,0 +1,176 @@
+[
+  {
+    "depends_on": [],
+    "index": 0,
+    "summary": "Navigation menu functionality testing including access to Platform, Pricing, Company pages, call-to-action buttons, and GitLab Duo feature link from the homepage",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Platform navigation link successfully navigates to the platform page, demonstrating a positive test scenario for primary navigation functionality.",
+        "actions": [
+          "Click the \"Platform\" link in the navigation menu"
+        ],
+        "validations": [
+          "The page displays the platform page content",
+          "The heading \"The most comprehensive AI-powered DevSecOps Platform\" is visible on the page"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Pricing navigation link successfully navigates to the pricing page, demonstrating a positive test scenario for primary navigation functionality.",
+        "actions": [
+          "browser:back",
+          "Click the \"Pricing\" link in the navigation menu"
+        ],
+        "validations": [
+          "The page displays the pricing page content",
+          "The heading \"Get started with GitLab\" is visible on the page"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Company navigation link successfully navigates to the company page, demonstrating a positive test scenario for primary navigation functionality.",
+        "actions": [
+          "browser:back",
+          "Click the \"Company\" link in the navigation menu"
+        ],
+        "validations": [
+          "The page displays the company page content",
+          "The heading \"About GitLab\" is visible on the page"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the GitLab Duo related button or link in the page content successfully navigates to the GitLab Duo page, demonstrating a positive test scenario for feature-specific navigation.",
+        "actions": [
+          "browser:back",
+          "Click the button or link related to GitLab Duo in the page content"
+        ],
+        "validations": [
+          "The page displays the GitLab Duo page content",
+          "GitLab Duo branding or logo is visible on the page"
+        ]
+      }
+    ],
+    "prototype": {
+      "homepage": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 1,
+    "summary": "Platform page call-to-action button testing to verify navigation to pricing page from feature comparison and upgrade prompts",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Platform page is successful.",
+        "actions": [
+          "Click the \"Platform\" link in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "platform": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 2,
+    "summary": "Pricing page navigation testing to verify successful access to the pricing page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Pricing page is successful.",
+        "actions": [
+          "Click the \"Pricing\" link in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "pricing": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 3,
+    "summary": "Company page navigation testing to verify successful access to the company page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Company page is successful.",
+        "actions": [
+          "Click the \"Company\" link in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "company": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 4,
+    "summary": "GitLab Duo page navigation testing to verify successful access to the GitLab Duo feature page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the GitLab Duo page from the homepage is successful.",
+        "actions": [
+          "browser:back",
+          "browser:back",
+          "Click the button or link related to GitLab Duo in the page content"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "gitlab_duo": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 5,
+    "summary": "Customers page display verification testing",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [],
+    "prototype": {
+      "customers": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  }
+]

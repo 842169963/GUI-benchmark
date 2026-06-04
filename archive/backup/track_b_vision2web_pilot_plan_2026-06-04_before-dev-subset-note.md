@@ -49,20 +49,6 @@ Avoid for the pilot:
 - Level 3 full-stack tasks;
 - tasks whose main value depends on backend state or real external data.
 
-## Development Subset vs Scale-up Set (2026-06-04)
-
-Per the supervisor's advice to develop metrics on a very small set first, the
-items are split into two explicit tiers:
-
-- **Development subset (3 items)**: `F01_1daycloud`, `F03_about_gitlab`,
-  `F10_gourmania` — the three items that already pass the static gate and have
-  browser-workflow dynamic results. All metric design, scoring implementation,
-  and judge-prompt iteration happen here.
-- **Scale-up set (10 items)**: the full Level 2 list below, used only after the
-  metric system is locked on the development subset.
-
-Do not expand to the full set for metric design; expand only for the final runs.
-
 ## Proposed Level 2 Pilot Tasks
 
 These are the initial dynamic-capable Track B candidates.

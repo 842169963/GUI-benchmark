@@ -1,0 +1,178 @@
+[
+  {
+    "depends_on": [],
+    "index": 0,
+    "summary": "Navigation menu functionality testing including access to Cookbooks, Media, What We Do pages, and recipe detail page from the homepage",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click \"COOKBOOKS\" in the navigation menu"
+        ],
+        "validations": [
+          "The page navigates to the cookbooks page",
+          "The page displays the heading \"MY COOKBOOKS\"",
+          "A grid of cookbook cover images is displayed on the page"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click \"MEDIA\" in the navigation menu"
+        ],
+        "validations": [
+          "The page navigates to the videos page",
+          "Video content thumbnails with play buttons are displayed on the page",
+          "The MEDIA tab in the navigation menu is highlighted or active"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click \"WHAT WE DO\" in the navigation menu"
+        ],
+        "validations": [
+          "The page navigates to the culinary solutions page",
+          "The page displays the heading \"CULINARY SOLUTIONS\"",
+          "Multiple service category cards are displayed on the page"
+        ]
+      },
+      {
+        "objective": "Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click the recipe card named \"Gefilte Fish\" in the \"FAVOURITE HOLIDAY RECIPES\" section"
+        ],
+        "validations": [
+          "The page navigates to the recipe detail page",
+          "The page displays the recipe title \"GEFILTE FISH 1\"",
+          "Recipe ingredients and instructions are displayed on the page"
+        ]
+      }
+    ],
+    "prototype": {
+      "homepage": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 1,
+    "summary": "Cookbooks page navigation testing to verify successful access to the cookbooks collection page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click \"COOKBOOKS\" in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "cookbooks": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 2,
+    "summary": "Media page navigation testing to verify successful access to the videos and media content page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click \"MEDIA\" in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "videos": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 3,
+    "summary": "Culinary solutions page navigation testing to verify successful access to the services and solutions overview page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click \"WHAT WE DO\" in the navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "culinary_solutions": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 4,
+    "summary": "Recipe detail page navigation testing to verify successful access to individual recipe content from the homepage",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the recipe card named \"Gefilte Fish\" in the \"FAVOURITE HOLIDAY RECIPES\" section"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "recipe_detail": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 5,
+    "summary": "Tips page display testing to verify the tips page content is correctly rendered",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [],
+    "prototype": {
+      "tips": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  }
+]

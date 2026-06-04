@@ -57,6 +57,39 @@ def html_ids(html):
     return set(value for _, value in re.findall(r"\bid\s*=\s*(['\"])(.*?)\1", html, flags=re.IGNORECASE))
 
 
+def click_target_label_from_action(action):
+    lower = action.lower()
+    if lower.startswith("browser:") or "click" not in lower:
+        return None
+
+    named = re.search(r"named\s+\"([^\"]{2,80})\"", action, flags=re.IGNORECASE)
+    if named:
+        return named.group(1).strip()
+
+    quoted = re.findall(r'"([^"]{2,80})"', action)
+    if quoted:
+        return quoted[0].strip()
+
+    related = re.search(
+        r"related to ([A-Za-z0-9 .&'/-]+?)(?: in | on | from |$)",
+        action,
+        flags=re.IGNORECASE,
+    )
+    if related:
+        return re.sub(r"\s+", " ", related.group(1).strip())
+
+    match = re.search(
+        r"Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)",
+        action,
+        flags=re.IGNORECASE,
+    )
+    if match:
+        label = re.sub(r"\s+", " ", match.group(1).strip())
+        if not label.lower().startswith("learn more button in"):
+            return label
+    return None
+
+
 def workflow_label_groups(workflow):
     exact_labels = set()
     semantic_labels = set()
@@ -69,40 +102,9 @@ def workflow_label_groups(workflow):
                 if lower.startswith("browser:") or "click" not in lower:
                     continue
 
-                quoted = re.findall(r'"([^"]{2,80})"', action)
-                if quoted:
-                    exact_labels.update(label.strip() for label in quoted)
-                    continue
-
-                related = re.search(
-                    r"related to ([A-Za-z0-9 .&'/-]+?)(?: in | on | from |$)",
-                    action,
-                    flags=re.IGNORECASE,
-                )
-                if related:
-                    label = related.group(1).strip()
-                    label = re.sub(r"\s+", " ", label)
-                    if 2 <= len(label) <= 80:
-                        semantic_labels.add(label)
-                    continue
-
-                named = re.search(r"named\s+\"([^\"]+)\"", action, flags=re.IGNORECASE)
-                if named:
-                    label = named.group(1).strip()
-                    if 2 <= len(label) <= 80:
-                        exact_labels.add(label)
-                    continue
-
-                match = re.search(
-                    r"Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)",
-                    action,
-                    flags=re.IGNORECASE,
-                )
-                if match:
-                    label = match.group(1).strip()
-                    label = re.sub(r"\s+", " ", label)
-                    if 2 <= len(label) <= 80 and not label.lower().startswith("learn more button in"):
-                        semantic_labels.add(label)
+                label = click_target_label_from_action(action)
+                if label and 2 <= len(label) <= 80:
+                    exact_labels.add(label)
     return {
         "exact": sorted(exact_labels),
         "semantic": sorted(semantic_labels - exact_labels),
@@ -118,6 +120,36 @@ def clickable_texts(html):
         entries = texts.setdefault(text.lower(), [])
         entries.append(attrs)
     return texts
+
+
+def image_srcs(html):
+    return [
+        src.strip()
+        for quote, src in re.findall(r"<img\b[^>]*\bsrc\s*=\s*(['\"])(.*?)\1", html, flags=re.IGNORECASE | re.DOTALL)
+    ]
+
+
+def local_image_source_missing(run_dir, html):
+    missing = []
+    local_srcs = []
+    for src in image_srcs(html):
+        lower = src.lower()
+        if lower.startswith(("http://", "https://", "data:", "blob:", "#")):
+            continue
+        local_srcs.append(src)
+        candidate = (run_dir / src).resolve()
+        if not candidate.exists():
+            missing.append(src)
+    return local_srcs, sorted(set(missing))
+
+
+def showpage_clickables(html):
+    entries = []
+    for tag, attrs, body in re.findall(r"<(a|button)\b([^>]*)>(.*?)</\1>", html, flags=re.IGNORECASE | re.DOTALL):
+        text = strip_tags(body)
+        for quote, route_id in re.findall(r"showPage\s*\(\s*(['\"])(.*?)\1\s*\)", attrs):
+            entries.append({"text": text, "route_id": route_id})
+    return entries
 
 
 def has_working_clickable(label, clickables):
@@ -174,18 +206,42 @@ def run_gate(item_dir, run_dir):
     add(checks, "error", "onclick_functions_defined", not missing,
         f"Missing onclick function definitions: {missing}.")
 
-    routes = route_ids_from_handlers(html)
     ids = html_ids(html)
-    missing_routes = sorted(route for route in routes if route not in ids)
-    add(checks, "error", "onclick_routes_exist", not missing_routes,
-        f"showPage route ids without matching id attributes: {missing_routes}.")
+    label_groups = workflow_label_groups(workflow)
+    labels = label_groups["exact"]
+    semantic_labels = label_groups["semantic"]
+    workflow_label_lookup = {label.lower() for label in labels}
+    route_entries = showpage_clickables(html)
+    missing_workflow_routes = sorted({
+        entry["route_id"]
+        for entry in route_entries
+        if entry["route_id"] not in ids and entry["text"].lower() in workflow_label_lookup
+    })
+    missing_nonworkflow_routes = sorted({
+        entry["route_id"]
+        for entry in route_entries
+        if entry["route_id"] not in ids and entry["text"].lower() not in workflow_label_lookup
+    })
+    add(checks, "error", "workflow_onclick_routes_exist", not missing_workflow_routes,
+        f"Workflow showPage route ids without matching id attributes: {missing_workflow_routes}.")
+    add(checks, "warning", "nonworkflow_onclick_routes_exist", not missing_nonworkflow_routes,
+        f"Non-workflow showPage route ids without matching id attributes: {missing_nonworkflow_routes}.")
 
     add(checks, "warning", "track_b_routes_self_test", "__TRACK_B_ROUTES" in html,
         "Generated page should expose window.__TRACK_B_ROUTES for cheap route introspection.")
 
-    label_groups = workflow_label_groups(workflow)
-    labels = label_groups["exact"]
-    semantic_labels = label_groups["semantic"]
+    local_image_srcs, missing_image_srcs = local_image_source_missing(run_dir, html)
+    resource_dir = item_dir / "resources"
+    resource_images_exist = resource_dir.exists() and any(
+        path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"}
+        for path in resource_dir.rglob("*")
+        if path.is_file()
+    )
+    add(checks, "warning", "local_images_used", bool(local_image_srcs) or not resource_images_exist,
+        f"Local image assets referenced by <img>: {len(local_image_srcs)}.")
+    add(checks, "warning", "local_image_sources_exist", not missing_image_srcs,
+        f"Missing local <img> sources: {missing_image_srcs}.")
+
     clickables = clickable_texts(html)
     missing_labels = [label for label in labels if label.lower() not in clickables]
     add(checks, "error", "workflow_clickable_labels_present", not missing_labels,

@@ -453,13 +453,173 @@ Available local resource paths:
 Prototype screenshots are attached after this text in this order:
 {prototype_list}
 """,
+    "TB-GEN-v14": """\
+Prompt ID: TB-GEN-v14
+
+Build a visually grounded, complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced exactly as ../../resources/<subpath> using paths from the resource list.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+- The first route in window.__TRACK_B_ROUTES must be the default page shown on initial load.
+
+Visual-grounding requirements:
+- Use the prototype screenshots for layout, hierarchy, colors, spacing, and visible content priorities.
+- Use local image assets whenever they are available. Do not replace provided images with plain text boxes, CSS placeholders, icon-only blocks, or empty cards.
+- The homepage must include visible <img> elements when image assets exist.
+- Product, recipe, article, service, and video card/list sections should use relevant <img> elements when matching or plausible local images exist.
+- Select images by filename and requirement context. For example, filenames that resemble a recipe, cookbook, logo, video thumbnail, or banner should be used for that visible item.
+- If no exact image match is obvious, choose the closest local image rather than omitting imagery.
+- Reduce prose before removing images, workflow controls, route sections, or JavaScript.
+
+Required workflow-control contract:
+- The controls below are machine-checkable requirements. For each item, create an <a> or <button> whose visible text exactly matches visible_text and whose route exactly matches route_id.
+- The listed visible_text values are the actual click targets. Context phrases in workflow actions, such as section names, may be headings but do not need to be clickable unless listed below.
+- Do not replace visible_text with a synonym, longer phrase, icon-only label, or nearby non-clickable heading.
+- Do not implement workflow-required controls as <div>, <span>, <li>, image-only controls, or any other inert element, even if onclick is present.
+- If a workflow target is visually a card or image tile, wrap the card content in an <a> or <button> and keep the required visible_text inside that element.
+- The required_element example is the safest minimal implementation; copy its text, data-route-target, and onclick route exactly unless the surrounding layout needs <button> instead of <a>.
+{workflow_controls}
+
+Implementation guidance:
+- Build a recognizable desktop page, not a bare wireframe.
+- Prefer a shared header/navigation and shared footer, with route-specific visual content.
+- Include enough cards/tables/lists to satisfy the written requirement and workflow validations, but do not reproduce exhaustive long prose.
+- Use semantic HTML, visible focus states, alt text for images, and accessible <a>/<button> controls.
+- Secondary navigation items may be visible non-functional placeholders only if they are not workflow-required controls.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
+    "TB-GEN-v15": """\
+Prompt ID: TB-GEN-v15
+
+Build a visually grounded, complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced exactly as ../../resources/<subpath> using paths from the resource list.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+- Never call showPage() with a route id that is not listed in window.__TRACK_B_ROUTES.
+- Secondary menu items that do not have a route in the route contract must be plain placeholders without onclick, without data-route-target, and without showPage().
+
+Visual-grounding requirements:
+- Use the prototype screenshots for layout, hierarchy, colors, spacing, and visible content priorities.
+- Use local image assets whenever they are available. Do not replace provided images with plain text boxes, CSS placeholders, icon-only blocks, or empty cards.
+- The homepage must include visible <img> elements when image assets exist.
+- Product, recipe, article, service, and video card/list sections should use relevant <img> elements when matching or plausible local images exist.
+- Select images by filename and requirement context. If no exact image match is obvious, choose the closest local image rather than omitting imagery.
+- Reduce prose before removing images, workflow controls, route sections, or JavaScript.
+
+Required workflow-control contract:
+- The controls below are machine-checkable requirements. For each item, create an <a> or <button> whose visible text exactly matches visible_text and whose route exactly matches route_id.
+- Copy each required_element line into the HTML output exactly once or adapt only the tag name from <a> to <button>. Keep the visible text, data-route-target, and onclick route unchanged.
+- The required clickable element's own visible text must be exactly visible_text. Do not use "View", "View Recipe", "Read more", "Open", icons, or longer phrases as the clickable text for required controls.
+- The listed visible_text values are the actual click targets. Context phrases in workflow actions, such as section names, may be headings but do not need to be clickable unless listed below.
+- Do not implement workflow-required controls as <div>, <span>, <li>, image-only controls, or any other inert element, even if onclick is present.
+- If a workflow target is visually a card or image tile, put the required <a> or <button> inside that card, and make the card's clickable label exactly visible_text.
+- Do not hide required controls in comments, scripts, templates, off-screen text, display:none, visibility:hidden, or aria-hidden content.
+{workflow_controls}
+
+Implementation guidance:
+- Build a recognizable desktop page, not a bare wireframe.
+- Prefer a shared header/navigation and shared footer, with route-specific visual content.
+- Include enough cards/tables/lists to satisfy the written requirement and workflow validations, but do not reproduce exhaustive long prose.
+- Use semantic HTML, visible focus states, alt text for images, and accessible <a>/<button> controls.
+- Before returning the HTML, self-check these conditions:
+  1. Every required_element visible_text appears as visible text inside an <a> or <button>.
+  2. Every showPage('...') route is present in window.__TRACK_B_ROUTES and has a matching section id.
+  3. The page uses local <img> assets when image assets were provided.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Workflow checks:
+{workflow}
+
+Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
 }
 
 
 def load_env_file(path):
     if not path.exists():
         return
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
@@ -759,14 +919,12 @@ def build_prompt(item_dir, args):
 
 def build_client(provider):
     if provider == "openai":
-        from openai import OpenAI
-
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
             raise SystemExit("ERROR: OPENAI_API_KEY not set.")
         base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("OPENAI_API_BASE")
-        client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
-        return client, base_url or "https://api.openai.com/v1"
+        endpoint = f"{(base_url or 'https://api.openai.com/v1').rstrip('/')}/chat/completions"
+        return {"api_key": api_key, "endpoint": endpoint}, endpoint
 
     if provider == "anthropic":
         api_key = os.environ.get("ANTHROPIC_API_KEY")
@@ -814,21 +972,45 @@ def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature):
             },
         })
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
+    payload = {
+        "model": model,
+        "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": content},
         ],
-        max_tokens=max_tokens,
-        temperature=temperature,
-    )
-    choice = response.choices[0]
-    meta = {
-        "finish_reason": getattr(choice, "finish_reason", None),
-        "usage": response.usage.model_dump() if getattr(response, "usage", None) else None,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
     }
-    return choice.message.content.strip(), meta
+    request = urllib.request.Request(
+        client["endpoint"],
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "accept": "application/json",
+            "authorization": f"Bearer {client['api_key']}",
+            "content-type": "application/json",
+            "user-agent": "master-thesis-track-b-generator/1.0",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=360) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"HTTP {exc.code}: {body}") from exc
+
+    choice = data.get("choices", [{}])[0]
+    message = choice.get("message", {})
+    content_text = message.get("content", "")
+    if isinstance(content_text, list):
+        content_text = "".join(part.get("text", "") for part in content_text if isinstance(part, dict))
+    meta = {
+        "id": data.get("id"),
+        "model": data.get("model"),
+        "finish_reason": choice.get("finish_reason"),
+        "usage": data.get("usage"),
+    }
+    return str(content_text).strip(), meta
 
 
 def anthropic_content(user_prompt, prototypes):

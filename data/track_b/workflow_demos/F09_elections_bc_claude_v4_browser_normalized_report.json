@@ -1,0 +1,465 @@
+{
+  "item_id": "F09_elections_bc",
+  "run": "claude_sonnet45_v4_smoke",
+  "html": "D:\\master_thesis\\data\\track_b\\items\\F09_elections_bc\\generated\\claude_sonnet45_v4_smoke\\index.html",
+  "workflow": "D:\\master_thesis\\data\\track_b\\workflow_demos\\F09_elections_bc_browser_normalized_v1.json",
+  "start_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+  "start_route": "homepage",
+  "evaluator": "browser-workflow-v1",
+  "case_count": 10,
+  "passed_case_count": 5,
+  "route_success_case_count": 10,
+  "content_validation_success_case_count": 5,
+  "task_success_rate": 0.5,
+  "route_success_rate": 1,
+  "content_validation_success_rate": 0.5,
+  "passed": false,
+  "console_errors": [],
+  "cases": [
+    {
+      "block_index": 0,
+      "case_index": 0,
+      "objective": "Verify that clicking the Register to Vote button successfully navigates to the voter registration page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Register to Vote button in the page header",
+          "passed": true,
+          "label": "Register to Vote",
+          "chosen": {
+            "text": "Register to Vote",
+            "target": "voter_registration",
+            "href": "",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "voter_registration",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#voter_registration",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the Register to Vote heading",
+          "kind": "text",
+          "needle": "Register to Vote",
+          "passed": true
+        },
+        {
+          "validation": "The page displays voter registration information and requirements",
+          "kind": "text",
+          "needle": "The page displays voter registration information and requirements",
+          "passed": false
+        },
+        {
+          "validation": "The left sidebar menu shows 2024 Provincial Election navigation options",
+          "kind": "text",
+          "needle": "The left sidebar menu shows 2024 Provincial Election navigation options",
+          "passed": false
+        }
+      ],
+      "final_route": "voter_registration",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#voter_registration",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 1,
+      "objective": "Verify that clicking the Learn more button in the 2024 Provincial Election Report banner successfully navigates to the provincial election detail page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click the Learn more button in the 2024 PROVINCIAL ELECTION REPORT banner",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2024_provincial_election",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2024_provincial_election",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2024_provincial_election",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the 2024 PROVINCIAL ELECTION heading",
+          "kind": "text",
+          "needle": "2024 PROVINCIAL ELECTION",
+          "passed": true
+        },
+        {
+          "validation": "The page displays provincial election report information and volumes",
+          "kind": "text",
+          "needle": "The page displays provincial election report information and volumes",
+          "passed": false
+        },
+        {
+          "validation": "The left sidebar menu shows 2024 Provincial Election navigation options",
+          "kind": "text",
+          "needle": "The left sidebar menu shows 2024 Provincial Election navigation options",
+          "passed": false
+        }
+      ],
+      "final_route": "2024_provincial_election",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2024_provincial_election",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 2,
+      "objective": "Verify that clicking the Learn more button in the 2026 General Local Elections card successfully navigates to the local elections page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2026_local_elections",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2026_local_elections",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the 2026 GENERAL LOCAL ELECTIONS heading",
+          "kind": "text",
+          "needle": "2026 GENERAL LOCAL ELECTIONS",
+          "passed": true
+        },
+        {
+          "validation": "The page displays local elections information and key dates table",
+          "kind": "text",
+          "needle": "The page displays local elections information and key dates table",
+          "passed": false
+        },
+        {
+          "validation": "The left sidebar menu shows Local Elections navigation options",
+          "kind": "text",
+          "needle": "The left sidebar menu shows Local Elections navigation options",
+          "passed": false
+        }
+      ],
+      "final_route": "2026_local_elections",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 3,
+      "objective": "Verify that clicking the Resources link in the main navigation menu successfully navigates to the resources page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click the Resources link in the main navigation menu",
+          "passed": true,
+          "label": "Resources",
+          "chosen": {
+            "text": "Resources",
+            "target": "resources_and_reports",
+            "href": "#",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "resources_and_reports",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#resources_and_reports",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the RESOURCES heading",
+          "kind": "text",
+          "needle": "RESOURCES",
+          "passed": true
+        },
+        {
+          "validation": "The page displays resource categories description text",
+          "kind": "text",
+          "needle": "The page displays resource categories description text",
+          "passed": false
+        },
+        {
+          "validation": "The left sidebar menu shows expandable resource categories including Maps, Forms & Guides, Results, Voters List, Reports, and Legislation",
+          "kind": "text",
+          "needle": "The left sidebar menu shows expandable resource categories including Maps, Forms & Guides, Results, Voters List, Reports, and Legislation",
+          "passed": false
+        }
+      ],
+      "final_route": "resources_and_reports",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#resources_and_reports",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 1,
+      "case_index": 0,
+      "objective": "Verify that clicking the Register to Vote button successfully navigates to the voter registration page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Register to Vote button in the page header",
+          "passed": true,
+          "label": "Register to Vote",
+          "chosen": {
+            "text": "Register to Vote",
+            "target": "voter_registration",
+            "href": "",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "voter_registration",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#voter_registration",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "voter_registration",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#voter_registration",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 2,
+      "case_index": 0,
+      "objective": "Verify that clicking the Learn more button in the 2024 Provincial Election Report banner successfully navigates to the provincial election detail page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Learn more button in the 2024 PROVINCIAL ELECTION REPORT banner",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2024_provincial_election",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2024_provincial_election",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2024_provincial_election",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "2024_provincial_election",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2024_provincial_election",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 3,
+      "case_index": 0,
+      "objective": "Verify that clicking the Learn more button in the 2026 General Local Elections card successfully navigates to the local elections page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2026_local_elections",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2026_local_elections",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "2026_local_elections",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 3,
+      "case_index": 1,
+      "objective": "Verify that clicking the Local Forms link in the sidebar menu successfully navigates to the local election forms page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2026_local_elections",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2026_local_elections",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "changed": true
+        },
+        {
+          "action": "Click the Local Forms link in the left sidebar menu",
+          "passed": true,
+          "label": "Local Forms",
+          "chosen": {
+            "text": "Local Forms",
+            "target": "local_election_forms",
+            "href": "#",
+            "score": 120
+          },
+          "route_before": "2026_local_elections",
+          "route_after": "local_election_forms",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#local_election_forms",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the LOCAL FORMS heading",
+          "kind": "text",
+          "needle": "LOCAL FORMS",
+          "passed": true
+        },
+        {
+          "validation": "The page displays a table with columns for Filer type, Report type(s), and Forms",
+          "kind": "text",
+          "needle": "The page displays a table with columns for Filer type, Report type(s), and Forms",
+          "passed": false
+        },
+        {
+          "validation": "The page displays a dropdown selector labeled Select filer type",
+          "kind": "text",
+          "needle": "The page displays a dropdown selector labeled Select filer type",
+          "passed": false
+        }
+      ],
+      "final_route": "local_election_forms",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#local_election_forms",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 4,
+      "case_index": 0,
+      "objective": "Verify that navigating to the local election forms page via the 2026 General Local Elections card and sidebar menu is successful, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "passed": true,
+          "label": "Learn more",
+          "chosen": {
+            "text": "Learn more",
+            "target": "2026_local_elections",
+            "href": "",
+            "score": 200
+          },
+          "route_before": "homepage",
+          "route_after": "2026_local_elections",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "changed": true
+        },
+        {
+          "action": "Click the Local Forms link in the left sidebar menu",
+          "passed": true,
+          "label": "Local Forms",
+          "chosen": {
+            "text": "Local Forms",
+            "target": "local_election_forms",
+            "href": "#",
+            "score": 120
+          },
+          "route_before": "2026_local_elections",
+          "route_after": "local_election_forms",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#2026_local_elections",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#local_election_forms",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "local_election_forms",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#local_election_forms",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 5,
+      "case_index": 0,
+      "objective": "Verify that clicking the Resources link in the main navigation menu successfully navigates to the resources page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the Resources link in the main navigation menu",
+          "passed": true,
+          "label": "Resources",
+          "chosen": {
+            "text": "Resources",
+            "target": "resources_and_reports",
+            "href": "#",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "resources_and_reports",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#resources_and_reports",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "resources_and_reports",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v4_smoke/index.html#resources_and_reports",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    }
+  ]
+}

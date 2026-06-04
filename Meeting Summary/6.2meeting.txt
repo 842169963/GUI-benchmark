@@ -1,0 +1,141 @@
+# Project Sync / Status Update Summary
+
+## Progress Since Last Sync
+
+- Benchmark pipeline prototyping:
+    - Implemented initial UI generation experiments using multiple LLMs (e.g., Claude, GPT-4 series) to produce web app UIs from structured requirements.
+    - Adopted ideas inspired by the Vision2VAP paper to assess generated GUI quality with agent-based procedures.
+    - Established a fixed prompt schema and input format:
+        - Inputs include requirement text, prototype screens, workflow and routing expectations, and validation rules.
+        - Pipeline generates HTML/CSS/JS and validates against predefined rules.
+- Early evaluation structure:
+    - Defined a three-layer approach:
+        - Static technical gates (HTML completeness, IDs/links/routing presence, requirement conformance).
+        - Dynamic task/route testing via a computer-use agent (end-to-end flow execution).
+        - Static visual quality assessment (visual hierarchy, contrast, spacing, information organization).
+- Practical findings:
+    - Encountered output truncation due to token limits; some models produced incomplete UIs when constrained.
+    - Verified that prompt consistency across models is critical for fair comparisons.
+
+## Leaderboard Framework Design
+
+- Core concept:
+    - Fixed benchmark dataset shared across all models to ensure comparability.
+    - Framework provides an “add new LLM” function:
+        - Injects the standard prompts and dataset into the new model.
+        - Generates apps, runs all scoring functions, aggregates metrics, and updates rankings.
+- Input modalities:
+    - Primary leaderboard input is the model under test (internal operation).
+    - Optional external scoring utility:
+        - Accepts a full project (e.g., zip of a web app) or a single HTML page to produce a score report outside the main leaderboard.
+- Output and rankings:
+    - Each model receives a comprehensive metric profile spanning static, dynamic, and visual categories.
+    - Rank by composite or facet-specific metrics; support cost-performance trade-off analyses.
+
+## Metrics and Evaluation Plan
+
+- Static technical gates (code- and structure-based; non-interactive):
+    - HTML/CSS/JS completeness and validity.
+    - Presence and correctness of IDs/selectors required by tasks.
+    - Link and route integrity:
+        - Existence of hrefs/routes where specified.
+        - Resolution rate of internal navigation targets.
+    - Requirement conformance via content validation:
+        - Check that required texts/components appear on the correct pages.
+        - Map requirement-to-element coverage rate.
+    - Accessibility and quality checks:
+        - Heuristics aligned with established guidelines (e.g., basic accessibility rules).
+        - Linting-based quality indicators.
+- Static visual quality (screenshot-based; non-interactive):
+    - For each subpage, capture standardized screenshots (not agent traces) to ensure comparability.
+    - LLM-based or model-based rating dimensions:
+        - Visual hierarchy and information organization.
+        - Typography/readability and contrast.
+        - Spacing/alignment and consistency.
+    - Aggregate per-page ratings into app-level scores.
+- Dynamic task/route testing (agent-based; interactive):
+    - Define concrete user tasks per app (e.g., navigate pages, add item to cart, submit form).
+    - Use a computer-use agent to execute tasks:
+        - Task success rate (successes/attempts).
+        - Failure localization (e.g., non-functional buttons/links).
+        - Optional: retries per step and robustness indicators.
+    - Capture traces and logs for diagnostics; keep screenshot collection for static visual analysis separate (per subpage).
+- Efficiency and resource metrics:
+    - Token usage (input/output) per call and per app.
+    - Incurred cost estimates.
+    - Optional: latency and throughput.
+- Prompting policy for fairness:
+    - Uniform prompts and data schema across all models under test.
+    - No output token cap enforced; instead, record usage and cost for fair, transparent comparisons.
+
+## Visualization and Reporting
+
+- Cost–performance trade-off plots:
+    - Y-axis: performance metric (e.g., task success rate, visual quality score).
+    - X-axis: cost (or token usage).
+    - Highlight Pareto frontier to identify optimal models under different trade-offs.
+- Leaderboard views:
+    - Overall ranking and category-specific leaderboards (static technical, static visual, dynamic tasks, efficiency).
+    - Model detail pages with metric breakdowns and error analyses.
+
+## Risks and Constraints
+
+- API access and rate limits:
+    - Free or low-tier access may cap throughput; may need multiple keys or higher limits.
+- Model availability and costs:
+    - Stronger models likely needed for reliable judging; budget planning required.
+- Token truncation:
+    - Low max output can yield incomplete UIs; must be avoided by configuration and tracked as a metric if it occurs.
+- Metric definition clarity:
+    - Requires unambiguous specifications for link resolution, routing integrity, content validation, and visual scales to ensure reproducibility.
+
+## Decisions and Alignments
+
+- Target platform: focus on web apps (web app/website) for generation and evaluation.
+- Dataset policy: fixed benchmark dataset reused across all models for comparability.
+- Prompting: same prompts across models; no per-model prompt tuning in leaderboard runs.
+- Token policy: do not restrict output tokens; always record token usage and cost.
+- Static visual evaluation: rely on standardized per-subpage screenshots (not agent traces) for consistent comparison.
+- Dynamic interactivity: treat button/link functionality and flow execution strictly as dynamic metrics via agent testing.
+- Development scope: start with a small dataset (2–5 apps) to design, implement, and validate metrics; scale later.
+- External scoring: may offer a standalone scoring tool for uploaded apps, but primary leaderboard remains dataset-driven.
+
+## Research Track: LLM Judge Biases
+
+- Scope (separate from leaderboard, but informative):
+    - Position bias in pairwise/multi-item GUI judgments (order effects).
+    - Anchoring/learning effects from prior context within the same session.
+    - Rating-scale effects (numeric ranges vs verbal labels).
+    - Relative judgment bias when juxtaposing very good/very bad exemplars.
+- Experiment design ideas:
+    - Vary item positions systematically; counterbalance orders; sample multiple runs.
+    - Compare fresh-context judgments vs accumulated-context sequences.
+    - Evaluate different rating scales (e.g., 1–5, 1–9, verbal categories) on the same items.
+    - Fix a target GUI and vary the comparator quality to measure drift in scores.
+- Cross-model comparison:
+    - Assess bias magnitude across different LLMs and versions to characterize tendencies.
+- Goal:
+    - Measure and report biases; use findings to inform robust evaluation protocols (e.g., single-item judgments, order randomization, multiple sampling).
+
+## Action Items
+
+- [ ] @Speaker1: Draft a complete, unambiguous metric specification (static technical, static visual, dynamic tasks, efficiency), including exact computations (e.g., link resolution rate, task success rate, content coverage, visual rating dimensions and scales).
+
+- [ ] @Speaker1: Build a small benchmark dataset (2–5 web app specs) with requirements, prototype screens, workflows/routes, and validation rules; finalize a single standardized prompt schema.
+
+- [ ] @Speaker1: Implement the “add new LLM” pipeline that generates apps, executes all scoring functions, aggregates results, and updates rankings.
+
+- [ ] @Speaker1: Implement static technical gates (HTML completeness, IDs/links, routing existence, content validation, basic accessibility checks).
+
+- [ ] @Speaker1: Implement standardized per-subpage screenshot capture and static visual evaluation; separate from agent trace screenshots.
+
+- [ ] @Speaker1: Implement the dynamic agent-based tester and compute task success metrics with retries and failure localization.
+
+- [ ] @Speaker1: Remove hard output token caps; add comprehensive logging for token usage, cost, and latency.
+
+- [ ] @Speaker2: Share the LLM service link and explore providing API access/keys or higher rate limits for stronger models (especially for judging).
+
+- [ ] @Speaker2: Review and provide feedback on the proposed metric specification and visualization plans (including Pareto plots).
+
+- [ ] @Speaker1: Prepare a minimal end-to-end demo of the pipeline running on the small dataset and produce initial leaderboard and trade-off plots.
+

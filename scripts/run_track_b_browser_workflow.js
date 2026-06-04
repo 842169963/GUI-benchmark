@@ -55,6 +55,7 @@ function parseArgs(argv) {
     if (arg === "--items-dir") args.itemsDir = argv[++i];
     else if (arg === "--item") args.item = argv[++i];
     else if (arg === "--run") args.run = argv[++i];
+    else if (arg === "--workflow") args.workflowPath = argv[++i];
     else if (arg === "--json-out") args.jsonOut = argv[++i];
     else if (arg === "--screenshot-dir") args.screenshotDir = argv[++i];
     else if (arg === "--timeout-ms") args.timeoutMs = Number(argv[++i]);
@@ -90,6 +91,58 @@ function extractActionLabel(action) {
   const click = action.match(/Click the (.+?)(?: button| link| option| card| navigation menu item| in the| from the|$)/i);
   if (click) return cleanText(click[1]);
   return null;
+}
+
+function extractActionContext(action) {
+  const contexts = [];
+  const patterns = [
+    /in the (.+?)(?: successfully| demonstrating|$)/i,
+    /from the (.+?)(?: successfully| demonstrating|$)/i,
+    /via the (.+?)(?: successfully| demonstrating|$)/i,
+  ];
+  for (const pattern of patterns) {
+    const match = action.match(pattern);
+    if (match) contexts.push(cleanText(match[1].replace(/\s+button$/i, "").replace(/\s+link$/i, "")));
+  }
+  return contexts.filter(Boolean);
+}
+
+function implementedRoutesFromHtml(html) {
+  const routeSet = new Set();
+  const routeArray = html.match(/__TRACK_B_ROUTES\s*=\s*(\[[^\]]+\])/);
+  if (routeArray) {
+    try {
+      for (const route of JSON.parse(routeArray[1])) routeSet.add(route);
+    } catch (_) {
+      // Fall through to section-id parsing.
+    }
+  }
+  for (const match of html.matchAll(/<section\b[^>]*\bid\s*=\s*["']([^"']+)["'][^>]*\bdata-track-route\b/gi)) {
+    routeSet.add(match[1]);
+  }
+  for (const match of html.matchAll(/<section\b[^>]*\bdata-track-route\b[^>]*\bid\s*=\s*["']([^"']+)["']/gi)) {
+    routeSet.add(match[1]);
+  }
+  return [...routeSet];
+}
+
+function startRouteForRoutes(routes) {
+  return ["homepage", "home", "index", "main"].find((route) => routes.includes(route)) || "";
+}
+
+function startUrlForHtml(htmlUrl, startRoute) {
+  return startRoute ? `${htmlUrl}#${startRoute}` : htmlUrl;
+}
+
+async function gotoStart(page, startUrl, startRoute, timeoutMs) {
+  await page.goto(startUrl, { waitUntil: "load", timeout: timeoutMs });
+  if (startRoute) {
+    await page.evaluate((route) => {
+      if (typeof window.showPage === "function") window.showPage(route);
+      else if (location.hash !== `#${route}`) location.hash = route;
+    }, startRoute).catch(() => {});
+  }
+  await page.waitForTimeout(250);
 }
 
 function validationKindAndNeedle(validation) {
@@ -137,13 +190,14 @@ async function visibleRoute(page) {
   });
 }
 
-async function clickByWorkflowLabel(page, label, timeoutMs) {
+async function clickByWorkflowLabel(page, action, label, timeoutMs) {
   const beforeUrl = page.url();
   const beforeRoute = await visibleRoute(page);
   const beforeText = await visibleBodyText(page);
   const candidates = page.locator("a, button");
   const count = await candidates.count();
   const wanted = norm(label);
+  const contexts = extractActionContext(action);
   let best = null;
 
   for (let i = 0; i < count; i += 1) {
@@ -156,16 +210,31 @@ async function clickByWorkflowLabel(page, label, timeoutMs) {
     const href = cleanText(await candidate.getAttribute("href").catch(() => ""));
     const labelText = cleanText(`${text} ${aria} ${title}`);
     const haystack = norm(`${labelText} ${target}`);
+    const labelNorm = norm(labelText);
     let score = 0;
     if (wanted === "logo") {
       score = haystack.includes("logo") || ["home", "homepage"].includes(norm(target)) ? 120 : 0;
-    } else if (norm(labelText) === wanted) {
+    } else if (labelNorm === wanted) {
       score = 120;
-    } else if (wanted && norm(labelText).includes(wanted)) {
+    } else if (wanted && labelNorm.includes(wanted)) {
       score = 90;
     } else {
       for (const term of wanted.split(" ").filter((part) => part.length > 1)) {
-        if (haystack.includes(term)) score += target && norm(target).includes(term) ? 15 : 10;
+        if (labelNorm.includes(term)) score += 10;
+      }
+    }
+    if (score === 0) continue;
+    if (!labelNorm.includes(wanted) && score < 40) continue;
+    if (contexts.length) {
+      const contextText = await candidate.evaluate((element) => {
+        const container = element.closest("article, section, aside, nav, header, .card, .banner, .feature, .sidebar, .hero, li, div");
+        return container ? container.innerText || "" : "";
+      }).catch(() => "");
+      const contextNorm = norm(contextText);
+      for (const context of contexts) {
+        const terms = norm(context).split(" ").filter((part) => part.length > 2);
+        const matchedTerms = terms.filter((term) => contextNorm.includes(term)).length;
+        if (terms.length && matchedTerms / terms.length >= 0.5) score += 80;
       }
     }
     if (score > 0 && (!best || score > best.score)) {
@@ -275,9 +344,8 @@ async function validateContent(page, validation, routeSuccess) {
   };
 }
 
-async function runCase(page, htmlUrl, workflowCase, blockIndex, caseIndex, timeoutMs, screenshotPath) {
-  await page.goto(htmlUrl, { waitUntil: "load", timeout: timeoutMs });
-  await page.waitForTimeout(250);
+async function runCase(page, htmlUrl, startUrl, startRoute, workflowCase, blockIndex, caseIndex, timeoutMs, screenshotPath) {
+  await gotoStart(page, startUrl, startRoute, timeoutMs);
 
   const actionReports = [];
   let caseError = null;
@@ -286,14 +354,13 @@ async function runCase(page, htmlUrl, workflowCase, blockIndex, caseIndex, timeo
     try {
       const lower = action.toLowerCase();
       if (lower.startsWith("browser:back") || lower.includes("navigate back")) {
-        await page.goto(htmlUrl, { waitUntil: "load", timeout: timeoutMs });
-        await page.waitForTimeout(250);
+        await gotoStart(page, startUrl, startRoute, timeoutMs);
         actionReport.method = "reset_to_initial_page";
         actionReport.route_after = await visibleRoute(page);
         actionReport.passed = true;
       } else if (lower.includes("click")) {
         const label = extractActionLabel(action);
-        Object.assign(actionReport, await clickByWorkflowLabel(page, label, timeoutMs));
+        Object.assign(actionReport, await clickByWorkflowLabel(page, action, label, timeoutMs));
         if (!actionReport.passed) caseError = actionReport.error || "Click action did not change browser state.";
       } else {
         actionReport.skipped = true;
@@ -339,7 +406,7 @@ async function runCase(page, htmlUrl, workflowCase, blockIndex, caseIndex, timeo
 async function runBrowserWorkflow(args) {
   const itemDir = path.resolve(args.itemsDir, args.item);
   const runDir = path.join(itemDir, "generated", args.run);
-  const workflowPath = path.join(itemDir, "workflow.json");
+  const workflowPath = args.workflowPath ? path.resolve(args.workflowPath) : path.join(itemDir, "workflow.json");
   const htmlPath = path.join(runDir, "index.html");
   if (!fs.existsSync(itemDir)) throw new Error(`Item not found: ${itemDir}`);
   if (!fs.existsSync(runDir)) throw new Error(`Run not found: ${runDir}`);
@@ -347,7 +414,11 @@ async function runBrowserWorkflow(args) {
   if (!fs.existsSync(htmlPath)) throw new Error(`HTML not found: ${htmlPath}`);
 
   const workflow = readJson(workflowPath);
+  const html = fs.readFileSync(htmlPath, "utf8");
   const htmlUrl = pathToFileURL(htmlPath).href;
+  const routes = implementedRoutesFromHtml(html);
+  const startRoute = startRouteForRoutes(routes);
+  const startUrl = startUrlForHtml(htmlUrl, startRoute);
   const browser = await chromium.launch({ headless: !args.headed });
   const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
   const page = await context.newPage();
@@ -368,7 +439,7 @@ async function runBrowserWorkflow(args) {
         const screenshotPath = args.screenshotDir
           ? path.join(args.screenshotDir, `block_${block.index}_case_${caseIndex}.png`)
           : "";
-        cases.push(await runCase(page, htmlUrl, content[caseIndex], block.index, caseIndex, args.timeoutMs, screenshotPath));
+        cases.push(await runCase(page, htmlUrl, startUrl, startRoute, content[caseIndex], block.index, caseIndex, args.timeoutMs, screenshotPath));
       }
     }
   } finally {
@@ -383,6 +454,9 @@ async function runBrowserWorkflow(args) {
     item_id: path.basename(itemDir),
     run: path.basename(runDir),
     html: htmlPath,
+    workflow: workflowPath,
+    start_url: startUrl,
+    start_route: startRoute,
     evaluator: "browser-workflow-v1",
     case_count: caseCount,
     passed_case_count: passedCount,

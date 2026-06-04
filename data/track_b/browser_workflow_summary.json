@@ -1,0 +1,97 @@
+﻿{
+    "generated_at":  "2026-06-04T15:10:21.6106504Z",
+    "notes":  "Browser-workflow-v1 results using workflow-case-normalized workflows for current static-gate-passing Track B demo runs.",
+    "reports":  [
+                    {
+                        "item":  "F01_1daycloud",
+                        "run":  "gwdg_qwen36_35b_v9_smoke",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F01_1daycloud_browser_v1.json",
+                        "passed_cases":  8,
+                        "total_cases":  12,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.6666666666666666,
+                        "task_success_rate":  0.6666666666666666,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v9_smoke\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F03_about_gitlab",
+                        "run":  "gwdg_qwen36_35b_v9_smoke",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F03_about_gitlab_browser_v1.json",
+                        "passed_cases":  8,
+                        "total_cases":  8,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  1,
+                        "task_success_rate":  1,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen36_35b_v9_smoke\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F06_community_dynamics",
+                        "run":  "gwdg_qwen36_35b_v9_smoke_40k",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F06_community_dynamics_browser_v1.json",
+                        "passed_cases":  4,
+                        "total_cases":  10,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.4,
+                        "task_success_rate":  0.4,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen36_35b_v9_smoke_40k\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F09_elections_bc",
+                        "run":  "claude_sonnet45_v3_smoke",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F09_elections_bc_browser_v1.json",
+                        "passed_cases":  5,
+                        "total_cases":  10,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.5,
+                        "task_success_rate":  0.5,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F09_elections_bc\\generated\\claude_sonnet45_v3_smoke\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F09_elections_bc",
+                        "run":  "claude_sonnet45_v4_smoke",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F09_elections_bc_browser_v1.json",
+                        "passed_cases":  5,
+                        "total_cases":  10,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.5,
+                        "task_success_rate":  0.5,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F09_elections_bc\\generated\\claude_sonnet45_v4_smoke\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F09_elections_bc",
+                        "run":  "gwdg_qwen36_35b_v6_smoke_40k",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F09_elections_bc_browser_v1.json",
+                        "passed_cases":  5,
+                        "total_cases":  10,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.5,
+                        "task_success_rate":  0.5,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F09_elections_bc\\generated\\gwdg_qwen36_35b_v6_smoke_40k\\browser_workflow_normalized_report.json"
+                    },
+                    {
+                        "item":  "F10_gourmania",
+                        "run":  "gwdg_qwen36_35b_v9_smoke",
+                        "evaluator":  "browser-workflow-v1",
+                        "workflow":  "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F10_gourmania_browser_v1.json",
+                        "passed_cases":  7,
+                        "total_cases":  8,
+                        "route_success_rate":  1,
+                        "content_validation_success_rate":  0.875,
+                        "task_success_rate":  0.875,
+                        "console_error_count":  0,
+                        "report":  "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v9_smoke\\browser_workflow_normalized_report.json"
+                    }
+                ]
+}

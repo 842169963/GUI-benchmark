@@ -2,6 +2,24 @@
 
 These instructions apply to every agent working in this repository.
 
+## Thesis text provenance and change recording
+
+When adding or materially revising thesis manuscript content, do not invent
+claims, facts, numbers, comparisons, or methodological justifications without a
+traceable basis.
+
+- Add an appropriate citation for literature-backed claims.
+- For project-specific claims, base the text on recorded experiment outputs,
+  scripts, notes, supervisor feedback, or explicit design decisions, and mention
+  that basis in the relevant note or revision record.
+- If a sentence is an interpretation or scope decision rather than a cited fact,
+  make the reason clear in the text or record it in `notes/revision_log.md`.
+- Record every substantive thesis-text change in `notes/revision_log.md`,
+  including the files changed, the source or rationale used, and any remaining
+  uncertainty.
+- Do not add unsupported background statements, result claims, benchmark claims,
+  or novelty claims merely because they sound plausible.
+
 ## Thesis-impacting prompt preservation
 
 Prompts are part of the experimental method for this thesis. When working on

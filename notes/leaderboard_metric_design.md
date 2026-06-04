@@ -1,8 +1,13 @@
 # Leaderboard Metric Design
 
-Working notes for the GUI-quality leaderboard metric system used by this
-thesis. Records both the original draft and the revised proposal so the
-design rationale and trade-offs are visible in the final write-up.
+Archived working notes for the GUI-quality leaderboard metric system used by
+this thesis. Records both the original draft and the revised proposal so the
+design rationale and trade-offs remain visible.
+
+Current authority: use `notes/metric_specification.md`,
+`notes/benchmark_item_schema.md`, `notes/prompt_schema.md`, and
+`notes/leaderboard_design.md` for the active thesis plan. This file is retained
+as historical rationale and should not override those newer specifications.
 
 Current note: the broader four-layer design below is retained as a candidate
 metric system, but the current Track B implementation baseline is the smaller

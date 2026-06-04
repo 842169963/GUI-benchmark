@@ -1,0 +1,45 @@
+{
+  "model_level": {
+    "model": "gwdg/qwen3.6-35b-a3b",
+    "run": "gwdg_qwen36_35b_v9_smoke",
+    "items": 3,
+    "technical": 1.0,
+    "visual": null,
+    "accessibility": 0.9411,
+    "dynamic": 0.8472,
+    "provisional_overall_excl_visual": 0.9067,
+    "full_overall": null,
+    "weights_tentative": {
+      "technical": 0.2,
+      "visual": 0.25,
+      "accessibility": 0.15,
+      "dynamic": 0.4
+    }
+  },
+  "item_level": [
+    {
+      "technical": 1.0,
+      "visual": null,
+      "accessibility": 0.913,
+      "dynamic": 0.6667,
+      "provisional_overall_excl_visual": 0.8048,
+      "item": "F01_1daycloud"
+    },
+    {
+      "technical": 1.0,
+      "visual": null,
+      "accessibility": 0.9845,
+      "dynamic": 1,
+      "provisional_overall_excl_visual": 0.9969,
+      "item": "F03_about_gitlab"
+    },
+    {
+      "technical": 1.0,
+      "visual": null,
+      "accessibility": 0.9259,
+      "dynamic": 0.875,
+      "provisional_overall_excl_visual": 0.9185,
+      "item": "F10_gourmania"
+    }
+  ]
+}

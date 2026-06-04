@@ -1,5 +1,83 @@
 # Revision Log
 
+## 2026-06-04
+
+### Provider model catalog for experiment keys
+
+- Added [notes/provider_model_catalog_2026-06-04.md](D:/master_thesis/notes/provider_model_catalog_2026-06-04.md) to record provider-documented model names for the configured GWDG/SAIA and ChatAnywhere keys without storing any secret values.
+- Sources used: GWDG Chat AI model documentation, GWDG SAIA API documentation, ChatAnywhere GitHub README, and ChatAnywhere API/model-list documentation.
+- Rationale: avoid wasting time and provider quota by probing model names through generation calls; keep model choices traceable for Track B smoke tests and future reported runs.
+- Added the experiment-cost decision that GWDG/SAIA remains the default for tests; when it is rate-limited, quota-limited, timing out, or otherwise unavailable, fallback to ChatAnywhere should start with low-cost models (`gpt-4o-mini`, `gpt-4.1-mini`, or `gpt-5-mini`) and record the fallback trigger in run metadata.
+- Remaining uncertainty: provider model availability can change after 2026-06-04, and ChatAnywhere's own model-list page warns that its table may lag upstream provider changes.
+
+### Metric-spec revision after supervisor-meeting follow-up discussion
+
+Source: discussion grounding in `Meeting Summary/` plus literature search
+(VisAWI Moshagen & Thielsch; Lavie & Tractinsky 2004; MLLM-as-a-UI-Judge
+arXiv:2510.08783; WebDevJudge arXiv:2510.18560; CheckEval arXiv:2403.18771;
+Beauty-in-the-Eye-of-AI arXiv:2604.03417; Position-Bias-in-Rubric-Based-Judge
+arXiv:2602.02219). These references are recorded here as rationale; they will be
+added to `references.bib` only when actually cited in thesis chapter text, per
+the user's "cite only if used" instruction.
+
+- Backups: `archive/backup/metric_specification_2026-06-04_before-visual-layer-revision.md` and `archive/backup/track_b_vision2web_pilot_plan_2026-06-04_before-dev-subset-note.md`.
+- Edited [notes/metric_specification.md](D:/master_thesis/notes/metric_specification.md):
+  - Reduced the Static Visual layer from seven dimensions to **four objective-leaning, LLM-judged dimensions** (Layout & Visual Hierarchy, Information Organization/Clarity, Typography & Readability, Visual Consistency), each grounded in cited instruments.
+  - Switched the visual scoring method to **binary-checklist decomposition** (CheckEval rationale: lower variance, higher agreement than holistic Likert); narrow 3–5 anchored scale only where a graded judgement is unavoidable; wide 1–9 scale reserved as a rating-scale-sensitivity condition only.
+  - Moved **holistic aesthetic quality to future work** (LLM-human aesthetic alignment is weak without calibration); optional non-weighted diagnostic with human-correlation validation.
+  - Moved **contrast and other rule-based accessibility checks to a new automated Accessibility Score** computed by `axe-core`/Lighthouse (free, local, deterministic, no LLM tokens), still counted in the leaderboard. Documented why contrast must not be LLM-judged.
+  - Added a shared **score-normalization rule** (all submetrics → [0,1] with per-instrument formulas) and clarified the Static Visual layer is a single layer with multiple instruments.
+  - Tightened the **dynamic task-success definition**: a task succeeds iff route reached AND destination content validation passes.
+  - Added optional **reliability levers** (few-shot anchoring, confidence filtering) and an **LLM-human visual-correlation validation** step.
+  - Added an **Overall-Score caution** that cost is primarily a Pareto axis and weights are an un-justified hyper-parameter to be sensitivity-tested.
+  - Reframed the **Reliability Audit** as lightweight recording only (per user decision): biases are recorded as they appear with known controls applied; a systematic bias study is an optional, out-of-scope future extension.
+- Edited [notes/track_b_vision2web_pilot_plan.md](D:/master_thesis/notes/track_b_vision2web_pilot_plan.md): added an explicit **development subset (3 items: F01, F03, F10) vs scale-up set (10 items)** split, per the supervisor's "develop on a tiny set first" advice.
+- Not yet done: `LB-JUDGE-v1` visual-judge prompt (four-dimension checklist + anchors) is still unwritten; when written it must go verbatim into [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex).
+
+### Methodology chapter aligned to revised metric spec
+
+- Backup: `archive/backup/chapter3_methodology_2026-06-04_before-visual-layer-revision.tex`.
+- Edited [thesis/chapters/chapter3_methodology.tex](D:/master_thesis/thesis/chapters/chapter3_methodology.tex) so the manuscript matches the revised metric spec:
+  - Rewrote the **Static Visual Score** subsection to the four objective-leaning dimensions + binary-checklist scoring + narrow-anchored-scale rule, with holistic aesthetics deferred to future work and contrast removed.
+  - Added a new **Accessibility Score** subsection (automated `axe-core`/Lighthouse, still in the leaderboard) and removed "accessibility basics" from the Static Technical submetric list to avoid duplication.
+  - Added an **Overall-Score hyper-parameter / cost-double-counting** caution.
+  - Provenance (per AGENTS.md): traceable to [notes/metric_specification.md](D:/master_thesis/notes/metric_specification.md); design-claim citations added (see below).
+- Added five bibliography entries to [thesis/references.bib](D:/master_thesis/thesis/references.bib): `visawi`, `lavie2004aesthetics`, `mllmuijudge`, `webdevjudge`, `checkeval`, and cited them in the Static Visual subsection. Clean rebuild (`bibtex` + `latexmk`) with zero undefined citations.
+  - **TODO (metadata)**: `mllmuijudge` (arXiv:2510.08783) and `webdevjudge` (arXiv:2510.18560) currently use placeholder author fields; replace with the real author lists before final submission. Classic HCI entries (`visawi`, `lavie2004aesthetics`) and `checkeval` have standard metadata.
+
+### LB-JUDGE-v1 visual judge prompt drafted
+
+- Created [scripts/prompts/LB-JUDGE-v1.md](D:/master_thesis/scripts/prompts/LB-JUDGE-v1.md): first draft of the static-visual judge prompt. Scores one standardized per-page screenshot via 16 binary checklist items (4 per dimension) over the four visual dimensions, returns strict JSON, includes confidence for confidence-filtering. Scale policy is binary-only (no Likert).
+- Not yet wired into a scorer script and not yet run. When it produces any reported result it must be copied verbatim into [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex) with id `LB-JUDGE-v1`.
+
+### Bib author metadata completed
+
+- Replaced the placeholder author fields in [thesis/references.bib](D:/master_thesis/thesis/references.bib) with the real author lists found via search: `mllmuijudge` (Luera, Rossi, Dernoncourt, et al., arXiv:2510.08783) and `webdevjudge` (Chunyang Li, Yilun Zheng, Xinting Huang, et al., arXiv:2510.18560).
+
+### Accessibility scorer (axe-core) implemented and run
+
+- Installed `axe-core` (npm) and created [scripts/run_track_b_accessibility.js](D:/master_thesis/scripts/run_track_b_accessibility.js): opens the generated `index.html` in Chromium (Playwright), injects axe-core, runs the WCAG 2 A/AA rule set in-page, and writes a normalized `accessibility_report.json`. Score = pass_nodes / (pass_nodes + violation_nodes). Free, local, deterministic, no API tokens.
+- Ran it on the 3-item development subset (`gwdg_qwen36_35b_v9_smoke`): F01 0.913, F03 0.9845, F10 0.9259. All violations were colour-contrast — exactly the WCAG check moved off the LLM judge.
+
+### Trial leaderboard aggregation
+
+- Created [scripts/build_trial_leaderboard.py](D:/master_thesis/scripts/build_trial_leaderboard.py) and wrote [data/track_b/trial_leaderboard_2026-06-04.json](D:/master_thesis/data/track_b/trial_leaderboard_2026-06-04.json).
+- **Tentative** Overall weights (hyper-parameters, to be sensitivity-tested, NOT final): Technical 0.20, Visual 0.25, Accessibility 0.15, Dynamic 0.40. Efficiency kept as a Pareto axis, not in the composite (avoids double-counting cost).
+- Visual is still null (LB-JUDGE-v1 not run), so only a provisional Overall over the available quality categories (renormalized) is reported. Model-level provisional (excl. visual) for `qwen3.6-35b-a3b`: technical 1.00, accessibility 0.941, dynamic 0.847, provisional Overall 0.907. Technical currently uses gate pass/fail as a placeholder until coverage submetrics are computed.
+
+### Thesis text provenance rule added
+
+- Updated [AGENTS.md](D:/master_thesis/AGENTS.md) with a repository-wide rule for thesis manuscript edits: new or materially revised thesis content must have either a citation, a traceable project source, or an explicit rationale.
+- The rule requires substantive thesis-text changes to be recorded in this revision log with changed files, source/rationale, and remaining uncertainty.
+- Motivation: user instruction that thesis additions should not be invented and should be source-marked or reasoned, with a record kept for reproducibility and writing discipline.
+
+### Methodology clarification for pilot results and artifact-scoring modes
+
+- Updated [chapter3_methodology.tex](D:/master_thesis/thesis/chapters/chapter3_methodology.tex) to clarify that controlled thesis experiments require full generation metadata, while public artifact-scoring mode can accept a submitted executable artifact with minimal optional metadata for diagnostic reports.
+- Added the current Track B static technical gate basis: complete HTML, non-truncated style/script blocks, defined click handlers, declared routes, workflow-required controls, and quoted-label versus semantic-click handling.
+- Added a dynamic-validation clarification that `browser-workflow-v1` is still a pilot implementation used to validate the protocol and identify workflow-design issues, not final thesis-result evidence until the item set, workflow normalization, and reporting rules are fixed.
+- Source/rationale: based on [notes/track_b_benchmark_protocol.md](D:/master_thesis/notes/track_b_benchmark_protocol.md), [notes/track_b_browser_workflow_v1_experiment.md](D:/master_thesis/notes/track_b_browser_workflow_v1_experiment.md), and the user decision that pilot browser-workflow and mini-leaderboard results should not be prematurely written as final thesis results.
+
 ## 2026-04-08
 
 - Abstract wording updated in [thesis_proposal.tex](D:/master_thesis/thesis_proposal.tex) to clarify the evaluation method:

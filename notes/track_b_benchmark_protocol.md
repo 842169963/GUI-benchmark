@@ -77,12 +77,16 @@ Output: pass/fail plus diagnostic warnings.
 
 Purpose: test whether workflow actions can reach the expected route or section.
 
-Current evaluator: `scripts/run_track_b_dynamic_workflow.py`,
-`route-simulation-v1`.
+Current evaluators:
 
-This evaluator parses the generated HTML, identifies clickable workflow
-controls, simulates route transitions through `data-route-target`, and records
-whether the final route matches the route implied by the action.
+- `scripts/run_track_b_dynamic_workflow.py`, `route-simulation-v1`
+- `scripts/run_track_b_browser_workflow.js`, `browser-workflow-v1`
+
+The route-simulation evaluator parses the generated HTML, identifies clickable
+workflow controls, simulates route transitions through `data-route-target`, and
+records whether the final route matches the route implied by the action. The
+browser-workflow evaluator opens the generated HTML in Chromium, executes
+workflow clicks with Playwright, and records the resulting visible route.
 
 Output:
 
@@ -94,17 +98,23 @@ Output:
 Purpose: test whether the reached route contains the content evidence required
 by the original `workflow.json` validations.
 
-Current evaluator: `scripts/run_track_b_dynamic_workflow.py`,
-`route-simulation-v1`.
+Current evaluators:
 
-The current implementation uses deterministic HTML/text/DOM-structure
-heuristics, such as:
+- `scripts/run_track_b_dynamic_workflow.py`, `route-simulation-v1`
+- `scripts/run_track_b_browser_workflow.js`, `browser-workflow-v1`
+
+The current route-simulation implementation uses deterministic
+HTML/text/DOM-structure heuristics, such as:
 
 - quoted heading/text presence
 - image/grid counts
 - form-field counts
 - card-like element counts
 - branding/logo text or image-alt evidence
+
+The browser-workflow evaluator applies the same validation intent after real
+browser interaction and can check visible text, DOM state, image/card/form
+counts, and active navigation state.
 
 Output:
 
@@ -137,6 +147,8 @@ Frozen prompt/model setting:
 - provider/model: GWDG/SAIA `qwen3.6-35b-a3b`
 - output budget: `max_tokens=20000`
 
+Route-simulation baseline:
+
 | Item | Run | Max tokens | Static gate | Route success | Content validation | Task success | Notes |
 | --- | --- | ---: | --- | ---: | ---: | ---: | --- |
 | F01_1daycloud | `gwdg_qwen36_35b_v9_smoke` | 20000 | pass | 1.000 | 0.750 | 0.750 | Valid pilot artifact. |
@@ -146,6 +158,18 @@ Frozen prompt/model setting:
 | F06_community_dynamics | `gwdg_qwen36_35b_v9_smoke` | 20000 | fail | 1.000 | 0.400 | 0.400 | Diagnostic artifact only: token-truncated at 20k and missing route handler. |
 | F06_community_dynamics | `gwdg_qwen36_35b_v9_smoke_40k` | 40000 | pass | 1.000 | 0.400 | 0.400 | 40k cap removes truncation/static failure but content validation remains low. |
 
+Browser-workflow pilot on static-gate-passing runs:
+
+| Item | Run | Evaluator | Cases passed | Route success | Content validation | Task success | Notes |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| F01_1daycloud | `gwdg_qwen36_35b_v9_smoke` | browser-workflow-v1 | 8/12 | 1.000 | 0.667 | 0.667 | Browser-visible workflow routes all work, but visible content/structure evidence is weaker than the route-simulation text check. |
+| F03_about_gitlab | `gwdg_qwen36_35b_v9_smoke` | browser-workflow-v1 | 8/8 | 1.000 | 1.000 | 1.000 | The generated UI passes both scripted browser interaction and visible-content checks. |
+| F10_gourmania | `gwdg_qwen36_35b_v9_smoke` | browser-workflow-v1 | 7/8 | 1.000 | 0.875 | 0.875 | The active MEDIA navigation state is now checked through browser DOM state; the remaining failure is missing service-card evidence on the culinary-solutions route. |
+| F06_community_dynamics | `gwdg_qwen36_35b_v9_smoke_40k` | browser-workflow-v1 | 4/10 | 1.000 | 0.400 | 0.400 | Real browser clicks reach the intended routes, but destination content validation remains low. |
+| F09_elections_bc | `claude_sonnet45_v3_smoke` | browser-workflow-v1 + normalized workflow | 5/10 | 1.000 | 0.500 | 0.500 | Workflow-case normalization adds the missing local-elections prerequisite before `Local Forms`; remaining failures are destination-content checks. |
+| F09_elections_bc | `claude_sonnet45_v4_smoke` | browser-workflow-v1 + normalized workflow | 5/10 | 1.000 | 0.500 | 0.500 | Same normalized browser-workflow outcome as v3. |
+| F09_elections_bc | `gwdg_qwen36_35b_v6_smoke_40k` | browser-workflow-v1 + normalized workflow | 5/10 | 1.000 | 0.500 | 0.500 | Same normalized browser-workflow outcome as the Claude F09 passing runs. |
+
 Provider-level failure:
 
 - `F02_401trucksource`, `TB-GEN-v9`, GWDG/SAIA `qwen3.6-35b-a3b`,
@@ -153,20 +177,27 @@ Provider-level failure:
 
 Interpretation: static-gate-failing runs are diagnostic and should not enter
 final leaderboard scoring. Among static-gate-passing runs, route success is
-currently strong, while content validation separates high-fidelity artifacts
-from artifacts that route correctly but lack the required destination content.
-The `F06` 20k/40k comparison shows that output-budget settings can affect
-whether a model produces a complete, statically valid artifact.
+currently strong under both evaluators, while content validation separates
+high-fidelity artifacts from artifacts that route correctly but lack the
+required destination content. The browser-workflow run confirms that the
+dynamic layer can be evaluated in a real browser without introducing an
+autonomous agent. It also shows that `route-simulation-v1` should be treated as
+a lightweight baseline, not the final dynamic evaluator. The `F06` 20k/40k
+comparison shows that output-budget settings can affect whether a model
+produces a complete, statically valid artifact. The F09 browser runs showed
+that workflow cases need their own prerequisite navigation paths; after
+normalization, the artificial `Local Forms` route failure is removed while the
+content-validation failures remain visible.
 
 ## Not Yet Final
 
-The current evaluator is enough for a reproducible pilot layer, but it is not
-the final full browser evaluator.
+The current browser-workflow evaluator is enough for a reproducible pilot
+layer, but it is not a full autonomous computer-use agent.
 
 Remaining work:
 
-- Convert some content checks to real browser/DOM/CSS assertions, especially
-  active tab or highlighted navigation state.
+- Expand browser/DOM/CSS assertions for cases that route simulation cannot
+  check robustly.
 - Decide whether the final leaderboard should include only the three core
   layers above, or add static visual quality and accessibility layers.
 - Decide whether route/content dynamic scores should be reported separately or

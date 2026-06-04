@@ -225,10 +225,8 @@ visible content, or missing entry files are recorded as artifact-level failures.
 Static technical metrics evaluate structure and requirement coverage without
 executing a user task. Candidate submetrics include HTML completeness, required
 element coverage, required text coverage, route declaration coverage, link
-target declaration, form field coverage, selector or ID coverage, and static
-requirement fidelity. Rule-based accessibility is reported separately as the
-Accessibility Score (Section~\ref{sec:metric-categories}) because it is computed
-by an automated tool rather than by structural heuristics.
+target declaration, form field coverage, selector or ID coverage, accessibility
+basics, and static requirement fidelity.
 
 Static technical checks can verify that a required button exists and declares a
 target. They do not prove that clicking the button completes a task; that is a
@@ -243,48 +241,13 @@ by route or task validation.
 
 \subsection{Static Visual Score}
 
-Static visual metrics evaluate standardized predefined-route screenshots. To
-keep the score reproducible and to avoid injecting high judge variance into the
-ranking, the design follows two principles. First, anything with an objective
-rule or formula is not LLM-judged: contrast, for example, has a deterministic
-\mbox{WCAG} formula computable from the actual CSS colors and is therefore moved
-to the automated accessibility metrics rather than scored by a multimodal judge.
-Second, holistic aesthetic judgement is treated cautiously, because multimodal
-judges align poorly with human aesthetic ratings without calibration
-\cite{visawi,lavie2004aesthetics}; overall aesthetic quality is consequently
-deferred to future work, or reported only as an optional, non-weighted
-diagnostic accompanied by human-correlation validation.
-
-The multimodal judge therefore scores four objective-leaning visual dimensions:
-\emph{layout and visual hierarchy}, \emph{information organization and clarity},
-\emph{typography and readability}, and \emph{visual consistency}. These build on
-dimensions used by recent multimodal-LLM UI and web-development judges
-\cite{mllmuijudge,webdevjudge} and on validated aesthetics inventories
-\cite{visawi,lavie2004aesthetics}. Each dimension is scored by decomposing it
-into binary (yes/no) sub-questions answered by the judge from the screenshot,
-rather than by eliciting a raw Likert score; checklist decomposition yields
-higher inter-judge agreement and lower variance than holistic Likert ratings
-\cite{checkeval}. A dimension score is the fraction of passed sub-questions.
-Where a graded judgement is unavoidable, a narrow three-to-five level scale with
-explicit behavioral anchors is used rather than a wide scale, which is prone to
-central-tendency bias; a wide or verbal-label scale is reserved only as a
-deliberate condition when recording rating-scale sensitivity.
+Static visual metrics evaluate standardized predefined-route screenshots.
+Candidate visual dimensions include visual hierarchy, information organization,
+typography and readability, contrast, spacing and alignment, consistency, and
+overall aesthetic quality.
 
 Page-level visual scores are aggregated into an artifact-level Static Visual
-Score, with each dimension first normalized to $[0,1]$. Agent trace screenshots
-are excluded from the main static visual score.
-
-\subsection{Accessibility Score}
-
-Rule-based accessibility is evaluated by a free, local, deterministic tool
-(\texttt{axe-core} via Playwright, or Lighthouse) rather than by a multimodal
-judge. This is cheaper than judge-based scoring, more accurate, reproducible,
-and immune to judge bias, while still contributing to the leaderboard under the
-automated technical and accessibility category. Tool-checkable items include
-color contrast on the actual CSS colors, image alternative text, form-control
-labels, accessible button and link names, sensible heading order, declared
-document language, correct \mbox{ARIA} usage, and landmark regions. The score is
-the fraction of passed applicable rule checks, normalized to $[0,1]$.
+Score. Agent trace screenshots are excluded from the main static visual score.
 
 \subsection{Dynamic Score}
 
@@ -328,12 +291,8 @@ Overall Score =
 + 0.15 * Efficiency Score
 \end{verbatim}
 
-This composite is a reporting convenience, and its weights are an
-un-justified hyper-parameter to be sensitivity-tested rather than a fixed final
-value. Category-specific scores remain visible and are interpreted separately.
-Because cost is primarily presented as a Pareto-plot axis, whether the
-Efficiency Score also enters the weighted composite is deferred to avoid
-double-counting cost.
+This composite is a reporting convenience. Category-specific scores remain
+visible and are interpreted separately.
 
 \section{Dynamic Validation Strategy}
 \label{sec:dynamic-method}

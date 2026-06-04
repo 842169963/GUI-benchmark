@@ -1,0 +1,186 @@
+[
+  {
+    "depends_on": [],
+    "index": 0,
+    "summary": "Navigation testing across multiple forum categories and discovery of events page from the homepage",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Customer experience forum card successfully navigates to the sales customer experience forum page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the \"Customer experience | Sales, Customer Insights, CRM\" forum card"
+        ],
+        "validations": [
+          "The page displays the Customer experience forum page header",
+          "The page shows forum discussion threads related to Sales, Customer Insights, and CRM"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Small and medium business forum card successfully navigates to the business central forum page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click the \"Small and medium business | Business Central, NAV, RMS\" forum card"
+        ],
+        "validations": [
+          "The page displays the Small and medium business forum page header",
+          "The page shows forum discussion threads related to Business Central, NAV, and RMS"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Supply chain forum card successfully navigates to the supply chain forum page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click the \"Supply chain | Supply Chain Management, Commerce\" forum card"
+        ],
+        "validations": [
+          "The page displays the Supply chain forum page header",
+          "The page shows forum discussion threads related to Supply Chain Management and Commerce"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Discover events navigation menu item successfully navigates to the blogs page, demonstrating a positive test scenario.",
+        "actions": [
+          "Navigate back using the browser back button",
+          "Click the \"Discover events\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the Community blogs page header",
+          "The page shows a list of blog posts and community content"
+        ]
+      }
+    ],
+    "prototype": {
+      "homepage": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 1,
+    "summary": "Navigation testing from the sales customer experience forum page to homepage and blogs page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Customer experience forum page from the homepage is successful.",
+        "actions": [
+          "Click the \"Customer experience | Sales, Customer Insights, CRM\" forum card"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "sales_customer_experience_forum": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 2,
+    "summary": "Navigation testing from the business central forum page to homepage and blogs page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Small and medium business forum page from the homepage is successful.",
+        "actions": [
+          "Click the \"Small and medium business | Business Central, NAV, RMS\" forum card"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "business_central_forum": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 3,
+    "summary": "Navigation testing from the supply chain forum page to homepage and blogs page",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the Supply chain forum page from the homepage is successful.",
+        "actions": [
+          "Click the \"Supply chain | Supply Chain Management, Commerce\" forum card"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "supply_chain_forum": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 4,
+    "summary": "Navigation testing from the blogs page to homepage using both main navigation and breadcrumb navigation",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the blogs page from the homepage is successful.",
+        "actions": [
+          "Click the \"Discover events\" navigation menu item"
+        ],
+        "validations": []
+      },
+      {
+        "objective": "Verify that clicking the Dynamics 365 Community navigation menu item from the blogs page successfully navigates back to the homepage, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the \"Discover events\" navigation menu item",
+          "Click the \"Dynamics 365 Community\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the homepage with the main hero banner",
+          "The page shows the \"Explore Dynamics 365 forums\" section with forum cards"
+        ],
+        "normalization_notes": [
+          "The Dynamics 365 Community navigation action is defined from the blogs page."
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Dynamics 365 Community breadcrumb link from the blogs page successfully navigates back to the homepage, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the \"Discover events\" navigation menu item",
+          "Click the \"Dynamics 365 Community\" breadcrumb link"
+        ],
+        "validations": [
+          "The page displays the homepage with the main hero banner",
+          "The page shows the \"Explore Dynamics 365 forums\" section with forum cards"
+        ],
+        "normalization_notes": [
+          "The breadcrumb link is only visible on the blogs page; browser:back would reset an independent case to homepage."
+        ]
+      }
+    ],
+    "prototype": {
+      "blogs": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  }
+]

@@ -1,0 +1,200 @@
+[
+  {
+    "depends_on": [],
+    "index": 0,
+    "summary": "Homepage navigation testing to verify successful access to voter registration, provincial election report, local elections, and resources pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Register to Vote button successfully navigates to the voter registration page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Register to Vote button in the page header"
+        ],
+        "validations": [
+          "The page displays the Register to Vote heading",
+          "The page displays voter registration information and requirements",
+          "The left sidebar menu shows 2024 Provincial Election navigation options"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Learn more button in the 2024 Provincial Election Report banner successfully navigates to the provincial election detail page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the Learn more button in the 2024 PROVINCIAL ELECTION REPORT banner"
+        ],
+        "validations": [
+          "The page displays the 2024 PROVINCIAL ELECTION heading",
+          "The page displays provincial election report information and volumes",
+          "The left sidebar menu shows 2024 Provincial Election navigation options"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Learn more button in the 2026 General Local Elections card successfully navigates to the local elections page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card"
+        ],
+        "validations": [
+          "The page displays the 2026 GENERAL LOCAL ELECTIONS heading",
+          "The page displays local elections information and key dates table",
+          "The left sidebar menu shows Local Elections navigation options"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Resources link in the main navigation menu successfully navigates to the resources page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the Resources link in the main navigation menu"
+        ],
+        "validations": [
+          "The page displays the RESOURCES heading",
+          "The page displays resource categories description text",
+          "The left sidebar menu shows expandable resource categories including Maps, Forms & Guides, Results, Voters List, Reports, and Legislation"
+        ]
+      }
+    ],
+    "prototype": {
+      "homepage": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 1,
+    "summary": "Voter registration page access testing to verify successful navigation from homepage",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Register to Vote button successfully navigates to the voter registration page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Register to Vote button in the page header"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "voter_registration": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 2,
+    "summary": "Provincial election report page access testing to verify successful navigation from homepage banner",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Learn more button in the 2024 Provincial Election Report banner successfully navigates to the provincial election detail page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Learn more button in the 2024 PROVINCIAL ELECTION REPORT banner"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "2024_provincial_election": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 3,
+    "summary": "Local elections navigation testing to verify successful access to local elections page and local forms page via sidebar menu",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Learn more button in the 2026 General Local Elections card successfully navigates to the local elections page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card"
+        ],
+        "validations": []
+      },
+      {
+        "objective": "Verify that clicking the Local Forms link in the sidebar menu successfully navigates to the local election forms page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "Click the Local Forms link in the left sidebar menu"
+        ],
+        "validations": [
+          "The page displays the LOCAL FORMS heading",
+          "The page displays a table with columns for Filer type, Report type(s), and Forms",
+          "The page displays a dropdown selector labeled Select filer type"
+        ],
+        "normalization_note": "Added the prerequisite local-elections navigation step so this case is independently executable from the homepage."
+      }
+    ],
+    "prototype": {
+      "2026_local_elections": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 4,
+    "summary": "Local election forms page access testing to verify successful navigation from local elections page sidebar",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that navigating to the local election forms page via the 2026 General Local Elections card and sidebar menu is successful, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card",
+          "Click the Local Forms link in the left sidebar menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "local_election_forms": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 5,
+    "summary": "Resources page access testing to verify successful navigation from main navigation menu",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Resources link in the main navigation menu successfully navigates to the resources page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the Resources link in the main navigation menu"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "resources_and_reports": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  }
+]

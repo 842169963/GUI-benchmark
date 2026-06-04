@@ -1,0 +1,226 @@
+[
+  {
+    "depends_on": [],
+    "index": 0,
+    "summary": "Navigation menu validation from home page testing sequential access to App Store, Services, Learning Hub, and Contact pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the \"App Store\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the OneClick App heading",
+          "The page displays a form with app selection options"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Services navigation menu item successfully navigates to the services page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the \"Services\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the Services heading",
+          "The page displays service information content"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the \"Learning Hub\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the OneDay Academy heading",
+          "The page displays a list of course cards"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the Contact navigation menu item successfully navigates to the contact page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the \"Contact\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays the Contact us heading",
+          "The page displays a contact form with fields"
+        ]
+      }
+    ],
+    "prototype": {
+      "home": {
+        "fullpage": true,
+        "idx": 0
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 1,
+    "summary": "Navigation menu validation from clickapp page testing access to Services, Learning Hub, Company, Contact pages, and logo click functionality",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page.",
+        "actions": [
+          "Click the \"App Store\" navigation menu item"
+        ],
+        "validations": []
+      },
+      {
+        "objective": "Verify that clicking the Company navigation menu item successfully navigates to the company page, demonstrating a positive test scenario.",
+        "actions": [
+          "Click the \"Company\" navigation menu item"
+        ],
+        "validations": [
+          "The page displays company information content"
+        ]
+      },
+      {
+        "objective": "Verify that clicking the logo at the top of the page successfully navigates to the home page, demonstrating a positive test scenario.",
+        "actions": [
+          "browser:back",
+          "Click the logo at the top of the page"
+        ],
+        "validations": [
+          "The page displays the home page content",
+          "The page displays the AI-Enabled No-Code Low-Code Platform heading"
+        ]
+      }
+    ],
+    "prototype": {
+      "clickapp": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 2,
+    "summary": "Navigation menu validation from digital cards page testing access to Services, Learning Hub, Company, and Contact pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the digital cards page.",
+        "actions": [
+          "Click the \"App Store\" navigation menu item"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "digital_cards": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 3,
+    "summary": "Navigation menu validation from services page testing access to App Store, Learning Hub, Company, and Contact pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Services navigation menu item successfully navigates to the services page.",
+        "actions": [
+          "Click the \"Services\" navigation menu item"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "services": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 4,
+    "summary": "Navigation menu validation from academy page testing access to App Store, Services, Company, and Contact pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page.",
+        "actions": [
+          "Click the \"Learning Hub\" navigation menu item"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "academy": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 5,
+    "summary": "Navigation menu validation from contact page testing access to App Store, Services, Learning Hub, and Company pages",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Contact navigation menu item successfully navigates to the contact page.",
+        "actions": [
+          "Click the \"Contact\" navigation menu item"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "contact": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  },
+  {
+    "depends_on": [],
+    "index": 6,
+    "summary": "Navigation to company page validation testing access via Company navigation menu item",
+    "resolution": {
+      "width": 1920,
+      "height": 1080
+    },
+    "content": [
+      {
+        "objective": "Verify that clicking the Company navigation menu item successfully navigates to the company page.",
+        "actions": [
+          "Click the \"Company\" navigation menu item"
+        ],
+        "validations": []
+      }
+    ],
+    "prototype": {
+      "company": {
+        "fullpage": true,
+        "idx": 1
+      }
+    }
+  }
+]

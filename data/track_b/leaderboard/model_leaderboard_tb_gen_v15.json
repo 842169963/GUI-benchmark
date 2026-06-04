@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-06-04T21:47:59.418436+00:00",
+  "prompt_id_filter": "TB-GEN-v15",
+  "aggregation_note": "Artifact-level scores are aggregated into model-level leaderboard rows. Ineligible artifacts are excluded from score means.",
+  "provider_failure_count": 0,
+  "models": [
+    {
+      "model": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v15",
+      "artifact_count": 1,
+      "eligible_artifact_count": 1,
+      "attempted_items": [
+        "F10_gourmania"
+      ],
+      "overall_score": null,
+      "static_technical_score": 0.8461538461538461,
+      "static_visual_score": null,
+      "dynamic_score": 1,
+      "efficiency_score": null,
+      "average_total_tokens": 46589,
+      "average_output_tokens": 6643,
+      "average_latency_seconds": 64.83,
+      "average_cost_per_app": null,
+      "notes": "Overall/static visual/efficiency scores remain null until visual rubric scoring and cost reference are defined.",
+      "rank": 1
+    }
+  ]
+}

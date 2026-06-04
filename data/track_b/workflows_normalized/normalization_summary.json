@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-06-04T15:02:06.141955+00:00",
+  "normalizer": "workflow-case-normalization-v1",
+  "purpose": "Make browser-workflow cases independently executable from the item homepage route.",
+  "items": [
+    {
+      "item_id": "F01_1daycloud",
+      "original_workflow": "data\\track_b\\items\\F01_1daycloud\\workflow.json",
+      "normalized_workflow": "data\\track_b\\workflows_normalized\\F01_1daycloud_browser_v1.json",
+      "change_count": 0,
+      "changes": []
+    },
+    {
+      "item_id": "F03_about_gitlab",
+      "original_workflow": "data\\track_b\\items\\F03_about_gitlab\\workflow.json",
+      "normalized_workflow": "data\\track_b\\workflows_normalized\\F03_about_gitlab_browser_v1.json",
+      "change_count": 0,
+      "changes": []
+    },
+    {
+      "item_id": "F06_community_dynamics",
+      "original_workflow": "data\\track_b\\items\\F06_community_dynamics\\workflow.json",
+      "normalized_workflow": "data\\track_b\\workflows_normalized\\F06_community_dynamics_browser_v1.json",
+      "change_count": 2,
+      "changes": [
+        {
+          "item_id": "F06_community_dynamics",
+          "block_index": 4,
+          "case_index": 1,
+          "objective": "Verify that clicking the Dynamics 365 Community navigation menu item from the blogs page successfully navigates back to the homepage, demonstrating a positive test scenario.",
+          "type": "insert_prerequisite",
+          "reason": "The Dynamics 365 Community navigation action is defined from the blogs page.",
+          "inserted_action": "Click the \"Discover events\" navigation menu item"
+        },
+        {
+          "item_id": "F06_community_dynamics",
+          "block_index": 4,
+          "case_index": 2,
+          "objective": "Verify that clicking the Dynamics 365 Community breadcrumb link from the blogs page successfully navigates back to the homepage, demonstrating a positive test scenario.",
+          "type": "replace_with_prerequisite_path",
+          "reason": "The breadcrumb link is only visible on the blogs page; browser:back would reset an independent case to homepage.",
+          "old_actions": [
+            "Navigate back using the browser back button",
+            "Click the \"Dynamics 365 Community\" breadcrumb link"
+          ],
+          "new_actions": [
+            "Click the \"Discover events\" navigation menu item",
+            "Click the \"Dynamics 365 Community\" breadcrumb link"
+          ]
+        }
+      ]
+    },
+    {
+      "item_id": "F09_elections_bc",
+      "original_workflow": "data\\track_b\\items\\F09_elections_bc\\workflow.json",
+      "normalized_workflow": "data\\track_b\\workflows_normalized\\F09_elections_bc_browser_v1.json",
+      "change_count": 1,
+      "changes": [
+        {
+          "item_id": "F09_elections_bc",
+          "block_index": 3,
+          "case_index": 1,
+          "objective": "Verify that clicking the Local Forms link in the sidebar menu successfully navigates to the local election forms page, demonstrating a positive test scenario.",
+          "type": "insert_prerequisite",
+          "reason": "Local Forms is a sidebar link visible after navigating to the local-elections page.",
+          "inserted_action": "Click the Learn more button in the 2026 GENERAL LOCAL ELECTIONS card"
+        }
+      ]
+    },
+    {
+      "item_id": "F10_gourmania",
+      "original_workflow": "data\\track_b\\items\\F10_gourmania\\workflow.json",
+      "normalized_workflow": "data\\track_b\\workflows_normalized\\F10_gourmania_browser_v1.json",
+      "change_count": 0,
+      "changes": []
+    }
+  ]
+}

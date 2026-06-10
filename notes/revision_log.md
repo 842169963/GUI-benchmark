@@ -1,5 +1,43 @@
 # Revision Log
 
+## 2026-06-05
+
+### Track B static gate relaxed; prompt freeze policy added
+
+Context: the Track B generation prompt kept churning (`TB-GEN-v1`..`v16`) because
+every gate failure was treated as a prompt-wording problem. Diagnosis: the static
+gate's exact-visible-text requirement for workflow controls was forcing the
+prompt to micromanage exact strings (`GitLab Duo`, `View Recipe`), and each fix
+regressed another item.
+
+- Backup: `archive/backup/check_track_b_generation_2026-06-05_before-gate-relaxation.py`.
+- Edited [scripts/check_track_b_generation.py](D:/master_thesis/scripts/check_track_b_generation.py):
+  - Added `normalize_label()` and `label_matches_clickable()` (normalized +
+    bidirectional-containment fuzzy matching) and an `attrs_make_clickable()`
+    helper (refactored out of `has_working_clickable`).
+  - Demoted `workflow_clickable_labels_present` and `workflow_clickables_not_inert`
+    from **error** to **warning**, and switched them to fuzzy matching. The hard
+    gate now blocks only on structural/capacity failures (incomplete doc, unclosed
+    body/style/script truncation, `finish_reason in {length,max_tokens}`, undefined
+    onclick functions, workflow `showPage` routes without matching section ids).
+  - Authority for workflow-control routing/content correctness moves to the
+    dynamic browser workflow check (`run_track_b_browser_workflow.js`).
+- Regression-verified on existing artifacts: F03 `..v16_f03_compact_smoke` now
+  **passes** (was a hard exact-label fail); F10 `..v15_f10_smoke` still passes;
+  F06/F09 `..v15..` still **fail but only on real truncation errors**, not labels.
+- Added [notes/track_b_prompt_freeze_policy.md](D:/master_thesis/notes/track_b_prompt_freeze_policy.md):
+  root-cause separation (capacity vs instruction-following vs exact-string), the
+  gate-change record, an explicit **freeze criterion** on the F01/F03/F10 dev
+  subset, and anti-overfitting rules (no single-item tuning, one change per
+  version, record-don't-patch).
+- Rationale: a benchmark must measure task completion, not verbatim string
+  reproduction; exact-text gating destroyed leaderboard discriminative power and
+  drove the prompt churn.
+- Not yet done: re-score a `TB-GEN-v16` dev-subset batch under the relaxed gate
+  to decide whether to freeze v16 as the baseline. The appendix table in
+  `thesis/appendices/prompt_templates.tex` may need a note that the static gate is
+  structural-only once the freeze decision is made.
+
 ## 2026-06-04
 
 ### Provider model catalog for experiment keys
@@ -64,6 +102,35 @@ the user's "cite only if used" instruction.
 - Created [scripts/build_trial_leaderboard.py](D:/master_thesis/scripts/build_trial_leaderboard.py) and wrote [data/track_b/trial_leaderboard_2026-06-04.json](D:/master_thesis/data/track_b/trial_leaderboard_2026-06-04.json).
 - **Tentative** Overall weights (hyper-parameters, to be sensitivity-tested, NOT final): Technical 0.20, Visual 0.25, Accessibility 0.15, Dynamic 0.40. Efficiency kept as a Pareto axis, not in the composite (avoids double-counting cost).
 - Visual is still null (LB-JUDGE-v1 not run), so only a provisional Overall over the available quality categories (renormalized) is reported. Model-level provisional (excl. visual) for `qwen3.6-35b-a3b`: technical 1.00, accessibility 0.941, dynamic 0.847, provisional Overall 0.907. Technical currently uses gate pass/fail as a placeholder until coverage submetrics are computed.
+
+### Accessibility coverage breadth + human visual-review page
+
+- Enhanced [scripts/run_track_b_accessibility.js](D:/master_thesis/scripts/run_track_b_accessibility.js) to also record passed-rule list, incomplete rules, and inapplicable-rule count, and re-ran the 3 dev items. Finding: all violations are `color-contrast` (serious); 17--19 applicable rules pass per page and 43--45 are inapplicable (simple pages without forms/tables/frames). Interpretation: for this content type the Accessibility category is currently dominated by contrast and has low discriminative breadth; consider items with forms/tables to exercise more rules, or report it as a focused contrast/structure diagnostic.
+- Created [scripts/build_visual_human_review.py](D:/master_thesis/scripts/build_visual_human_review.py) → [data/track_b/visual_human_review/review.html](D:/master_thesis/data/track_b/visual_human_review/review.html): a self-contained page presenting each of the 19 standardized dev-subset screenshots with the same 16 binary checklist items, live per-page scoring, localStorage autosave, and JSON export in the LB-JUDGE-v1 shape for human-vs-LLM comparison.
+
+### First human-vs-LLM visual judge comparison (key finding)
+
+- Human review collected (18/19 pages answered; `04_gitlab_duo` left null): [data/track_b/visual_human_review/visual_human_review.json](D:/master_thesis/data/track_b/visual_human_review/visual_human_review.json). Human mean page score 0.889 with real spread (page scores 0.50--1.00).
+- Created [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py) (LB-JUDGE-v1 comparison variant, flat boolean answers + confidence) and ran it on all 19 screenshots via GWDG/SAIA free model `internvl3.5-30b-a3b`: [data/track_b/visual_human_review/llm_judge_internvl3.5-30b-a3b.json](D:/master_thesis/data/track_b/visual_human_review/llm_judge_internvl3.5-30b-a3b.json).
+- Created [scripts/compare_visual_human_llm.py](D:/master_thesis/scripts/compare_visual_human_llm.py) → [data/track_b/visual_human_review/human_vs_llm_comparison.json](D:/master_thesis/data/track_b/visual_human_review/human_vs_llm_comparison.json).
+- **Finding**: the free InternVL model answered `true` to all 16 items on all 19 pages (mean 1.000, zero variance, confidence 0.90--0.95) -- a degenerate yea-saying judge. Raw item agreement is 0.889 but this is a base-rate artifact (the human is also mostly-true); Pearson on page scores is undefined because the LLM has no variance, so it cannot discriminate good from weak pages and is unusable as a leaderboard scorer as-is. The LLM never marked false on exactly the discriminative items where the human did (O2 uncluttered, T3 line length, T2 text size, L2 alignment). This reproduces the WebDevJudge cautionary result and validates the human-correlation requirement.
+- Implications/next steps to try: stronger judge model (GPT-4o/Claude, needs paid key); prompt forcing a critical stance with required evidence for each `false`; few-shot calibration including failure examples; possibly comparative/forced-quota judging. Recorded as a reliability finding, not a separate research direction.
+
+### Cross-model + strict-prompt follow-up (visual judge)
+
+- Queried the live GWDG model list; only four vision-capable models exist (`internvl3.5-30b-a3b`, `qwen3-omni-30b-a3b-instruct`, `gemma-4-31b-it`, `medgemma-27b-it`); the email's Qwen2.5-VL-72B is no longer served.
+- **Base prompt, all three usable vision models give the identical degenerate output**: every page scored 1.000, zero variance (internvl, qwen3-omni, gemma). The yes-bias is robust across models, not a single-model fluke.
+- Added a `--variant strict` fault-finding prompt to [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py) and re-ran:
+  - `gemma-4-31b-it` strict: yes-bias broken -- now has real variance (LLM mean 0.879), but judgments do not track the human (item agreement 0.787, Pearson on page scores = -0.184 over 17 pages, i.e. ~0 / slightly negative). 1 page failed JSON parse.
+  - `internvl3.5-30b-a3b` strict: still all 1.000, ignores the strict instruction entirely.
+- **Conclusion (revised after few-shot)**: free GWDG vision models default to yes-bias; strict prompting removes the all-yes symptom (gemma) but alone gives uncorrelated noise; some models ignore it (internvl).
+
+### Ruling out non-model causes + few-shot calibration
+
+- Ruled out image-resolution confound: all standardized screenshots are 1440x900 (above-the-fold viewport), not giant downscaled full-page captures, so the judge sees the same images the human saw.
+- Added a `--fewshot` mode to [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py): prepends 3 curated human-labelled example screenshots (mix of weak/strong: F10 homepage 0.50, F01 contact 0.75, F01 academy 1.00) as image+gold-answer turns; those 3 pages are excluded from evaluation.
+- `gemma-4-31b-it` strict + few-shot (15 eval pages): **Pearson on page scores jumps from -0.184 to +0.565**; item agreement 0.871; LLM mean 0.912 vs human 0.917 (well-calibrated). So the failure was largely prompt/calibration, not raw capability: a free 31B model + strict prompt + 3 examples reaches moderate human alignment.
+- Net narrative for the reliability section: (1) yes-bias is the default across free vision models; (2) a strict fault-finding prompt is necessary but not sufficient; (3) few-shot calibration with human-labelled examples recovers moderate alignment (r=0.565, n=15, single rater) even on a free model. A paid judge and more/independent human labels are the path to stronger alignment.
 
 ### Thesis text provenance rule added
 
@@ -602,3 +669,19 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 - Confirmed no dangling `\ref` to deleted labels (`prompt-tb-gen-v6/7/8/12/13`).
 - Clean rebuild: `latexmk -pdf -interaction=nonstopmode -halt-on-error master_thesis.tex` → exit 0, no errors.
 - Backup: `archive/backup/prompt_templates_2026-05-28_before-appendix-prune.tex`.
+
+## 2026-06-05
+
+### Track B model capability table
+
+- Added [scripts/probe_model_capabilities.py](D:/master_thesis/scripts/probe_model_capabilities.py), a low-cost provider/model smoke-probe helper. Its default behavior lists provider models; optional `--chat-smoke` asks for `OK` only so high requested output caps can be tested without forcing long generation.
+- Added [data/track_b/model_capabilities/model_capability_table_2026-06-05.json](D:/master_thesis/data/track_b/model_capabilities/model_capability_table_2026-06-05.json) to separate published token limits, local observed metadata, and provider error messages for current Track B candidate models.
+- Ran a minimal GWDG smoke probe and saved [data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json](D:/master_thesis/data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json). It used one requested output token for `qwen3.6-35b-a3b` and `qwen3-omni-30b-a3b-instruct`, confirming both currently respond without spending a long generation budget.
+- Updated [notes/provider_model_catalog_2026-06-04.md](D:/master_thesis/notes/provider_model_catalog_2026-06-04.md) with the 2026-06-05 token-limit interpretation. Basis: local `generation_metadata.json` files, the F03 `qwen3-omni` 65,536-token rejection log, and published OpenAI/Anthropic/Gemini model-limit documentation. Remaining uncertainty: several GWDG-hosted model hard limits are not exposed by the endpoint and must be treated as observed lower bounds, not exact maxima.
+
+### Track B v16 compact input policy
+
+- Added `TB-GEN-v16` and compact input packing to [scripts/generate_track_b_ui.py](D:/master_thesis/scripts/generate_track_b_ui.py). The new policy keeps legacy input for old prompt ids, but `TB-GEN-v16` uses a deduplicated route/evidence workflow summary, exact-vs-semantic workflow target separation, ranked resource paths, and prototype image downscaling before API upload.
+- Added the full `TB-GEN-v16` template and metadata to [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex), marking it as a candidate rather than a frozen baseline.
+- Created [notes/track_b_v16_input_compression.md](D:/master_thesis/notes/track_b_v16_input_compression.md). Dry-run basis: F03 prompt text changed from 18,878 characters for `TB-GEN-v15` legacy input to 13,424 characters for `TB-GEN-v16` compact input; F03 prototype images will be downscaled from 6,632--8,000 px tall full-page screenshots to 3,000 px longest side for compact runs. Remaining uncertainty: compact input may still lose some multi-step workflow nuance and needs a real smoke run before use in leaderboard comparisons.
+- Ran F03 `TB-GEN-v16` compact smoke tests with two GWDG models. Both `qwen3.6-35b-a3b` and `qwen3-omni-30b-a3b-instruct` generated complete, non-truncated artifacts (`finish_reason=stop`) with about 16k prompt tokens, showing that compact input fixes the prior F03 qwen3-omni input-limit failure. After correcting the evaluator so `button or link related to GitLab Duo` is treated as a semantic target rather than a hard exact visible label, both artifacts pass the static gate with one semantic warning. Normalized browser workflow scores are: `qwen3.6-35b-a3b` 4/8, route 1.000, content 0.500; `qwen3-omni-30b-a3b-instruct` 3/8, route 0.750, content 0.500. Basis: `gate_report.json` and `browser_workflow_normalized_report.json` in the two generated F03 v16 run directories. Conclusion: create a new `TB-GEN-v17` if strengthening semantic route/evidence guarantees; do not silently edit v16.

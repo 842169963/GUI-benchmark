@@ -1,0 +1,215 @@
+{
+  "schema_version": "track-b-model-capability-table-v1",
+  "created_at": "2026-06-05T16:00:00+02:00",
+  "purpose": "Candidate model capability table for Track B GUI generation smoke tests and leaderboard demo planning.",
+  "important_notes": [
+    "For chat generation, context is a combined budget: input tokens plus output tokens plus hidden/provider overhead must fit the model/provider limit.",
+    "Do not treat unknown limits as unlimited. The generator may avoid an artificial low cap, but it still has to respect provider hard limits.",
+    "Provider /models endpoints checked in this project did not expose context or max-output metadata, so this table separates published documentation from local observations.",
+    "Large output-cap smoke probes should ask for a one-token answer. They test whether the request is accepted; they do not spend the full requested output cap."
+  ],
+  "performed_smoke_probes": [
+    {
+      "provider": "gwdg-openai",
+      "models": [
+        "qwen3.6-35b-a3b",
+        "qwen3-omni-30b-a3b-instruct"
+      ],
+      "requested_max_tokens": 1,
+      "output_path": "data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json",
+      "result": "Both models returned HTTP 200. The probe used 15+1 tokens for qwen3.6 and 13+1 tokens for qwen3-omni."
+    }
+  ],
+  "candidate_models": [
+    {
+      "provider": "gwdg-openai",
+      "model": "qwen3-omni-30b-a3b-instruct",
+      "endpoint_available": true,
+      "vision_input": "observed_supported",
+      "published_context_window_tokens": null,
+      "published_max_output_tokens": null,
+      "local_observed_total_context_limit_tokens": 65536,
+      "local_observed_max_output_request_tokens": 20000,
+      "local_observed_max_prompt_tokens": 39946,
+      "local_observed_max_completion_tokens": 20000,
+      "local_observed_failure": "F03 TB-GEN-v15 failed before generation because decoder prompt length 78813 exceeded maximum model length 65536.",
+      "track_b_recommendation": "Useful for small multimodal smoke tests such as F10. Risky for complex items unless prompt/input is compressed or output request is adjusted within the 65536 total budget.",
+      "sources": [
+        "data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json",
+        "data/track_b/v15_batch_runner.err.log",
+        "data/track_b/items/F10_gourmania/generated/gwdg_qwen3_omni_30b_v15_f10_smoke/generation_metadata.json",
+        "data/track_b/items/F06_community_dynamics/generated/gwdg_qwen3_omni_30b_v15_f06_smoke/generation_metadata.json",
+        "data/track_b/items/F09_elections_bc/generated/gwdg_qwen3_omni_30b_v15_f09_smoke/generation_metadata.json"
+      ]
+    },
+    {
+      "provider": "gwdg-openai",
+      "model": "qwen3.6-35b-a3b",
+      "endpoint_available": true,
+      "vision_input": "observed_supported",
+      "published_context_window_tokens": null,
+      "published_max_output_tokens": null,
+      "local_observed_total_context_limit_tokens": ">= 98246",
+      "local_observed_max_output_request_tokens": ">= 40000",
+      "local_observed_max_prompt_tokens": 83033,
+      "local_observed_max_completion_tokens": 15213,
+      "local_observed_failure": null,
+      "track_b_recommendation": "Best current GWDG candidate for larger Track B items because it accepted F03 prompts around 83k tokens and 40k requested output in prior runs.",
+      "sources": [
+        "data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json",
+        "data/track_b/items/F03_about_gitlab/generated/gwdg_qwen36_35b_v10_smoke_40k/generation_metadata.json",
+        "data/track_b/items/F03_about_gitlab/generated/gwdg_qwen36_35b_v12_smoke_40k_res60/generation_metadata.json",
+        "data/track_b/items/F06_community_dynamics/generated/gwdg_qwen36_35b_v9_smoke_40k/generation_metadata.json"
+      ]
+    },
+    {
+      "provider": "gwdg-openai",
+      "model": "internvl3.5-30b-a3b",
+      "endpoint_available": true,
+      "vision_input": "observed_supported",
+      "published_context_window_tokens": null,
+      "published_max_output_tokens": null,
+      "local_observed_total_context_limit_tokens": ">= 21859",
+      "local_observed_max_output_request_tokens": ">= 20000",
+      "local_observed_max_prompt_tokens": 19194,
+      "local_observed_max_completion_tokens": 2665,
+      "local_observed_failure": null,
+      "track_b_recommendation": "Can accept image-input Track B smoke prompts, but previous output quality was weak; keep as diagnostic multimodal comparison rather than main generator.",
+      "sources": [
+        "data/track_b/items/F10_gourmania/generated/gwdg_internvl35_30b_v9_smoke/generation_metadata.json"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "endpoint_available": true,
+      "vision_input": "observed_supported",
+      "published_context_window_tokens": 128000,
+      "published_max_output_tokens": 16384,
+      "local_observed_total_context_limit_tokens": ">= 214600 via configured proxy usage accounting",
+      "local_observed_max_output_request_tokens": ">= 20000 via configured proxy request",
+      "local_observed_max_prompt_tokens": 213249,
+      "local_observed_max_completion_tokens": 1351,
+      "local_observed_failure": null,
+      "track_b_recommendation": "Low-cost paid/proxy fallback. Official OpenAI limits are lower than this proxy usage accounting, so reported runs must record the configured provider/base URL.",
+      "sources": [
+        "https://platform.openai.com/docs/models/compare",
+        "data/track_b/items/F10_gourmania/generated/openai_gpt4omini_v9_f10_smoke/generation_metadata.json"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4o",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 128000,
+      "published_max_output_tokens": 16384,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Higher-quality OpenAI fallback than gpt-4o-mini, but more expensive; use only after prompt/gate validation.",
+      "sources": [
+        "https://platform.openai.com/docs/models/gpt-4o",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-4.1",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 1047576,
+      "published_max_output_tokens": 32768,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Strong candidate when F03-style input is too large for GWDG qwen3-omni; cost should be controlled with small item smoke tests first.",
+      "sources": [
+        "https://platform.openai.com/docs/models/compare",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-5-mini",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 400000,
+      "published_max_output_tokens": 128000,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Possible low-cost larger-output fallback, but the current generator uses chat-completions max_tokens; probe compatibility before Track B generation.",
+      "sources": [
+        "https://openai.com/gpt-5",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gpt-5.2",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 400000,
+      "published_max_output_tokens": 128000,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Likely strong but expensive. Do not use for broad smoke tests until cheaper models and prompt/gate are validated.",
+      "sources": [
+        "https://platform.openai.com/docs/models/compare",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
+    {
+      "provider": "chatanywhere-anthropic",
+      "model": "claude-sonnet-4-5-20250929",
+      "endpoint_available": true,
+      "vision_input": "observed_supported",
+      "published_context_window_tokens": 200000,
+      "published_max_output_tokens": 64000,
+      "local_observed_total_context_limit_tokens": ">= 20716",
+      "local_observed_max_output_request_tokens": ">= 20000",
+      "local_observed_max_prompt_tokens": 13937,
+      "local_observed_max_completion_tokens": 6779,
+      "track_b_recommendation": "Good quality candidate but proxy reliability/cost has been uneven; use for selected same-prompt comparison after GWDG validation.",
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "https://support.claude.com/en/articles/8606395-how-large-is-the-anthropic-api-s-context-window",
+        "data/track_b/items/F09_elections_bc/generated/claude_sonnet45_v8_smoke/generation_metadata.json"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gemini-2.5-flash",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 1048576,
+      "published_max_output_tokens": 65536,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Promising cheap large-context fallback through the OpenAI-compatible proxy, but needs compatibility probe because the project has no direct Gemini API key configured.",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/models/gemini-v2",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
+    {
+      "provider": "openai",
+      "model": "gemini-2.5-pro",
+      "endpoint_available": "listed_by_proxy",
+      "vision_input": "published_supported",
+      "published_context_window_tokens": 1048576,
+      "published_max_output_tokens": 65536,
+      "local_observed_total_context_limit_tokens": null,
+      "local_observed_max_output_request_tokens": null,
+      "track_b_recommendation": "Higher-quality Gemini fallback if flash is insufficient; probe and use sparingly due cost/latency.",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/models/gemini-v2",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    }
+  ],
+  "next_probe_command_examples": [
+    "py -3.12 scripts/probe_model_capabilities.py --provider gwdg-openai --model qwen3.6-35b-a3b --model qwen3-omni-30b-a3b-instruct --chat-smoke --output-cap 1",
+    "py -3.12 scripts/probe_model_capabilities.py --provider gwdg-openai --model qwen3.6-35b-a3b --chat-smoke --output-cap 40000",
+    "py -3.12 scripts/probe_model_capabilities.py --provider openai --model gemini-2.5-flash --chat-smoke --output-cap 1",
+    "py -3.12 scripts/probe_model_capabilities.py --provider chatanywhere-anthropic --model claude-sonnet-4-5-20250929 --chat-smoke --output-cap 1"
+  ]
+}

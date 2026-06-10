@@ -109,8 +109,9 @@ Track B generation prompts changed repeatedly during smoke testing. To keep
 the appendix focused on reproducibility rather than serving as a full prompt
 archive, this appendix reproduces in full the frozen baseline prompt that
 produces the reported Track B pilot and leaderboard artifacts,
-\texttt{TB-GEN-v9}, and the later F10 diagnostic prompts
-\texttt{TB-GEN-v14} and \texttt{TB-GEN-v15}. All earlier smoke-test variants
+\texttt{TB-GEN-v9}, the later F10 diagnostic prompts
+\texttt{TB-GEN-v14} and \texttt{TB-GEN-v15}, and the compact-input candidate
+\texttt{TB-GEN-v16}. All earlier smoke-test variants
 (\texttt{TB-GEN-v1} through \texttt{v8}, \texttt{v12}, and \texttt{v13}) were
 diagnostic iterations that did not contribute reported metrics; they are
 summarized in Table~\ref{tab:track-b-generation-prompt-history} and remain
@@ -138,6 +139,7 @@ interpret a specific pilot artifact.
 \texttt{TB-GEN-v13} & Required workflow-control navigation block & Replaces per-control examples with a complete navigation block to copy into the page header; both smoke attempts failed at the provider layer (HTTP 500) and produced no artifact. & Summarized only \\
 \texttt{TB-GEN-v14} & F10 visual-grounding diagnostic & Removes the strong compactness bias, requires local images, and uses per-control \texttt{required\_element} entries while clarifying that workflow context phrases are not necessarily clickable controls. & Full text below \\
 \texttt{TB-GEN-v15} & F10 control-contract diagnostic & Tightens v14 after F10 v14 failed: forbids non-contract \texttt{showPage()} routes and forbids replacing required control text with labels such as ``View Recipe''. & Full text below \\
+\texttt{TB-GEN-v16} & Compact-input candidate & Keeps v15's exact-control contract but uses a compact route/evidence workflow summary, separates semantic visual targets from exact visible text controls, adds bounded generation, and uses deterministic ranked resources plus prototype-image downscaling in the generator input policy. & Full text below \\
 \bottomrule
 \end{tabularx}
 \caption{Summary of Track B GUI generation prompt versions. Only the current
@@ -489,6 +491,132 @@ Workflow checks:
 {workflow}
 
 Available local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+\end{verbatim}
+\endgroup
+
+\subsection{TB-GEN-v16: Compact-Input Visual Workflow Candidate}
+\label{app:prompt-tb-gen-v16}
+
+\textbf{Purpose:} Candidate prompt introduced after the TB-GEN-v15 small-batch
+experiment showed that v15 could pass F10 but did not generalize to larger
+items because of context/output pressure, repeated workflow input, and exact
+text treatment of semantic visual actions such as logo clicks.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, GUI generation
+  \item \textbf{Prompt ID:} TB-GEN-v16
+  \item \textbf{Version change:} revises TB-GEN-v15 by using a compact
+  route/evidence workflow summary instead of the full workflow JSON, separating
+  exact visible-text controls from semantic/visual targets, adding bounded
+  generation limits, and pairing the prompt with deterministic input packing
+  (\texttt{compact\_route\_evidence\_v1}, ranked resource paths, and prototype
+  image downscaling for compact runs)
+  \item \textbf{Model intended for first smoke run:} \texttt{qwen3.6-35b-a3b}
+  via GWDG/SAIA OpenAI-compatible API
+  \item \textbf{Input modalities:} normalized requirement text, compact
+  workflow route/evidence summary, ranked local resource-path list, route
+  contract, and prototype screenshots
+  \item \textbf{Message structure:} system message plus one user message
+  containing text and prototype images
+  \item \textbf{Decoding parameters:} planned smoke-test default temperature =
+  0.2; max\_tokens chosen per model capability table rather than as a quality
+  score
+  \item \textbf{First implementation:} 2026-06-05, Europe/Berlin
+  \item \textbf{Source:} \texttt{scripts/generate\_track\_b\_ui.py}
+  \item \textbf{Result file:} not yet frozen; future smoke runs must record the
+  generated directory and \texttt{generation\_metadata.json}
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.
+Create a polished, working website implementation that can be opened directly from a local index.html file.
+
+User:
+Prompt ID: TB-GEN-v16
+
+Build a visually grounded, complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced exactly as ../../resources/<subpath> using paths from the resource list.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+- Never call showPage() with a route id that is not listed in window.__TRACK_B_ROUTES.
+- Secondary menu items that do not have a route in the route contract must be plain placeholders without onclick, without data-route-target, and without showPage().
+
+Visual-grounding requirements:
+- Use the prototype screenshots for layout, hierarchy, colors, spacing, and visible content priorities.
+- Use local image assets whenever they are available. Do not replace provided images with plain text boxes, CSS placeholders, icon-only blocks, or empty cards.
+- Use a bounded number of images: include at least one relevant local image on visual routes when assets exist, but avoid exhaustive galleries.
+- Product, recipe, article, service, and video card/list sections should use relevant <img> elements when matching or plausible local images exist.
+- Select images by filename and requirement context. If no exact image match is obvious, choose the closest local image from the listed assets rather than omitting imagery.
+- Reduce repeated prose before removing images, workflow controls, route sections, validation evidence, or JavaScript.
+
+Required exact workflow-control contract:
+- The controls below are machine-checkable exact-text requirements. For each item, create an <a> or <button> whose visible text exactly matches visible_text and whose route exactly matches route_id.
+- Copy each required_element line into the HTML output exactly once or adapt only the tag name from <a> to <button>. Keep the visible text, data-route-target, and onclick route unchanged.
+- The required clickable element's own visible text must be exactly visible_text. Do not use "View", "View Recipe", "Read more", "Open", icons, or longer phrases as the clickable text for required exact-text controls.
+- Do not implement workflow-required exact-text controls as <div>, <span>, <li>, image-only controls, or any other inert element, even if onclick is present.
+- Semantic/visual targets listed in the compact workflow summary, such as a logo click, must be clickable and route correctly, but do not render the descriptive phrase literally unless it is actual visible UI text.
+{workflow_controls}
+
+Bounded implementation guidance:
+- Build a recognizable desktop page, not a bare wireframe.
+- Prefer one shared header/navigation and one shared footer, with route-specific visual content.
+- For each route, include one clear heading, enough validation evidence text, and at most one compact table/list plus a small card grid when needed.
+- Use at most 4 cards per route, 4 rows per table, and 4 bullets per list unless a validation explicitly requires more.
+- Use semantic HTML, visible focus states, alt text for images, and accessible <a>/<button> controls.
+- Before returning the HTML, self-check these conditions:
+  1. Every exact required_element visible_text appears as visible text inside an <a> or <button>.
+  2. Every semantic/visual workflow target routes correctly without requiring its descriptive phrase as visible text.
+  3. Every showPage('...') route is present in window.__TRACK_B_ROUTES and has a matching section id.
+  4. Every route includes the evidence needed by the compact workflow validations.
+  5. The page uses local <img> assets when image assets were provided.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() { window.scrollTo(0, 0); }, 0);
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Compact workflow checks, deduplicated from workflow.json:
+{workflow}
+
+Relevant local resource paths:
 {resource_paths}
 
 Prototype screenshots are attached after this text in this order:

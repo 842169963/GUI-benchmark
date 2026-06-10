@@ -139,6 +139,7 @@ failures are content-validation failures.
 Follow-up file:
 
 - `notes/track_b_f10_prompt_v14_v15_experiment.md`
+- `notes/track_b_v15_small_batch_experiment.md`
 
 `TB-GEN-v14` and `TB-GEN-v15` were created for an F10-specific diagnostic after
 the same-prompt second-model smoke tests showed poor visual quality and repeated
@@ -153,6 +154,14 @@ This does not make the mixed-prompt `all` table a fair leaderboard. It shows
 that a stricter visual-grounded prompt and a corrected gate extraction rule can
 fix the F10 workflow-control failure. Fair model comparison still requires the
 same prompt and same item set.
+
+A later small-batch v15 test on `F01`, `F03`, `F06`, `F09`, and `F10` showed
+that v15 should not be frozen as the next general prompt. Only F10 was eligible.
+F01 routed correctly but missed destination-content evidence, F03 exceeded the
+qwen3-omni context limit, and F06/F09 were truncated at the output limit. The
+next prompt candidate should keep v15's exact control-contract improvements but
+restore bounded generation and distinguish exact text controls from semantic or
+image targets such as logo clicks.
 
 ## Next Improvements
 

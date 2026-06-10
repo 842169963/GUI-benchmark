@@ -1,0 +1,614 @@
+{
+  "run": "gwdg_qwen36_35b_v9_smoke",
+  "reviewer": "llm:internvl3.5-30b-a3b",
+  "pages": [
+    {
+      "item": "F01_1daycloud",
+      "page_id": "01_home",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "02_academy",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "03_clickapp",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "04_contact",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "05_digital_cards",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "06_services",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "07_company",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "01_homepage",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "02_company",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "03_customers",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.9
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "04_gitlab_duo",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "05_platform",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "06_pricing",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.9
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.9
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 0.95
+    }
+  ]
+}

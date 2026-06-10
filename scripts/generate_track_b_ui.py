@@ -613,6 +613,89 @@ Available local resource paths:
 Prototype screenshots are attached after this text in this order:
 {prototype_list}
 """,
+    "TB-GEN-v16": """\
+Prompt ID: TB-GEN-v16
+
+Build a visually grounded, complete single-file HTML implementation for the Track B GUI item below.
+
+Hard requirements:
+- Return exactly one complete HTML document ending with </html>.
+- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.
+- Local assets must be referenced exactly as ../../resources/<subpath> using paths from the resource list.
+- Implement every route in the route contract as a <section id="..." data-track-route>.
+- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.
+- Never call showPage() with a route id that is not listed in window.__TRACK_B_ROUTES.
+- Secondary menu items that do not have a route in the route contract must be plain placeholders without onclick, without data-route-target, and without showPage().
+
+Visual-grounding requirements:
+- Use the prototype screenshots for layout, hierarchy, colors, spacing, and visible content priorities.
+- Use local image assets whenever they are available. Do not replace provided images with plain text boxes, CSS placeholders, icon-only blocks, or empty cards.
+- Use a bounded number of images: include at least one relevant local image on visual routes when assets exist, but avoid exhaustive galleries.
+- Product, recipe, article, service, and video card/list sections should use relevant <img> elements when matching or plausible local images exist.
+- Select images by filename and requirement context. If no exact image match is obvious, choose the closest local image from the listed assets rather than omitting imagery.
+- Reduce repeated prose before removing images, workflow controls, route sections, validation evidence, or JavaScript.
+
+Required exact workflow-control contract:
+- The controls below are machine-checkable exact-text requirements. For each item, create an <a> or <button> whose visible text exactly matches visible_text and whose route exactly matches route_id.
+- Copy each required_element line into the HTML output exactly once or adapt only the tag name from <a> to <button>. Keep the visible text, data-route-target, and onclick route unchanged.
+- The required clickable element's own visible text must be exactly visible_text. Do not use "View", "View Recipe", "Read more", "Open", icons, or longer phrases as the clickable text for required exact-text controls.
+- Do not implement workflow-required exact-text controls as <div>, <span>, <li>, image-only controls, or any other inert element, even if onclick is present.
+- Semantic/visual targets listed in the compact workflow summary, such as a logo click, must be clickable and route correctly, but do not render the descriptive phrase literally unless it is actual visible UI text.
+{workflow_controls}
+
+Bounded implementation guidance:
+- Build a recognizable desktop page, not a bare wireframe.
+- Prefer one shared header/navigation and one shared footer, with route-specific visual content.
+- For each route, include one clear heading, enough validation evidence text, and at most one compact table/list plus a small card grid when needed.
+- Use at most 4 cards per route, 4 rows per table, and 4 bullets per list unless a validation explicitly requires more.
+- Use semantic HTML, visible focus states, alt text for images, and accessible <a>/<button> controls.
+- Before returning the HTML, self-check these conditions:
+  1. Every exact required_element visible_text appears as visible text inside an <a> or <button>.
+  2. Every semantic/visual workflow target routes correctly without requiring its descriptive phrase as visible text.
+  3. Every showPage('...') route is present in window.__TRACK_B_ROUTES and has a matching section id.
+  4. Every route includes the evidence needed by the compact workflow validations.
+  5. The page uses local <img> assets when image assets were provided.
+
+Route contract:
+{route_contract}
+
+Required JavaScript:
+<script>
+window.__TRACK_B_ROUTES = {route_ids_json};
+function showPage(routeId) {{
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {{
+    section.hidden = section.id !== routeId;
+  }});
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {{
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  }});
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() {{ window.scrollTo(0, 0); }}, 0);
+}}
+document.addEventListener('DOMContentLoaded', function() {{
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+}});
+</script>
+
+Item ID: {item_id}
+Source task: {source_task_name}
+Source level: {source_level}
+Use for dynamic validation: {use_for_dynamic}
+
+Normalized requirement:
+{requirement}
+
+Compact workflow checks, deduplicated from workflow.json:
+{workflow}
+
+Relevant local resource paths:
+{resource_paths}
+
+Prototype screenshots are attached after this text in this order:
+{prototype_list}
+""",
 }
 
 
@@ -654,6 +737,18 @@ def limited_text(value, limit):
     if len(value) <= limit:
         return value
     return value[:limit] + "\n\n[TRUNCATED FOR PROMPT]"
+
+
+def unique_preserve_order(values):
+    seen = set()
+    result = []
+    for value in values:
+        key = str(value).strip()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        result.append(key)
+    return result
 
 
 def collect_resource_paths(item_dir, limit):
@@ -732,7 +827,25 @@ def fuzzy_overlap(left_terms, right_terms):
 
 
 def best_route_for_control(label, action, context, route_ids, prototype_routes):
-    candidates = [route for route in route_ids if route not in {"home", "homepage", "index", "landing"}]
+    combined = " ".join([label, action, context]).lower()
+    normalized_label = label.strip().lower()
+    include_home = any(
+        hint in combined
+        for hint in [
+            "logo",
+            "return to home",
+            "return to homepage",
+            "back to home",
+            "back to homepage",
+            "navigates back",
+            "home page content",
+            "homepage with the main hero",
+        ]
+    ) or normalized_label in {"home", "homepage"}
+    if include_home:
+        candidates = route_ids
+    else:
+        candidates = [route for route in route_ids if route not in {"home", "homepage", "index", "landing"}]
     if not candidates:
         candidates = route_ids
     label_terms = set(text_terms(label))
@@ -745,6 +858,8 @@ def best_route_for_control(label, action, context, route_ids, prototype_routes):
         score = fuzzy_overlap(label_terms, terms) * 6
         score += fuzzy_overlap(action_terms, terms) * 4
         score += fuzzy_overlap(context_terms, terms)
+        if include_home and route in {"home", "homepage", "index", "landing"}:
+            score += 20
         if route in prototype_routes:
             score += 1
         if score > best_score:
@@ -755,6 +870,22 @@ def best_route_for_control(label, action, context, route_ids, prototype_routes):
         if only_route in route_ids:
             return only_route
     return best_route
+
+
+def workflow_target_kind(label, action):
+    lower_action = action.lower()
+    lower_label = label.lower()
+    if "logo" in lower_action or lower_label.startswith("logo ") or " logo " in lower_label:
+        return "semantic_visual"
+    if "button or link related to" in lower_action:
+        return "exact_text"
+    if re.search(r'"[^"]+"', action):
+        return "exact_text"
+    if re.search(r"named\s+\"", action, flags=re.IGNORECASE):
+        return "exact_text"
+    if re.search(r"related to [A-Za-z0-9 .&'/-]+", action, flags=re.IGNORECASE):
+        return "exact_text"
+    return "exact_text"
 
 
 def derive_workflow_controls(workflow, route_ids):
@@ -778,7 +909,12 @@ def derive_workflow_controls(workflow, route_ids):
                 if key in seen:
                     continue
                 seen.add(key)
-                controls.append({"visible_text": label, "route_id": route, "context": action})
+                controls.append({
+                    "visible_text": label,
+                    "route_id": route,
+                    "context": action,
+                    "target_kind": workflow_target_kind(label, action),
+                })
     return controls
 
 
@@ -826,11 +962,15 @@ def workflow_labels_text(labels):
     return "\n".join(f"- {label}" for label in labels)
 
 
-def workflow_controls_text(controls):
-    if not controls:
+def workflow_controls_text(controls, exact_only=False):
+    selected = [
+        control for control in controls
+        if not exact_only or control.get("target_kind", "exact_text") == "exact_text"
+    ]
+    if not selected:
         return "- No workflow controls were extracted."
     lines = []
-    for control in controls:
+    for control in selected:
         text = control["visible_text"]
         route = control["route_id"]
         lines.extend([
@@ -839,6 +979,127 @@ def workflow_controls_text(controls):
             f"  context: {control['context']}",
             f"  required_element: <a href=\"#{route}\" data-route-target=\"{route}\" onclick=\"showPage('{route}')\">{text}</a>",
         ])
+    return "\n".join(lines)
+
+
+def compact_resource_paths(resources, requirement, workflow_controls, route_ids, limit):
+    if not resources:
+        return []
+    requirement_terms = set(text_terms(requirement))
+    control_terms = set()
+    for control in workflow_controls:
+        control_terms.update(text_terms(control.get("visible_text", "")))
+        control_terms.update(text_terms(control.get("context", "")))
+    route_term_set = set()
+    for route_id in route_ids:
+        route_term_set.update(route_terms(route_id))
+    important_terms = requirement_terms | control_terms | route_term_set
+
+    image_exts = {".avif", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"}
+    preferred_name_terms = {
+        "banner", "brand", "card", "cover", "hero", "icon", "image", "img",
+        "logo", "photo", "thumbnail", "thumb", "video",
+    }
+    deprioritized_exts = {".otf", ".ttf", ".woff", ".woff2"}
+
+    ranked = []
+    for index, path in enumerate(resources):
+        path_obj = Path(path)
+        suffix = path_obj.suffix.lower()
+        name_terms = set(text_terms(path_obj.stem))
+        score = 0
+        if suffix in image_exts:
+            score += 20
+        if suffix in deprioritized_exts:
+            score -= 30
+        score += len(name_terms & important_terms) * 5
+        score += len(name_terms & preferred_name_terms) * 3
+        if "logo" in name_terms:
+            score += 5
+        ranked.append((-score, index, path))
+    ranked.sort()
+    return [path for _, _, path in ranked[:limit]]
+
+
+def resource_paths_text(resources, compact=False, omitted_count=0):
+    if not resources:
+        return "- No local resources were found."
+    lines = [f"- ../../resources/{path}" for path in resources]
+    if compact and omitted_count > 0:
+        lines.append(f"- [omitted {omitted_count} lower-priority resource paths from the prompt]")
+    return "\n".join(lines)
+
+
+def route_prototype_map(route_ids, prototypes):
+    return {
+        route_id: path.name
+        for route_id, path in zip(route_ids, prototypes)
+    }
+
+
+def compact_workflow_summary(workflow, route_ids, prototypes, workflow_controls):
+    prototype_by_route = route_prototype_map(route_ids, prototypes)
+    validations_by_route = {route_id: [] for route_id in route_ids}
+    actions_by_route = {route_id: [] for route_id in route_ids}
+    semantic_targets = []
+
+    controls_by_action = {control["context"]: control for control in workflow_controls}
+
+    for block in workflow:
+        block_routes = [
+            route for route in (block.get("prototype") or {}).keys()
+            if route in route_ids
+        ]
+        fallback_route = block_routes[0] if len(block_routes) == 1 else None
+        for case in block.get("content", []):
+            case_validations = [
+                validation for validation in case.get("validations", [])
+                if isinstance(validation, str)
+            ]
+            destination_route = None
+            for action in case.get("actions", []):
+                if not isinstance(action, str):
+                    continue
+                control = controls_by_action.get(action)
+                if control:
+                    destination_route = control["route_id"]
+                    actions_by_route[destination_route].append(action)
+                    if control.get("target_kind") != "exact_text":
+                        semantic_targets.append(
+                            f"{action} -> {destination_route} ({control.get('target_kind')})"
+                        )
+            if destination_route is None:
+                destination_route = fallback_route
+            if destination_route in validations_by_route:
+                validations_by_route[destination_route].extend(case_validations)
+
+    lines = [
+        "Use this compact summary as the workflow source of truth for route behavior and destination evidence.",
+        "Exact text click controls are listed in the workflow-control contract above.",
+    ]
+    if semantic_targets:
+        lines.append("Semantic/visual click targets:")
+        for target in unique_preserve_order(semantic_targets):
+            lines.append(f"- {target}")
+    else:
+        lines.append("Semantic/visual click targets: none.")
+
+    lines.append("Route validation evidence:")
+    for route_id in route_ids:
+        prototype_name = prototype_by_route.get(route_id, "unknown prototype")
+        lines.append(f"- route_id: {route_id} (prototype: {prototype_name})")
+        route_actions = unique_preserve_order(actions_by_route.get(route_id, []))
+        if route_actions:
+            lines.append("  triggered_by:")
+            for action in route_actions:
+                lines.append(f"  - {action}")
+        route_validations = unique_preserve_order(validations_by_route.get(route_id, []))
+        if route_validations:
+            lines.append("  required_visible_evidence:")
+            for validation in route_validations:
+                lines.append(f"  - {validation}")
+        else:
+            lines.append("  required_visible_evidence: route must exist and match its prototype/requirement.")
     return "\n".join(lines)
 
 
@@ -859,6 +1120,22 @@ def workflow_control_bar_text(controls):
     return "\n".join(lines)
 
 
+def effective_input_profile(args):
+    if args.input_profile != "auto":
+        return args.input_profile
+    if args.prompt_id == "TB-GEN-v16":
+        return "compact"
+    return "legacy"
+
+
+def effective_image_max_side(args):
+    if args.image_max_side is not None:
+        return args.image_max_side or None
+    if effective_input_profile(args) == "compact":
+        return 3000
+    return None
+
+
 def image_to_b64(path):
     return base64.b64encode(path.read_bytes()).decode("ascii")
 
@@ -868,24 +1145,92 @@ def image_media_type(path):
     return media_type or "image/png"
 
 
+def encoded_image(path, image_max_side=None):
+    if not image_max_side:
+        return image_media_type(path), image_to_b64(path)
+    try:
+        from io import BytesIO
+        from PIL import Image
+    except ImportError:
+        return image_media_type(path), image_to_b64(path)
+
+    with Image.open(path) as image:
+        width, height = image.size
+        max_dimension = max(width, height)
+        if max_dimension <= image_max_side:
+            return image_media_type(path), image_to_b64(path)
+        scale = image_max_side / max_dimension
+        new_size = (max(1, int(width * scale)), max(1, int(height * scale)))
+        resized = image.convert("RGB").resize(new_size, Image.Resampling.LANCZOS)
+        buffer = BytesIO()
+        resized.save(buffer, format="JPEG", quality=85, optimize=True)
+        return "image/jpeg", base64.b64encode(buffer.getvalue()).decode("ascii")
+
+
+def prototype_image_metadata(prototypes, image_max_side=None):
+    try:
+        from PIL import Image
+    except ImportError:
+        return [
+            {"path": path.name, "image_max_side": image_max_side, "original_size": None, "sent_size": None}
+            for path in prototypes
+        ]
+
+    metadata = []
+    for path in prototypes:
+        with Image.open(path) as image:
+            width, height = image.size
+        if image_max_side and max(width, height) > image_max_side:
+            scale = image_max_side / max(width, height)
+            sent_size = [max(1, int(width * scale)), max(1, int(height * scale))]
+        else:
+            sent_size = [width, height]
+        metadata.append({
+            "path": path.name,
+            "image_max_side": image_max_side,
+            "original_size": [width, height],
+            "sent_size": sent_size,
+        })
+    return metadata
+
+
 def build_prompt(item_dir, args):
     requirement = read_text(item_dir / "requirement.md")
     workflow_data = read_json(item_dir / "workflow.json")
-    workflow = json.dumps(workflow_data, indent=2, ensure_ascii=False)
     meta = read_json(item_dir / "source_meta.json")
-    resources = collect_resource_paths(item_dir, args.max_resources)
     prototypes = collect_prototypes(item_dir, args.max_prototypes)
     if not prototypes:
         raise SystemExit(f"ERROR: no prototype screenshots found under {item_dir / 'prototypes'}")
 
-    resource_text = "\n".join(f"- ../../resources/{path}" for path in resources)
-    if not resource_text:
-        resource_text = "- No local resources were found."
-
     prototype_text = "\n".join(f"- {path.name}" for path in prototypes)
     route_ids = [path.stem for path in prototypes]
     workflow_controls = derive_workflow_controls(workflow_data, route_ids)
-    workflow_control_text = workflow_controls_text(workflow_controls)
+    input_profile = effective_input_profile(args)
+    all_resources = collect_resource_paths(item_dir, args.max_resources)
+    if input_profile == "compact":
+        resources = compact_resource_paths(
+            all_resources,
+            requirement,
+            workflow_controls,
+            route_ids,
+            min(args.max_resources, args.compact_max_resources),
+        )
+        workflow = compact_workflow_summary(workflow_data, route_ids, prototypes, workflow_controls)
+        workflow_control_text = workflow_controls_text(workflow_controls, exact_only=True)
+        resource_text = resource_paths_text(
+            resources,
+            compact=True,
+            omitted_count=max(0, len(all_resources) - len(resources)),
+        )
+        workflow_text_format = "compact_route_evidence_v1"
+        resource_text_format = "ranked_compact_v1"
+    else:
+        resources = all_resources
+        workflow = json.dumps(workflow_data, indent=2, ensure_ascii=False)
+        workflow_control_text = workflow_controls_text(workflow_controls)
+        resource_text = resource_paths_text(resources)
+        workflow_text_format = "full_workflow_json"
+        resource_text_format = "full_sorted_paths"
     workflow_control_bar = workflow_control_bar_text(workflow_controls)
     workflow_labels = workflow_click_labels(workflow_data)
     workflow_label_text = workflow_labels_text(workflow_labels)
@@ -914,7 +1259,26 @@ def build_prompt(item_dir, args):
         workflow_control_bar=workflow_control_bar,
         workflow_labels=workflow_label_text,
     )
-    return user_prompt, prototypes, resources, meta, workflow_controls
+    prompt_input_metadata = {
+        "input_profile": input_profile,
+        "workflow_text_format": workflow_text_format,
+        "resource_text_format": resource_text_format,
+        "all_resource_count": len(all_resources),
+        "resource_paths_in_prompt_count": len(resources),
+        "omitted_resource_count": max(0, len(all_resources) - len(resources)),
+        "workflow_case_count": sum(len(block.get("content", [])) for block in workflow_data),
+        "workflow_prompt_characters": len(workflow),
+        "user_prompt_characters": len(user_prompt),
+        "exact_workflow_control_count": sum(
+            1 for control in workflow_controls
+            if control.get("target_kind", "exact_text") == "exact_text"
+        ),
+        "semantic_workflow_control_count": sum(
+            1 for control in workflow_controls
+            if control.get("target_kind", "exact_text") != "exact_text"
+        ),
+    }
+    return user_prompt, prototypes, resources, meta, workflow_controls, prompt_input_metadata
 
 
 def build_client(provider):
@@ -960,14 +1324,15 @@ def build_client(provider):
     raise SystemExit(f"ERROR: unsupported provider {provider!r}")
 
 
-def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature):
+def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     content = [{"type": "text", "text": user_prompt}]
     for path in prototypes:
+        media_type, image_data = encoded_image(path, image_max_side=image_max_side)
         content.append({"type": "text", "text": f"Prototype screenshot: {path.name}"})
         content.append({
             "type": "image_url",
             "image_url": {
-                "url": f"data:{image_media_type(path)};base64,{image_to_b64(path)}",
+                "url": f"data:{media_type};base64,{image_data}",
                 "detail": "high",
             },
         })
@@ -1013,28 +1378,29 @@ def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature):
     return str(content_text).strip(), meta
 
 
-def anthropic_content(user_prompt, prototypes):
+def anthropic_content(user_prompt, prototypes, image_max_side=None):
     content = [{"type": "text", "text": user_prompt}]
     for path in prototypes:
+        media_type, image_data = encoded_image(path, image_max_side=image_max_side)
         content.append({"type": "text", "text": f"Prototype screenshot: {path.name}"})
         content.append({
             "type": "image",
             "source": {
                 "type": "base64",
-                "media_type": image_media_type(path),
-                "data": image_to_b64(path),
+                "media_type": media_type,
+                "data": image_data,
             },
         })
     return content
 
 
-def ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature):
+def ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     response = client.messages.create(
         model=model,
         system=SYSTEM_PROMPT,
         max_tokens=max_tokens,
         temperature=temperature,
-        messages=[{"role": "user", "content": anthropic_content(user_prompt, prototypes)}],
+        messages=[{"role": "user", "content": anthropic_content(user_prompt, prototypes, image_max_side)}],
     )
     parts = [block.text for block in response.content if getattr(block, "type", None) == "text"]
     meta = {
@@ -1045,13 +1411,13 @@ def ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperatur
     return "".join(parts).strip(), meta
 
 
-def ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature):
+def ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     payload = {
         "model": model,
         "system": SYSTEM_PROMPT,
         "max_tokens": max_tokens,
         "temperature": temperature,
-        "messages": [{"role": "user", "content": anthropic_content(user_prompt, prototypes)}],
+        "messages": [{"role": "user", "content": anthropic_content(user_prompt, prototypes, image_max_side)}],
     }
     request = urllib.request.Request(
         client["endpoint"],
@@ -1087,14 +1453,15 @@ def ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_token
     return "".join(parts).strip(), meta
 
 
-def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperature):
+def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     content = [{"type": "text", "text": user_prompt}]
     for path in prototypes:
+        media_type, image_data = encoded_image(path, image_max_side=image_max_side)
         content.append({"type": "text", "text": f"Prototype screenshot: {path.name}"})
         content.append({
             "type": "image_url",
             "image_url": {
-                "url": f"data:{image_media_type(path)};base64,{image_to_b64(path)}",
+                "url": f"data:{media_type};base64,{image_data}",
             },
         })
 
@@ -1139,15 +1506,15 @@ def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperat
     return str(content_text).strip(), meta
 
 
-def ask_model(provider, client, model, user_prompt, prototypes, max_tokens, temperature):
+def ask_model(provider, client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     if provider == "openai":
-        return ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature)
+        return ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
     if provider == "anthropic":
-        return ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature)
+        return ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
     if provider == "chatanywhere-anthropic":
-        return ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature)
+        return ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
     if provider == "gwdg-openai":
-        return ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperature)
+        return ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
     raise ValueError(provider)
 
 
@@ -1184,9 +1551,22 @@ def main():
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--max-prototypes", type=int, default=6)
     parser.add_argument("--max-resources", type=int, default=120)
+    parser.add_argument("--compact-max-resources", type=int, default=60)
+    parser.add_argument(
+        "--image-max-side",
+        type=int,
+        default=None,
+        help="Resize attached prototype images to this max side before API upload. Default: 3000 for compact input, original for legacy. Use 0 to disable.",
+    )
     parser.add_argument("--requirement-char-limit", type=int, default=12000)
     parser.add_argument("--workflow-char-limit", type=int, default=14000)
     parser.add_argument("--prompt-id", choices=sorted(USER_PROMPT_TEMPLATES), default=DEFAULT_PROMPT_ID)
+    parser.add_argument(
+        "--input-profile",
+        choices=["auto", "legacy", "compact"],
+        default="auto",
+        help="Prompt input packing policy. auto uses compact input for TB-GEN-v16 and legacy input otherwise.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -1195,12 +1575,20 @@ def main():
     if not item_dir.exists():
         raise SystemExit(f"ERROR: item directory not found: {item_dir}")
 
-    user_prompt, prototypes, resources, source_meta, workflow_controls = build_prompt(item_dir, args)
+    (
+        user_prompt,
+        prototypes,
+        resources,
+        source_meta,
+        workflow_controls,
+        prompt_input_metadata,
+    ) = build_prompt(item_dir, args)
     if args.dry_run:
         print(user_prompt)
         print(f"\nAttached prototype files: {[path.name for path in prototypes]}")
         return
 
+    image_max_side = effective_image_max_side(args)
     client, base_url = build_client(args.provider)
     started = datetime.now().astimezone()
     started_time = time.time()
@@ -1212,6 +1600,7 @@ def main():
         prototypes,
         args.max_tokens,
         args.temperature,
+        image_max_side,
     )
     elapsed = time.time() - started_time
     html = extract_html(raw_response)
@@ -1236,8 +1625,10 @@ def main():
         "source_meta": source_meta,
         "system_prompt": SYSTEM_PROMPT,
         "user_prompt": user_prompt,
+        "prompt_input_metadata": prompt_input_metadata,
         "workflow_controls": workflow_controls,
         "prototype_files": [str(path.relative_to(item_dir).as_posix()) for path in prototypes],
+        "prototype_image_input": prototype_image_metadata(prototypes, image_max_side=image_max_side),
         "resource_paths_in_prompt": resources,
         "output_files": {
             "html": "index.html",

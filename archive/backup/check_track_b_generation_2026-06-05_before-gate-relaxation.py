@@ -131,52 +131,6 @@ def workflow_label_groups(workflow):
     }
 
 
-def normalize_label(value):
-    """Normalize a workflow label or clickable text for tolerant comparison.
-
-    Lowercases, collapses whitespace, and strips surrounding punctuation and
-    common affordance glyphs (arrows, bullets, separators). This lets the static
-    gate tolerate case, spacing, and decorative-suffix differences instead of
-    demanding exact visible-text reproduction.
-    """
-    value = re.sub(r"[\s ]+", " ", value.lower()).strip()
-    return value.strip(" \t\r\n.>→»›·|:-—–")
-
-
-def label_matches_clickable(label, clickables):
-    """Fuzzy-match a workflow label against clickable <a>/<button> texts.
-
-    Returns the attribute strings of clickables whose normalized text equals,
-    contains, or is contained by the normalized label. Containment is only used
-    when the shorter side has at least 3 characters, to avoid spurious matches
-    on very short tokens.
-    """
-    target = normalize_label(label)
-    if not target:
-        return []
-    matches = []
-    for text, attrs_list in clickables.items():
-        candidate = normalize_label(text)
-        if not candidate:
-            continue
-        if candidate == target:
-            matches.extend(attrs_list)
-        elif min(len(candidate), len(target)) >= 3 and (target in candidate or candidate in target):
-            matches.extend(attrs_list)
-    return matches
-
-
-def attrs_make_clickable(attrs):
-    lower = attrs.lower()
-    if "onclick" in lower:
-        return True
-    if "data-route-target" in lower:
-        return True
-    if "href" in lower and not re.search(r"href\s*=\s*['\"]#['\"]", lower):
-        return True
-    return False
-
-
 def clickable_texts(html):
     texts = {}
     for tag, attrs, body in re.findall(r"<(a|button)\b([^>]*)>(.*?)</\1>", html, flags=re.IGNORECASE | re.DOTALL):
@@ -220,7 +174,17 @@ def showpage_clickables(html):
 
 def has_working_clickable(label, clickables):
     entries = clickables.get(label.lower(), [])
-    return any(attrs_make_clickable(attrs) for attrs in entries)
+    if not entries:
+        return False
+    for attrs in entries:
+        lower = attrs.lower()
+        if "onclick" in lower:
+            return True
+        if "data-route-target" in lower:
+            return True
+        if "href" in lower and not re.search(r"href\s*=\s*['\"]#['\"]", lower):
+            return True
+    return False
 
 
 def add(checks, level, name, passed, detail):
@@ -298,24 +262,13 @@ def run_gate(item_dir, run_dir):
     add(checks, "warning", "local_image_sources_exist", not missing_image_srcs,
         f"Missing local <img> sources: {missing_image_srcs}.")
 
-    # Workflow-control labels are a soft signal, not a hard gate. The static gate
-    # cannot cheaply verify that a paraphrased or restructured control still
-    # routes correctly; that is the job of the dynamic browser workflow check.
-    # We therefore (a) use tolerant fuzzy matching and (b) report these as
-    # warnings, so the leaderboard's discriminative power comes from actual task
-    # completion rather than exact visible-text reproduction.
     clickables = clickable_texts(html)
-    label_match_map = {label: label_matches_clickable(label, clickables) for label in labels}
-    missing_labels = [label for label, hits in label_match_map.items() if not hits]
-    add(checks, "warning", "workflow_clickable_labels_present", not missing_labels,
-        f"Workflow click labels not found as <a> or <button> (fuzzy match): {missing_labels}. "
-        "Authoritative workflow-control validation is the dynamic browser workflow check.")
+    missing_labels = [label for label in labels if label.lower() not in clickables]
+    add(checks, "error", "workflow_clickable_labels_present", not missing_labels,
+        f"Workflow click labels not found as <a> or <button>: {missing_labels}.")
 
-    inert_labels = [
-        label for label, hits in label_match_map.items()
-        if hits and not any(attrs_make_clickable(attrs) for attrs in hits)
-    ]
-    add(checks, "warning", "workflow_clickables_not_inert", not inert_labels,
+    inert_labels = [label for label in labels if label.lower() in clickables and not has_working_clickable(label, clickables)]
+    add(checks, "error", "workflow_clickables_not_inert", not inert_labels,
         f"Workflow click labels found only as inert controls: {inert_labels}.")
 
     missing_semantic_labels = [label for label in semantic_labels if label.lower() not in clickables]

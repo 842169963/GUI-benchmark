@@ -107,6 +107,10 @@ function extractActionContext(action) {
   return contexts.filter(Boolean);
 }
 
+function isSemanticRelatedAction(action) {
+  return /related to [A-Za-z0-9 .&'/-]+/i.test(action);
+}
+
 function implementedRoutesFromHtml(html) {
   const routeSet = new Set();
   const routeArray = html.match(/__TRACK_B_ROUTES\s*=\s*(\[[^\]]+\])/);
@@ -198,6 +202,7 @@ async function clickByWorkflowLabel(page, action, label, timeoutMs) {
   const count = await candidates.count();
   const wanted = norm(label);
   const contexts = extractActionContext(action);
+  const semanticRelated = isSemanticRelatedAction(action);
   let best = null;
 
   for (let i = 0; i < count; i += 1) {
@@ -209,8 +214,13 @@ async function clickByWorkflowLabel(page, action, label, timeoutMs) {
     const target = cleanText(await candidate.getAttribute("data-route-target").catch(() => ""));
     const href = cleanText(await candidate.getAttribute("href").catch(() => ""));
     const labelText = cleanText(`${text} ${aria} ${title}`);
-    const haystack = norm(`${labelText} ${target}`);
+    const haystack = norm(`${labelText} ${target} ${href}`);
     const labelNorm = norm(labelText);
+    const containerText = await candidate.evaluate((element) => {
+      const container = element.closest("article, section, aside, nav, header, .card, .banner, .feature, .sidebar, .hero, li, div");
+      return container ? container.innerText || "" : "";
+    }).catch(() => "");
+    const containerNorm = norm(containerText);
     let score = 0;
     if (wanted === "logo") {
       score = haystack.includes("logo") || ["home", "homepage"].includes(norm(target)) ? 120 : 0;
@@ -218,22 +228,22 @@ async function clickByWorkflowLabel(page, action, label, timeoutMs) {
       score = 120;
     } else if (wanted && labelNorm.includes(wanted)) {
       score = 90;
+    } else if (semanticRelated && wanted && haystack.includes(wanted)) {
+      score = 110;
+    } else if (semanticRelated && wanted && containerNorm.includes(wanted)) {
+      score = 95;
     } else {
       for (const term of wanted.split(" ").filter((part) => part.length > 1)) {
         if (labelNorm.includes(term)) score += 10;
       }
     }
     if (score === 0) continue;
-    if (!labelNorm.includes(wanted) && score < 40) continue;
+    if (semanticRelated && score < 40) continue;
+    if (!semanticRelated && !labelNorm.includes(wanted) && score < 40) continue;
     if (contexts.length) {
-      const contextText = await candidate.evaluate((element) => {
-        const container = element.closest("article, section, aside, nav, header, .card, .banner, .feature, .sidebar, .hero, li, div");
-        return container ? container.innerText || "" : "";
-      }).catch(() => "");
-      const contextNorm = norm(contextText);
       for (const context of contexts) {
         const terms = norm(context).split(" ").filter((part) => part.length > 2);
-        const matchedTerms = terms.filter((term) => contextNorm.includes(term)).length;
+        const matchedTerms = terms.filter((term) => containerNorm.includes(term)).length;
         if (terms.length && matchedTerms / terms.length >= 0.5) score += 80;
       }
     }

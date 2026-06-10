@@ -121,3 +121,50 @@ ChatAnywhere pricing/model page.
   the run metadata records the variant and the provider caveat, because the
   docs describe them as cheaper third-party channels with potentially lower
   stability.
+
+## Token-limit capability note, 2026-06-05
+
+The provider model-list endpoints available to this project do not expose a
+complete per-model context-window or max-output table. For Track B generation,
+record token limits from three separate evidence classes:
+
+1. Published provider documentation, when available.
+2. Local observed generation metadata, including prompt/completion token counts.
+3. Local provider error messages, when a request is rejected before generation.
+
+Do not treat unknown limits as unlimited. The relevant generation constraint is
+the combined context budget: input tokens, multimodal/image tokens, output
+tokens, and provider-side overhead must fit the provider/model limit.
+
+The current local capability table is:
+
+- `data/track_b/model_capabilities/model_capability_table_2026-06-05.json`
+- `data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json`
+  records a 1-token GWDG smoke probe for `qwen3.6-35b-a3b` and
+  `qwen3-omni-30b-a3b-instruct`.
+
+The helper script for future low-cost checks is:
+
+- `scripts/probe_model_capabilities.py`
+
+The probe script defaults to low-cost behavior. Its chat smoke mode asks for
+`OK` only, so even a high requested `--output-cap` tests request acceptance
+without forcing long generation. That means it is appropriate for checking
+whether a provider accepts `max_tokens=40000`, but it does not prove that the
+model will produce a useful 40k-token HTML artifact.
+
+Current practical interpretation:
+
+- `gwdg-openai/qwen3-omni-30b-a3b-instruct` has a locally observed hard total
+  context limit of 65,536 tokens from the F03 `TB-GEN-v15` rejection. It is
+  usable for smaller multimodal items, but F03-style inputs must be compressed
+  or moved to another model.
+- `gwdg-openai/qwen3.6-35b-a3b` has locally accepted F03 prompts around 83k
+  prompt tokens and a 40k requested output cap. Its exact hard limit is still
+  unknown, but it is the strongest current GWDG candidate for larger Track B
+  smoke runs.
+- `openai/gpt-4o-mini`, `openai/gpt-4.1`, `openai/gpt-5-mini`,
+  `chatanywhere-anthropic/claude-sonnet-4-5-20250929`,
+  `openai/gemini-2.5-flash`, and `openai/gemini-2.5-pro` remain paid/proxy
+  fallback candidates. Reported runs must record the configured provider and
+  base URL because proxy behavior can differ from official provider limits.

@@ -1,12 +1,162 @@
 {
-  "generated_at": "2026-06-04T21:47:59.418436+00:00",
+  "generated_at": "2026-06-05T13:15:44.418574+00:00",
   "prompt_id_filter": "TB-GEN-v15",
   "direct_evaluation_target": "generated UI/Web app artifact",
   "leaderboard_ranking_target": "generator LLM/model configuration",
-  "artifact_count": 1,
+  "artifact_count": 4,
   "eligible_artifact_count": 1,
   "provider_failures": [],
   "artifacts": [
+    {
+      "item_id": "F01_1daycloud",
+      "run": "gwdg_qwen3_omni_30b_v15_f01_smoke",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v15",
+      "prompt_id": "TB-GEN-v15",
+      "artifact": {
+        "html": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v15_f01_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v15_f01_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.8461538461538461,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 1,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v15_f01_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.5,
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.5,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 0.5,
+        "case_count": 12,
+        "passed_case_count": 6,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v15_f01_smoke\\browser_workflow_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "pending_cost_reference",
+        "input_tokens": 32465,
+        "output_tokens": 12347,
+        "total_tokens": 44812,
+        "finish_reason": "stop",
+        "elapsed_seconds": 117.56,
+        "max_tokens_setting": 20000
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed"
+      ]
+    },
+    {
+      "item_id": "F06_community_dynamics",
+      "run": "gwdg_qwen3_omni_30b_v15_f06_smoke",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v15",
+      "prompt_id": "TB-GEN-v15",
+      "artifact": {
+        "html": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen3_omni_30b_v15_f06_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen3_omni_30b_v15_f06_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.5384615384615384,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 4,
+        "failed_warning_count": 2,
+        "report": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen3_omni_30b_v15_f06_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": null,
+        "evaluator": null,
+        "task_success_rate": null,
+        "route_success_rate": null,
+        "content_validation_success_rate": null,
+        "case_count": null,
+        "passed_case_count": null,
+        "report": null
+      },
+      "efficiency": {
+        "score": null,
+        "status": "pending_cost_reference",
+        "input_tokens": 29686,
+        "output_tokens": 20000,
+        "total_tokens": 49686,
+        "finish_reason": "length",
+        "elapsed_seconds": 179.11,
+        "max_tokens_setting": 20000
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed",
+        "generation_token_truncated",
+        "dynamic_report_missing"
+      ]
+    },
+    {
+      "item_id": "F09_elections_bc",
+      "run": "gwdg_qwen3_omni_30b_v15_f09_smoke",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v15",
+      "prompt_id": "TB-GEN-v15",
+      "artifact": {
+        "html": "data\\track_b\\items\\F09_elections_bc\\generated\\gwdg_qwen3_omni_30b_v15_f09_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F09_elections_bc\\generated\\gwdg_qwen3_omni_30b_v15_f09_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.5384615384615384,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 4,
+        "failed_warning_count": 2,
+        "report": "data\\track_b\\items\\F09_elections_bc\\generated\\gwdg_qwen3_omni_30b_v15_f09_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0,
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0,
+        "route_success_rate": 0,
+        "content_validation_success_rate": 0.5,
+        "case_count": 10,
+        "passed_case_count": 0,
+        "report": "data\\track_b\\items\\F09_elections_bc\\generated\\gwdg_qwen3_omni_30b_v15_f09_smoke\\browser_workflow_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "pending_cost_reference",
+        "input_tokens": 24808,
+        "output_tokens": 20000,
+        "total_tokens": 44808,
+        "finish_reason": "length",
+        "elapsed_seconds": 157.05,
+        "max_tokens_setting": 20000
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed",
+        "generation_token_truncated"
+      ]
+    },
     {
       "item_id": "F10_gourmania",
       "run": "gwdg_qwen3_omni_30b_v15_f10_smoke",

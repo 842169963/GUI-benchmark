@@ -1,5 +1,230 @@
 # Revision Log
 
+## 2026-06-11
+
+### Thesis manuscript synchronization pass after multi-agent experiment edits
+
+- Ran a focused sync pass because recent Track B files were edited across
+  Claude Code and Codex sessions while the thesis chapter files had not been
+  updated since 2026-06-04/05.
+- Updated [thesis/chapters/chapter3_methodology.tex](D:/master_thesis/thesis/chapters/chapter3_methodology.tex):
+  - added the current versioned-generation protocol around `TB-GEN-v16`
+    compact input packing, prompt-ID governance, and the OpenAI-compatible
+    `max_tokens` omission policy;
+  - replaced the outdated accessibility pass-ratio wording with the frozen
+    severity-weighted violation-density formula from
+    [notes/metric_specification.md](D:/master_thesis/notes/metric_specification.md);
+  - refined the failure taxonomy to separate provider failures, completion /
+    truncation failures, dynamic route failures, and dynamic content-validation
+    failures, based on
+    [notes/track_b_failure_taxonomy_and_decisions.md](D:/master_thesis/notes/track_b_failure_taxonomy_and_decisions.md);
+  - expanded the reliability-audit text to cover the 16-item human/LLM visual
+    checklist, Cohen's kappa, score degeneracy, strict/few-shot calibration,
+    jittered screenshots, weak-model artifacts, and the caveat that mild
+    perturbations are not a guaranteed error oracle, based on
+    [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md).
+- Updated [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex)
+  with thesis-impacting Track B visual prompt/protocol records:
+  `LB-JUDGE-v1-base`, `LB-JUDGE-v1-strict`,
+  `LB-JUDGE-v1-strict-fewshot`, and `HUMAN-VISUAL-v1`. Basis:
+  [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py)
+  and [scripts/build_visual_human_review.py](D:/master_thesis/scripts/build_visual_human_review.py).
+- Added [notes/thesis_sync_workflow.md](D:/master_thesis/notes/thesis_sync_workflow.md)
+  to define when to run future sync passes and how to decide whether recent
+  code/data/notes changes should be written to the manuscript, appendix, or
+  left in notes.
+- Remaining uncertainty: the production visual judge is still not stated as a
+  final frozen choice in the manuscript; current evidence favors
+  `gpt-4.1-mini` strict+fewshot, but the notes still record this as awaiting
+  user confirmation.
+- Validation: `pdflatex -interaction=nonstopmode -halt-on-error
+  master_thesis.tex` succeeded from `thesis/` and produced
+  `thesis/master_thesis.pdf`. LaTeX still reports existing overfull/underfull
+  box warnings in tables/verbatim prompt blocks.
+
+### Track B W-series static/responsive probe
+
+- Ran one Vision2Web Level 1 W-series item, `W03_eventbrite`, to check how the
+  current `TB-GEN-v16` pipeline behaves on static responsive webpage tasks
+  rather than F-series dynamic workflow tasks.
+- Command policy: `TB-GEN-v16`, compact input, GWDG `qwen3.6-35b-a3b`,
+  `--max-tokens none`. Run directory:
+  `data/track_b/items/W03_eventbrite/generated/gwdg_qwen36_35b_v16_w03_static_omit_maxtokens/`.
+- Result: generation stopped normally (`finish_reason=stop`) with 10,120 prompt
+  tokens, 16,525 completion tokens, 26,645 total tokens, and 206.35 seconds
+  latency. The static gate passed with zero errors and zero warnings.
+- Captured standardized screenshots with
+  `scripts/capture_track_b_standard_screenshots.js --full-page`; screenshot
+  coverage is 3/3 for the W03 desktop/tablet/mobile viewport routes. Manifest:
+  `data/track_b/items/W03_eventbrite/generated/gwdg_qwen36_35b_v16_w03_static_omit_maxtokens/standard_screenshots/manifest.json`.
+- Interpretation: W-series items exercise a different branch of Track B. They
+  are static/responsive visual-layout tasks (`use_for_dynamic=false`), so they
+  should feed static visual/responsive evaluation rather than route/content
+  dynamic workflow scoring. Do not merge W03 into the current F-series dynamic
+  leaderboard without separate metric treatment.
+
+### Judge test-retest instability found; freeze protocol gains 3-rep majority vote
+
+- Measured repeated-scoring consistency (user question: average multiple
+  judge runs?): 3 reps of gpt-4.1-mini strict+fewshot on the 16 original
+  pages at temperature=0. Result: 5/16 pages changed, max page-score swing
+  0.4375, 9% item flip rate; per-rep r vs human 0.602/0.627/0.503 — the API
+  is not deterministic at temperature=0 (MoE routing/batching).
+- Decision: the frozen judge protocol will require **3 repetitions +
+  item-level majority vote** (variance reduction, not bias correction; bias
+  is handled by strict+fewshot calibration; judge panels = future work).
+- Details in [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md);
+  rep files `llm_judge_gpt-4.1-mini_strict_fewshot_rep{1,2,3}.json`.
+- Also built shareable single-file review pages for the second rater
+  (`review_extended_rater2_embedded.html`, 13MB, base64-embedded screenshots;
+  `--rater`/`--embed` options added to
+  [scripts/build_visual_human_review.py](D:/master_thesis/scripts/build_visual_human_review.py)),
+  plus an original-vs-mild comparison page
+  ([scripts/build_jitter_comparison.py](D:/master_thesis/scripts/build_jitter_comparison.py))
+  and the three-cause decomposition of the mild result (JND / binary floor
+  effect / rater fatigue) with candidate citations.
+
+### Extended human review completed; full-range validation computed
+
+- User annotated all 56 extended pages (19 jitter-mild, 19 jitter-severe, 18
+  weak-model F10) via `review_extended.html` (quasi-blind, shuffled, per-page
+  All-Yes/All-No default-then-correct protocol). Export stored as
+  [data/track_b/visual_human_review/visual_human_review_extended.json](D:/master_thesis/data/track_b/visual_human_review/visual_human_review_extended.json).
+- Ran all three strict+fewshot judges on the three weak-model runs (new
+  `llm_judge_*_strict_fewshot_<weak_run>.json` files; example-page exclusion
+  drops 01_homepage, so 5 pages per weak run).
+- New [scripts/compute_extended_validation.py](D:/master_thesis/scripts/compute_extended_validation.py)
+  → `data/track_b/visual_jitter_validation/extended_validation_summary.json`.
+- **Findings** (details appended to
+  [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md)):
+  - Human refutes the mild ground truth (0/18 original>mild; mild mean 0.987)
+    → gemma/claude mild "inversions" were human-aligned, not failures.
+  - Severe ordering confirmed (15/18); weak pages span the low end (0.344).
+  - Full range (62 pages): gemma r=0.694/κ=0.294; gpt-4.1-mini r=0.615/
+    κ=0.360, best-calibrated mean, best weak-subset r=0.393; claude r=0.505.
+    Range-restriction hypothesis confirmed: r rose from ~0.5–0.6 to ~0.69, κ
+    from 0.07–0.17 to 0.29–0.36 once the quality range was unrestricted.
+  - Residual uniform-output degeneracy on out-of-distribution broken pages for
+    both minis (gemma all-0.6875, 4.1-mini all-0.125 on the qwen3-omni run).
+- Protocol caveat recorded: extended session used default-accept/-reject
+  buttons, original session per-item clicks; cross-session (original vs mild)
+  comparisons carry this confound.
+- Pending: final judge freeze decision (recommendation gpt-4.1-mini
+  strict+fewshot: best κ, best calibration, best on real weak pages — the
+  leaderboard-relevant subset; gemma best raw full-range r but lenient and
+  weakest on weak pages). After freeze: appendix prompts, leaderboard wiring,
+  Technical coverage submetrics.
+
+## 2026-06-10
+
+### Pre-freeze validation per literature standards (Claude capping test, kappa, extended human set)
+
+Context: literature check (Design2Code 5-annotator majority protocol;
+MLLM-as-UI-Judge multi-rater crowdsourcing, judges accurate only on large
+score gaps; LLM-judge surveys requiring chance-corrected agreement, κ>0.6)
+showed our validation was below field standards (1 rater, 15 pages, raw
+agreement only). Executed the agreed pre-freeze checklist:
+
+- Added **Cohen's κ** to [scripts/compare_visual_human_llm.py](D:/master_thesis/scripts/compare_visual_human_llm.py).
+  Result: raw item agreement ~0.85 collapses to κ=0.173 (gemma) / 0.067
+  (gpt-4.1-mini) on the range-restricted original set — the "high agreement"
+  was base-rate inflation; must not be reported as primary evidence.
+- **Claude capping test** (claude-sonnet-4-5 via ChatAnywhere, strict+fewshot,
+  prompt unchanged): on originals Pearson **-0.125** (κ -0.059) — real variance
+  and varied confidence, but flags *different* pages than the human. On jitter
+  pairs it is the most decisive severe discriminator (0.938, zero ties).
+  Cross-judge summary: ALL judges pass coarse discrimination (orig-vs-severe
+  ≈0.91–0.94); ALL fail subtle discrimination; gemma and claude *invert* on
+  mild. Trying more judges cannot resolve the freeze decision — more human
+  data is the only arbiter.
+- Captured standardized screenshots for three real weak-model F10 artifacts
+  (same TB-GEN-v9 prompt: qwen3-omni, internvl3.5, gpt-4o-mini).
+- Extended [scripts/build_visual_human_review.py](D:/master_thesis/scripts/build_visual_human_review.py)
+  with `--extended`: built `review_extended.html` (56 pages = 19 jitter-mild +
+  19 jitter-severe + 18 weak-model), **run names hidden + deterministic
+  shuffle (quasi-blind)**, separate localStorage key and export name.
+- Mild-jitter caveat strengthened: 2 of 3 judges scored mild-jittered pages
+  *higher* than originals — the "any jitter = worse" assumption may be partly
+  wrong for mild; the human extended review arbitrates.
+- **Next / blocking**: user annotates the 56-page extended set (priority:
+  jitter-mild), exports `visual_human_review_extended.json`; then recompute
+  full-range r and κ and make the judge freeze decision. Inter-rater κ
+  (second human rater) deferred to scale-up phase.
+
+### Paid-judge comparison (gpt-4o-mini, gpt-4.1-mini) vs free gemma
+
+- Edited [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py):
+  added a `--provider {gwdg,chatanywhere}` option (endpoint + key loading from
+  `.env`, fixed a UTF-8-BOM parsing issue). **Prompt wording unchanged** — no
+  new prompt version. Backup:
+  `archive/backup/run_visual_judge_2026-06-10_before-paid-provider.py`.
+- Ran the LB-JUDGE comparison harness on the same 19/16 dev screenshots:
+  - `gpt-4o-mini` base: all pages 1.000, zero variance — **the paid model has
+    the same yes-bias** as all four free GWDG vision models.
+  - `gpt-4o-mini` strict: all pages exactly 0.9375, zero variance — a **new
+    degenerate mode**: mechanically marks exactly one item false per page
+    ("token fault-finding"), superficially obeying the strict instruction while
+    still having no discriminative power.
+  - `gpt-4o-mini` strict+fewshot: real variance, Pearson **0.514**, item
+    agreement 0.838 (below free gemma's 0.565/0.871).
+  - `gpt-4.1-mini` strict+fewshot: Pearson **0.602**, item agreement 0.854,
+    mean 0.912 vs human 0.917 (well calibrated) — best so far, but within noise
+    of gemma at n=15.
+- Outputs: `data/track_b/visual_human_review/llm_judge_gpt-4o-mini*.json`,
+  `llm_judge_gpt-4.1-mini_strict_fewshot.json`, and per-condition
+  `human_vs_llm_comparison_*.json` copies (the unsuffixed comparison file now
+  holds the latest run; named copies disambiguate).
+- **Interpretation**: all three strict+fewshot judges cluster at r≈0.51–0.60,
+  so the alignment ceiling is the task/labels (single rater, n=15, ~90%-true
+  base rate), not model price tier. L4 (spacing consistency) is systematically
+  under-marked by every judge (gemma, 4o-mini, 4.1-mini) — an item-level
+  wording/standard issue, not a model issue.
+- Pending decision: freeze the production judge (free gemma strict+fewshot vs
+  paid gpt-4.1-mini). Once frozen, all LB-JUDGE prompt variants (base, strict,
+  fewshot) must go verbatim into
+  [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex)
+  because the three-condition comparison will be reported in the reliability
+  section.
+
+### Jitter validation: range-restriction hypothesis confirmed, judge preference flipped
+
+- User hypothesis: the r≈0.51–0.60 ceiling is **range restriction** (all dev
+  artifacts are good, human scores cluster 0.875–1.00), not judge incapacity.
+- Built a UIClip-style validation (details in
+  [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md)):
+  [scripts/jitter_track_b_pages.py](D:/master_thesis/scripts/jitter_track_b_pages.py)
+  injects deterministic CSS defects (JITTER-MILD-v1 / JITTER-SEVERE-v1) into the
+  dev-subset artifacts → constructed ground truth (original > mild > severe) →
+  same screenshot protocol → pairwise ranking accuracy via
+  [scripts/compute_jitter_pairwise.py](D:/master_thesis/scripts/compute_jitter_pairwise.py),
+  no new human labels needed.
+- Added `--run` option to [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py)
+  (prompt wording unchanged).
+- Results (16 pairs each): both judges hit **0.906 with zero inversions** on
+  original-vs-severe — the moderate r on originals is compressed variance, not
+  blindness. On original-vs-mild, gpt-4.1-mini mostly ties (insensitive), but
+  gemma **inverts** (scores mild-jittered pages higher than originals, 7/16) —
+  a validity failure on subtle differences.
+- **Judge freeze recommendation flipped to `gpt-4.1-mini` strict+fewshot**
+  (no inversion, proportional severity response 0.918/0.902/0.645, higher
+  human r=0.602); gemma stays as the documented free fallback. Decision
+  awaiting user confirmation.
+- Caveat recorded: the mild ground-truth assumption ("any jitter = worse") is
+  weak; orig-vs-severe is the headline evidence.
+
+### Accessibility normalization formula frozen
+
+- Backup: `archive/backup/metric_specification_2026-06-10_before-accessibility-formula-freeze.md`.
+- Edited [notes/metric_specification.md](D:/master_thesis/notes/metric_specification.md):
+  replaced the pass-ratio leaderboard formula (clustered 0.91–0.98, no
+  discriminative power) with severity-weighted violation density:
+  `1 - min(1, (1*minor + 2*moderate + 4*serious + 8*critical) / (pass_nodes + violation_nodes))`.
+  Weights 1/2/4/8 are a recorded convention (axe-core gives ordinal impact
+  only). All inputs already exist in `accessibility_report.json`, so historical
+  reports can be re-scored without re-running. Pass ratio demoted to a
+  diagnostic field. Formula frozen before formal batches, same discipline as
+  the generation-prompt freeze policy.
+
 ## 2026-06-05
 
 ### Track B static gate relaxed; prompt freeze policy added
@@ -685,3 +910,129 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 - Added the full `TB-GEN-v16` template and metadata to [thesis/appendices/prompt_templates.tex](D:/master_thesis/thesis/appendices/prompt_templates.tex), marking it as a candidate rather than a frozen baseline.
 - Created [notes/track_b_v16_input_compression.md](D:/master_thesis/notes/track_b_v16_input_compression.md). Dry-run basis: F03 prompt text changed from 18,878 characters for `TB-GEN-v15` legacy input to 13,424 characters for `TB-GEN-v16` compact input; F03 prototype images will be downscaled from 6,632--8,000 px tall full-page screenshots to 3,000 px longest side for compact runs. Remaining uncertainty: compact input may still lose some multi-step workflow nuance and needs a real smoke run before use in leaderboard comparisons.
 - Ran F03 `TB-GEN-v16` compact smoke tests with two GWDG models. Both `qwen3.6-35b-a3b` and `qwen3-omni-30b-a3b-instruct` generated complete, non-truncated artifacts (`finish_reason=stop`) with about 16k prompt tokens, showing that compact input fixes the prior F03 qwen3-omni input-limit failure. After correcting the evaluator so `button or link related to GitLab Duo` is treated as a semantic target rather than a hard exact visible label, both artifacts pass the static gate with one semantic warning. Normalized browser workflow scores are: `qwen3.6-35b-a3b` 4/8, route 1.000, content 0.500; `qwen3-omni-30b-a3b-instruct` 3/8, route 0.750, content 0.500. Basis: `gate_report.json` and `browser_workflow_normalized_report.json` in the two generated F03 v16 run directories. Conclusion: create a new `TB-GEN-v17` if strengthening semantic route/evidence guarantees; do not silently edit v16.
+
+## 2026-06-10
+
+### Track B v16 dev-subset freeze check
+
+- Ran the remaining `TB-GEN-v16` development-subset checks for
+  `F01_1daycloud` and `F10_gourmania` with two free GWDG/SAIA reference models:
+  `qwen3.6-35b-a3b` and `qwen3-omni-30b-a3b-instruct`. The existing F03 v16
+  compact smoke runs from 2026-06-05 were reused.
+- Added generated artifacts and reports under:
+  - `data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v16_f01_dev/`
+  - `data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v16_f10_dev/`
+  - `data/track_b/items/F01_1daycloud/generated/gwdg_qwen3_omni_30b_v16_f01_dev/`
+  - `data/track_b/items/F10_gourmania/generated/gwdg_qwen3_omni_30b_v16_f10_dev/`
+- Wrote normalized browser workflow reports for the new F01/F10 runs so they
+  are comparable with the existing F03 normalized reports.
+- Updated `notes/track_b_v16_input_compression.md` with the result table and
+  interpretation. Basis: each run's `generation_metadata.json`,
+  `gate_report.json`, and `browser_workflow_normalized_report.json`.
+- Result summary: `qwen3.6-35b-a3b` produced complete artifacts for F01/F03/F10
+  and passed the relaxed static gate on all three; normalized workflow scores
+  were 7/12, 4/8, and 6/8. `qwen3-omni-30b-a3b-instruct` passed F03 but hit
+  `finish_reason=length` for F01 and F10 at `max_tokens=20000`, so it does not
+  satisfy the current two-reference-model freeze criterion.
+- Remaining uncertainty: this does not yet prove that v16's prompt wording is
+  insufficient, because the qwen3-omni failures are capacity/truncation failures.
+  The next decision is whether to rerun qwen3-omni with a documented larger
+  output cap, or use a second reference model whose capacity is sufficient under
+  the fixed v16 compact input profile.
+
+### Track B max-token policy correction
+
+- Corrected `scripts/generate_track_b_ui.py` so OpenAI-compatible providers
+  (`openai`, `gwdg-openai`) can be called with `--max-tokens none` / `omit` /
+  `null`, which omits the `max_tokens` field from the request payload. Previous
+  behavior always sent the script default `max_tokens=20000` unless another
+  integer was supplied.
+- Kept Anthropic-compatible requests conservative: `anthropic` and
+  `chatanywhere-anthropic` still require an explicit integer `max_tokens`
+  setting because their API path expects one.
+- Updated `notes/track_b_v16_input_compression.md` to mark the 2026-06-10
+  qwen3-omni F01/F10 failures as 20k-capped sensitivity results, not as evidence
+  for an uncapped/no-`max_tokens` generation policy.
+- Basis: earlier notes and methodology already state that the evaluation should
+  avoid presenting a fixed truncating output-token cap as the final policy
+  (`notes/metric_specification.md`, `thesis/chapters/chapter3_methodology.tex`,
+  and `notes/thesis_outline.md`). Validation: `py -3 -m py_compile
+  scripts/generate_track_b_ui.py` and a `--max-tokens none --dry-run` command
+  both passed.
+
+### Track B qwen3-omni no-`max_tokens` rerun
+
+- Re-ran the qwen3-omni `TB-GEN-v16` F01/F10 dev-subset cases with
+  `--max-tokens none`, using new run names:
+  `gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens` and
+  `gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens`.
+- F01 still failed structurally with `finish_reason=length`, but completion
+  tokens increased from 20,000 to 41,740, confirming that the request no longer
+  used the script's 20k cap and that the remaining failure is provider/model
+  output behavior for this item.
+- F10 changed from capped `finish_reason=length` to `finish_reason=stop`,
+  passed the relaxed static gate with three warnings, and kept the same
+  normalized workflow score pattern (5/8, route 0.750, content 0.750).
+- Updated `notes/track_b_v16_input_compression.md` with the capped-vs-omitted
+  comparison table. Basis: each run's `generation_metadata.json`,
+  `gate_report.json`, and `browser_workflow_normalized_report.json`.
+- Conclusion: omit `max_tokens` for future OpenAI-compatible Track B generation
+  when accepted by the provider. `TB-GEN-v16` still does not meet the current
+  two-reference-model freeze criterion with qwen3-omni, because F01 remains
+  incomplete without a client-side output cap.
+
+### Track B failure taxonomy and convergence decision
+
+- Added `notes/track_b_failure_taxonomy_and_decisions.md` to consolidate the
+  repeated Track B debugging issues into benchmark categories and explicit
+  decisions.
+- Defined five failure categories: provider failure, completion/truncation
+  failure, static technical gate failure, dynamic route failure, and content
+  validation failure.
+- Recorded concrete cases already observed, including F03 qwen3-omni context
+  overflow, F09/F02 provider failures, F10 qwen3-omni cap sensitivity, and F01
+  qwen3-omni no-`max_tokens` truncation after 41,740 completion tokens.
+- Decision: stop prompt tuning for F01/qwen3-omni. Treat it as a model/provider
+  completion failure under the fixed v16 prompt rather than an unresolved prompt
+  bug.
+- Next engineering step: build a small failure-aware v16 dev-subset demo table
+  from existing F01/F03/F10 runs before doing more generation.
+
+### Track B v16 dev-subset pipeline demo
+
+- Added `scripts/build_track_b_dev_subset_demo.py`, a narrow aggregation script
+  for the supervisor-meeting demo. It does not run new generation or scoring; it
+  reads existing v16 F01/F03/F10 artifacts, gate reports, and normalized browser
+  workflow reports.
+- Generated:
+  - `data/track_b/leaderboard/dev_subset_v16_failure_demo.json`
+  - `data/track_b/leaderboard/dev_subset_v16_failure_demo.md`
+- Demo scope: `TB-GEN-v16`, compact input, items `F01_1daycloud`,
+  `F03_about_gitlab`, and `F10_gourmania`; model/config rows for
+  `qwen3.6-35b-a3b` and `qwen3-omni-30b-a3b-instruct`.
+- Demo result: `qwen3.6-35b-a3b` generated 3/3 artifacts, passed static gate
+  3/3, and has average route/content/task scores 1.000/0.611/0.611.
+  `qwen3-omni-30b-a3b-instruct` generated 3/3 artifacts, passed static gate
+  2/3, has one truncation failure, and has eligible-artifact average
+  route/content/task scores 0.750/0.625/0.500.
+- Updated `notes/track_b_failure_taxonomy_and_decisions.md` to mark the
+  failure-aware demo artifact as implemented. Validation: `py -3 -m py_compile
+  scripts/build_track_b_dev_subset_demo.py` and `py -3
+  scripts/build_track_b_dev_subset_demo.py` both succeeded.
+
+### Track B F06 v16 demo extension
+
+- Ran one additional normalized demo item, `F06_community_dynamics`, with
+  `TB-GEN-v16`, compact input, GWDG `qwen3.6-35b-a3b`, and `--max-tokens none`.
+  Run directory:
+  `data/track_b/items/F06_community_dynamics/generated/gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens/`.
+- Result: generation stopped normally (`finish_reason=stop`), with 28,901
+  prompt tokens, 28,353 completion tokens, and 213.87 seconds latency. The
+  relaxed static gate passed with zero errors and zero warnings.
+- Normalized browser workflow result: 4/10 cases, route success 1.000, content
+  validation 0.400, task success 0.400. Interpretation: this is an eligible
+  artifact with strong route behavior but weak destination-content evidence.
+- Updated `scripts/build_track_b_dev_subset_demo.py` and regenerated
+  `data/track_b/leaderboard/dev_subset_v16_failure_demo.json` and `.md` so the
+  meeting demo now covers four normalized items for `qwen3.6-35b-a3b`
+  (F01/F03/F06/F10) and three items for qwen3-omni (F01/F03/F10).

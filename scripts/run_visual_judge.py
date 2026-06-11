@@ -27,7 +27,13 @@ ITEMS = ROOT / "data" / "track_b" / "items"
 OUT_DIR = ROOT / "data" / "track_b" / "visual_human_review"
 RUN = "gwdg_qwen36_35b_v9_smoke"
 DEV_ITEMS = ["F01_1daycloud", "F03_about_gitlab", "F10_gourmania"]
-BASE_URL = "https://chat-ai.academiccloud.de/v1"
+
+PROVIDERS = {
+    "gwdg": {"key_env": "GWDG_API_KEY", "url_env": "GWDG_BASE_URL",
+             "default_url": "https://chat-ai.academiccloud.de/v1"},
+    "chatanywhere": {"key_env": "OPENAI_API_KEY", "url_env": "OPENAI_BASE_URL",
+                     "default_url": "https://api.chatanywhere.org/v1"},
+}
 
 ITEM_IDS = ["L1", "L2", "L3", "L4", "O1", "O2", "O3", "O4",
             "T1", "T2", "T3", "T4", "C1", "C2", "C3", "C4"]
@@ -89,22 +95,43 @@ DIM_MAP = {
 }
 
 
-def load_key():
+def load_dotenv():
+    """Read root .env into a dict without exporting (no secrets in process env)."""
+    env = {}
+    dotenv = ROOT / ".env"
+    if dotenv.exists():
+        for line in dotenv.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, _, v = line.partition("=")
+                env[k.strip()] = v.strip().strip('"').strip("'")
+    return env
+
+def load_provider(provider):
+    """Return (api_key, base_url) for the chosen provider."""
     import os
-    if os.environ.get("GWDG_API_KEY"):
-        return os.environ["GWDG_API_KEY"].strip()
-    keyfile = ROOT / "api key free gwdg.txt"
-    for line in keyfile.read_text(encoding="utf-8", errors="replace").splitlines():
-        m = re.search(r"API\s*Key\s*[:=]\s*([A-Za-z0-9._-]{20,})", line, re.I)
-        if m:
-            return m.group(1).strip()
-    raise SystemExit("No GWDG API key found (env GWDG_API_KEY or key file).")
+    cfg = PROVIDERS[provider]
+    env = load_dotenv()
+    key = os.environ.get(cfg["key_env"]) or env.get(cfg["key_env"])
+    base_url = (os.environ.get(cfg["url_env"]) or env.get(cfg["url_env"])
+                or cfg["default_url"]).rstrip("/")
+    if not key and provider == "gwdg":
+        keyfile = ROOT / "api key free gwdg.txt"
+        if keyfile.exists():
+            for line in keyfile.read_text(encoding="utf-8", errors="replace").splitlines():
+                m = re.search(r"API\s*Key\s*[:=]\s*([A-Za-z0-9._-]{20,})", line, re.I)
+                if m:
+                    key = m.group(1).strip()
+                    break
+    if not key:
+        raise SystemExit(f"No API key for provider {provider!r} ({cfg['key_env']} in env or .env).")
+    return key.strip(), base_url
 
 
-def collect_pages():
+def collect_pages(run=RUN):
     pages = []
     for item in DEV_ITEMS:
-        sdir = ITEMS / item / "generated" / RUN / "standard_screenshots"
+        sdir = ITEMS / item / "generated" / run / "standard_screenshots"
         for png in sorted(sdir.glob("*.png")):
             pages.append({"item": item, "page_id": png.stem, "path": png})
     return pages
@@ -135,7 +162,7 @@ def img_msg(text, png):
     ]}
 
 
-def call(key, model, png, system, user, fewshot_msgs=None):
+def call(key, base_url, model, png, system, user, fewshot_msgs=None):
     messages = [{"role": "system", "content": system}]
     if fewshot_msgs:
         messages.extend(fewshot_msgs)
@@ -147,7 +174,7 @@ def call(key, model, png, system, user, fewshot_msgs=None):
         "temperature": 0.0,
     }
     req = urllib.request.Request(
-        f"{BASE_URL}/chat/completions",
+        f"{base_url}/chat/completions",
         data=json.dumps(payload).encode("utf-8"),
         headers={"authorization": f"Bearer {key}", "content-type": "application/json"},
         method="POST",
@@ -160,6 +187,9 @@ def call(key, model, png, system, user, fewshot_msgs=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="internvl3.5-30b-a3b")
+    ap.add_argument("--run", default=RUN,
+                    help="run directory name under items/<item>/generated/ to judge")
+    ap.add_argument("--provider", choices=sorted(PROVIDERS), default="gwdg")
     ap.add_argument("--variant", choices=["base", "strict"], default="base")
     ap.add_argument("--fewshot", action="store_true",
                     help="prepend human-labelled example screenshots as calibration")
@@ -196,8 +226,8 @@ def main():
             fewshot_msgs.append({"role": "assistant", "content": json.dumps(gold)})
             example_keys.add(k)
 
-    key = load_key()
-    pages = collect_pages()
+    key, base_url = load_provider(args.provider)
+    pages = collect_pages(args.run)
     results = []
     for i, p in enumerate(pages, 1):
         key_pp = f"{p['item']}::{p['page_id']}"
@@ -205,7 +235,7 @@ def main():
             continue
         rec = {"item": p["item"], "page_id": p["page_id"]}
         try:
-            text = call(key, args.model, p["path"], system, user, fewshot_msgs)
+            text = call(key, base_url, args.model, p["path"], system, user, fewshot_msgs)
             ans, conf = parse_answers(text)
             dims = {dk: {it: ans[it] for it in ids} for dk, ids in DIM_MAP.items()}
             valid = [v for v in ans.values() if v is not None]
@@ -221,11 +251,14 @@ def main():
         results.append(rec)
         time.sleep(1.0)
 
-    out = {"run": RUN, "reviewer": f"llm:{args.model}:{args.variant}", "pages": results}
+    out = {"run": args.run, "reviewer": f"llm:{args.model}:{args.variant}", "pages": results}
     safe_model = re.sub(r"[^A-Za-z0-9._-]", "_", args.model)
     suffix = "" if args.variant == "base" else f"_{args.variant}"
     if args.fewshot:
         suffix += "_fewshot"
+    if args.run != RUN:
+        run_tag = re.sub(r"[^A-Za-z0-9._-]", "_", args.run.replace(RUN, "").strip("_"))
+        suffix += f"_{run_tag}"
     out_path = OUT_DIR / f"llm_judge_{safe_model}{suffix}.json"
     out_path.write_text(json.dumps(out, indent=2), encoding="utf-8")
     ok = sum(1 for r in results if r["page_score"] is not None)

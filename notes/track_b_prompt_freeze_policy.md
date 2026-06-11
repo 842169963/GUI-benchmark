@@ -16,8 +16,11 @@ note fixes the governance so the prompt can stop moving.
 Track B failures fall into three classes with different fixes:
 
 1. **Capacity / truncation** (F03 context overflow; F06/F09 `finish_reason=length`).
-   Fix via input budget (compact input profile) + per-model `max_tokens` from the
-   model-capability table. **Never change prompt wording to fix truncation.**
+   Fix via input budget (compact input profile) and provider-specific output-budget
+   policy. For OpenAI-compatible providers, prefer omitting `max_tokens` when the
+   provider accepts it; if a provider requires a cap, use a documented setting
+   high enough for complete outputs where feasible. **Never change prompt wording
+   to fix truncation.**
 2. **Instruction-following floor** (a weak model ignores or paraphrases a
    control). This is a *model* property and is a legitimate leaderboard result,
    not a prompt bug.

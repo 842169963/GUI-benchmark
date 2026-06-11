@@ -1,0 +1,107 @@
+{
+  "human": "visual_human_review.json",
+  "llm": "llm_judge_gpt-4o-mini.json",
+  "pages_compared": 18,
+  "item_agreement": 0.8889,
+  "human_mean_page_score": 0.8889,
+  "llm_mean_page_score": 1.0,
+  "pearson_page_score": null,
+  "per_item": {
+    "L1": {
+      "match": 16,
+      "n": 18,
+      "human_true": 16,
+      "llm_true": 18
+    },
+    "L2": {
+      "match": 15,
+      "n": 18,
+      "human_true": 15,
+      "llm_true": 18
+    },
+    "L3": {
+      "match": 16,
+      "n": 18,
+      "human_true": 16,
+      "llm_true": 18
+    },
+    "L4": {
+      "match": 16,
+      "n": 18,
+      "human_true": 16,
+      "llm_true": 18
+    },
+    "O1": {
+      "match": 17,
+      "n": 18,
+      "human_true": 17,
+      "llm_true": 18
+    },
+    "O2": {
+      "match": 14,
+      "n": 18,
+      "human_true": 14,
+      "llm_true": 18
+    },
+    "O3": {
+      "match": 16,
+      "n": 18,
+      "human_true": 16,
+      "llm_true": 18
+    },
+    "O4": {
+      "match": 18,
+      "n": 18,
+      "human_true": 18,
+      "llm_true": 18
+    },
+    "T1": {
+      "match": 17,
+      "n": 18,
+      "human_true": 17,
+      "llm_true": 18
+    },
+    "T2": {
+      "match": 15,
+      "n": 18,
+      "human_true": 15,
+      "llm_true": 18
+    },
+    "T3": {
+      "match": 14,
+      "n": 18,
+      "human_true": 14,
+      "llm_true": 18
+    },
+    "T4": {
+      "match": 15,
+      "n": 18,
+      "human_true": 15,
+      "llm_true": 18
+    },
+    "C1": {
+      "match": 16,
+      "n": 18,
+      "human_true": 16,
+      "llm_true": 18
+    },
+    "C2": {
+      "match": 15,
+      "n": 18,
+      "human_true": 15,
+      "llm_true": 18
+    },
+    "C3": {
+      "match": 18,
+      "n": 18,
+      "human_true": 18,
+      "llm_true": 18
+    },
+    "C4": {
+      "match": 18,
+      "n": 18,
+      "human_true": 18,
+      "llm_true": 18
+    }
+  }
+}

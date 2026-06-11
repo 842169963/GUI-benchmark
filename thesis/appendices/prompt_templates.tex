@@ -624,6 +624,194 @@ Prototype screenshots are attached after this text in this order:
 \end{verbatim}
 \endgroup
 
+\section{Track B Static-Visual Judge and Human Review Prompts}
+\label{app:track-b-visual-judge-prompts}
+
+\subsection{LB-JUDGE-v1: Base Static-Visual Checklist Prompt}
+\label{app:prompt-lb-judge-v1-base}
+
+\textbf{Purpose:} Static visual scoring for standardized Track~B page
+screenshots. The prompt asks a multimodal LLM to answer the same 16 binary
+checklist items used by the human review interface, returning machine-readable
+JSON.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, static visual judging
+  \item \textbf{Prompt ID:} LB-JUDGE-v1-base
+  \item \textbf{Models used in development comparisons:} \texttt{internvl3.5-30b-a3b},
+  \texttt{qwen3-omni-30b-a3b-instruct}, \texttt{gemma-4-31b-it},
+  \texttt{gpt-4o-mini}, and \texttt{gpt-4.1-mini}, depending on provider
+  availability
+  \item \textbf{Input modalities:} one standardized PNG screenshot plus text
+  checklist
+  \item \textbf{Message structure:} system message plus one user message with
+  text and image
+  \item \textbf{Decoding parameters:} temperature = 0.0, max\_tokens = 800
+  \item \textbf{Source:} \texttt{scripts/run\_visual\_judge.py}
+  \item \textbf{Result files:}
+  \texttt{data/track\_b/visual\_human\_review/llm\_judge\_*.json} and
+  \texttt{human\_vs\_llm\_comparison*.json}
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a careful visual UI reviewer. You see ONE screenshot of ONE page of
+a web interface. Judge ONLY what is visible. Do not guess about interactivity
+or pages you cannot see. Answer each checklist item strictly true or false.
+Return ONLY valid JSON, no prose.
+
+User:
+Answer every checklist item for this screenshot (true = page satisfies it).
+
+Layout & Visual Hierarchy
+ L1: There is a clear primary element or focal point.
+ L2: Elements are free of overlap or obvious misalignment.
+ L3: Alignment follows a consistent grid/structure.
+ L4: Spacing and padding are consistent across the page.
+Information Organization & Clarity
+ O1: Related content is grouped into clear sections.
+ O2: The page is uncluttered, not visually overwhelming.
+ O3: Sections are labelled or easy to tell apart.
+ O4: The main purpose/content is clear at a glance.
+Typography & Readability
+ T1: Clear text hierarchy (headings vs body distinguishable).
+ T2: Body text is a comfortably readable size.
+ T3: Line length / text width is reasonable.
+ T4: Font usage is consistent (no clashing typefaces).
+Visual Consistency
+ C1: Buttons and controls share a consistent style.
+ C2: Colour palette is coherent (no clashing colours).
+ C3: Navigation / header styling is consistent.
+ C4: Repeated components look uniform.
+
+Return JSON exactly:
+{"answers": {"L1": true, "L2": true, "L3": true, "L4": true,
+ "O1": true, "O2": true, "O3": true, "O4": true,
+ "T1": true, "T2": true, "T3": true, "T4": true,
+ "C1": true, "C2": true, "C3": true, "C4": true}, "confidence": 0.0}
+\end{verbatim}
+\endgroup
+
+\subsection{LB-JUDGE-v1: Strict Variant}
+\label{app:prompt-lb-judge-v1-strict}
+
+\textbf{Purpose:} Bias-reduction variant introduced after base prompts across
+several vision models produced all-true or near-all-true outputs. The checklist
+items are identical to LB-JUDGE-v1-base; only the system instruction and the
+lead-in before the JSON schema change.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, static visual judging
+  \item \textbf{Prompt ID:} LB-JUDGE-v1-strict
+  \item \textbf{Version change:} adds fault-finding instruction and changes
+  ``Return JSON exactly'' to ``Look for problems first. Return JSON exactly''
+  \item \textbf{Source:} \texttt{scripts/run\_visual\_judge.py}
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+You are a STRICT, critical visual UI reviewer evaluating an AI-generated web
+page. Most AI-generated pages contain at least some real visual flaws
+(inconsistent spacing, weak contrast, misalignment, cramped or oversized
+text, clashing colours, uneven components). Your job is to FIND those flaws,
+not to approve. Mark an item true ONLY if the criterion is clearly and fully
+satisfied with no visible issue. If there is ANY visible problem, or you are
+not clearly confident, mark it false. A page that is true on every item is
+rare; before answering, identify the single worst visual problem on the page
+and make sure the relevant item is false. Return ONLY valid JSON, no prose.
+
+User:
+Same 16-item checklist as LB-JUDGE-v1-base, with this lead-in before the
+schema:
+
+Look for problems first. Return JSON exactly:
+\end{verbatim}
+\endgroup
+
+\subsection{LB-JUDGE-v1: Strict Few-Shot Variant}
+\label{app:prompt-lb-judge-v1-strict-fewshot}
+
+\textbf{Purpose:} Calibration variant for static visual scoring. It uses the
+strict system and user prompts above, then prepends three human-labelled
+example screenshots before the scored screenshot. The example pages are
+excluded from evaluation when computing human-vs-LLM agreement.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, static visual judging with calibration
+  examples
+  \item \textbf{Prompt ID:} LB-JUDGE-v1-strict-fewshot
+  \item \textbf{Example pages:} \texttt{F10\_gourmania::01\_homepage}
+  (human page score 0.50), \texttt{F01\_1daycloud::04\_contact}
+  (0.75), and \texttt{F01\_1daycloud::02\_academy} (1.00)
+  \item \textbf{Message structure:} strict system message; for each example,
+  one user image+checklist message followed by one assistant JSON answer; then
+  the scored user image+checklist message
+  \item \textbf{Source:} \texttt{scripts/run\_visual\_judge.py}
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+System:
+Use the LB-JUDGE-v1-strict system message.
+
+Few-shot messages:
+For each calibration page, send the same LB-JUDGE-v1-strict user checklist
+with the example screenshot, followed by an assistant message:
+
+{"answers": {"L1": <human label>, ..., "C4": <human label>},
+ "confidence": 1.0}
+
+Scored message:
+Send the same LB-JUDGE-v1-strict user checklist with the target screenshot.
+\end{verbatim}
+\endgroup
+
+\subsection{HUMAN-VISUAL-v1: Human Review Checklist}
+\label{app:prompt-human-visual-v1}
+
+\textbf{Purpose:} Human annotation protocol for validating the static visual
+checklist against LLM judges. The self-contained review page shows one
+standardized screenshot at a time and asks the rater to answer the same
+16 binary checklist items as LB-JUDGE-v1.
+
+\textbf{Metadata:}
+\begin{itemize}
+  \item \textbf{Track / task:} Track B, human static-visual annotation
+  \item \textbf{Prompt ID:} HUMAN-VISUAL-v1
+  \item \textbf{Interface source:} \texttt{scripts/build\_visual\_human\_review.py}
+  \item \textbf{Original export:}
+  \texttt{data/track\_b/visual\_human\_review/visual\_human\_review.json}
+  \item \textbf{Extended export:}
+  \texttt{data/track\_b/visual\_human\_review/visual\_human\_review\_extended.json}
+  \item \textbf{Extended setting:} deterministic shuffled order, run names
+  hidden from the page, separate localStorage key and export name
+\end{itemize}
+
+\begingroup
+\scriptsize
+\begin{verbatim}
+Static-Visual Human Review
+
+For each screenshot, answer the same 16 checklist items:
+L1-L4 Layout & Visual Hierarchy
+O1-O4 Information Organization & Clarity
+T1-T4 Typography & Readability
+C1-C4 Visual Consistency
+
+Each item is answered Yes or No. The interface also provides All Yes and
+All No buttons for a page; the rater can then correct individual items before
+exporting JSON.
+\end{verbatim}
+\endgroup
+
 \section{Prompt Slots for Later Experiments}
 \label{app:future-prompt-slots}
 

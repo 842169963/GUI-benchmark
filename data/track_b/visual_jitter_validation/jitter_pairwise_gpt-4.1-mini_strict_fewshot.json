@@ -1,0 +1,56 @@
+{
+  "model": "gpt-4.1-mini",
+  "judge_config": "strict_fewshot",
+  "ground_truth": "original > mild > severe (constructed via JITTER-*-v1 CSS injection)",
+  "mean_scores": {
+    "original": 0.918,
+    "mild": 0.9023,
+    "severe": 0.6445
+  },
+  "pairs": {
+    "original_vs_mild": {
+      "n_pairs": 16,
+      "accuracy": 0.5,
+      "wrong_pairs": [
+        "F10_gourmania::03_culinary_solutions",
+        "F10_gourmania::06_videos"
+      ],
+      "tied_pairs": [
+        "F01_1daycloud::01_home",
+        "F01_1daycloud::03_clickapp",
+        "F01_1daycloud::05_digital_cards",
+        "F01_1daycloud::06_services",
+        "F01_1daycloud::07_company",
+        "F03_about_gitlab::01_homepage",
+        "F03_about_gitlab::02_company",
+        "F03_about_gitlab::03_customers",
+        "F03_about_gitlab::04_gitlab_duo",
+        "F03_about_gitlab::05_platform",
+        "F03_about_gitlab::06_pricing",
+        "F10_gourmania::05_tips"
+      ]
+    },
+    "original_vs_severe": {
+      "n_pairs": 16,
+      "accuracy": 0.9062,
+      "wrong_pairs": [],
+      "tied_pairs": [
+        "F03_about_gitlab::02_company",
+        "F03_about_gitlab::03_customers",
+        "F03_about_gitlab::04_gitlab_duo"
+      ]
+    },
+    "mild_vs_severe": {
+      "n_pairs": 16,
+      "accuracy": 0.875,
+      "wrong_pairs": [],
+      "tied_pairs": [
+        "F03_about_gitlab::02_company",
+        "F03_about_gitlab::03_customers",
+        "F03_about_gitlab::04_gitlab_duo",
+        "F10_gourmania::02_cookbooks"
+      ]
+    }
+  },
+  "overall_pairwise_accuracy": 0.7604
+}

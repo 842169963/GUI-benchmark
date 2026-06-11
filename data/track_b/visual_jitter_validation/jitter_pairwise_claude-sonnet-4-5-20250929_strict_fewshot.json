@@ -1,0 +1,52 @@
+{
+  "model": "claude-sonnet-4-5-20250929",
+  "judge_config": "strict_fewshot",
+  "ground_truth": "original > mild > severe (constructed via JITTER-*-v1 CSS injection)",
+  "mean_scores": {
+    "original": 0.8789,
+    "mild": 0.9492,
+    "severe": 0.6797
+  },
+  "pairs": {
+    "original_vs_mild": {
+      "n_pairs": 16,
+      "accuracy": 0.3125,
+      "wrong_pairs": [
+        "F01_1daycloud::05_digital_cards",
+        "F01_1daycloud::07_company",
+        "F03_about_gitlab::04_gitlab_duo",
+        "F10_gourmania::02_cookbooks",
+        "F10_gourmania::03_culinary_solutions",
+        "F10_gourmania::04_recipe_detail",
+        "F10_gourmania::05_tips"
+      ],
+      "tied_pairs": [
+        "F01_1daycloud::01_home",
+        "F01_1daycloud::03_clickapp",
+        "F01_1daycloud::06_services",
+        "F03_about_gitlab::01_homepage",
+        "F03_about_gitlab::02_company",
+        "F03_about_gitlab::03_customers",
+        "F03_about_gitlab::05_platform",
+        "F03_about_gitlab::06_pricing"
+      ]
+    },
+    "original_vs_severe": {
+      "n_pairs": 16,
+      "accuracy": 0.9375,
+      "wrong_pairs": [
+        "F10_gourmania::02_cookbooks"
+      ],
+      "tied_pairs": []
+    },
+    "mild_vs_severe": {
+      "n_pairs": 16,
+      "accuracy": 0.9375,
+      "wrong_pairs": [
+        "F10_gourmania::02_cookbooks"
+      ],
+      "tied_pairs": []
+    }
+  },
+  "overall_pairwise_accuracy": 0.7292
+}

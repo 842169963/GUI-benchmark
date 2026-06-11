@@ -1,0 +1,191 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<title>原版 vs mild-jitter 对照（19 页）</title>
+<style>
+ body{font-family:system-ui,Arial,sans-serif;margin:0;background:#f4f5f7;color:#222}
+ header{background:#1f2937;color:#fff;padding:14px 20px}
+ header ul{margin:8px 0 0;color:#d1d5db;font-size:14px}
+ .card{margin:16px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:14px}
+ .card h3{margin:2px 0 10px;font-size:15px}
+ .pair{display:flex;gap:12px}
+ figure{flex:1;margin:0;border:1px solid #e5e7eb;border-radius:8px;overflow:auto;max-height:75vh}
+ figcaption{position:sticky;top:0;background:#f9fafb;padding:6px 10px;font-size:13px;font-weight:600;border-bottom:1px solid #e5e7eb}
+ img{width:100%;display:block}
+</style></head><body>
+<header><strong>原版 vs JITTER-MILD-v1 对照</strong>（共 19 页）
+<div style="margin-top:6px;font-size:14px">注入的 4 类扰动（每页相同，确定性 CSS）：</div>
+<ul><li><b>Section 间距不均</b>：奇数 section 上下 padding 压到 6px/2px，偶数 section 撑到 56px/64px —— 垂直节奏被打乱（对应检查项 L4）</li><li><b>标题错位</b>：所有 h2 右移 14px、h3 左移 9px —— 与栅格不再对齐（对应 L2/L3）</li><li><b>标题字号异常</b>：所有 h2 强制 15px，常小于正文 —— 层级感被破坏（对应 T1）</li><li><b>正文对比度降低</b>：所有段落文字改为 #8a8a8a 浅灰 —— 可读性下降（对应 T2）</li></ul>
+<div style="font-size:13px;color:#9ca3af">观察建议：盯 h2 标题（是否偏小、右移）、段落文字颜色（是否发灰）、相邻 section 的留白是否一密一疏。</div>
+</header>
+
+<div class="card">
+ <h3>F01_1daycloud · 01_home <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/01_home.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/01_home.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 02_academy <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/02_academy.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/02_academy.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 03_clickapp <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/03_clickapp.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/03_clickapp.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 04_contact <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.750</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/04_contact.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/04_contact.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 05_digital_cards <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/05_digital_cards.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/05_digital_cards.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 06_services <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.875</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/06_services.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 0.875</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/06_services.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F01_1daycloud · 07_company <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/07_company.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/07_company.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 01_homepage <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.875</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/01_homepage.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/01_homepage.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 02_company <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/02_company.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/02_company.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 03_customers <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/03_customers.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/03_customers.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 04_gitlab_duo</h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 未标注</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/04_gitlab_duo.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/04_gitlab_duo.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 05_platform <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/05_platform.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/05_platform.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F03_about_gitlab · 06_pricing <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/06_pricing.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F03_about_gitlab/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/06_pricing.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 01_homepage <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.500</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/01_homepage.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/01_homepage.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 02_cookbooks <span style="color:#6b7280">（持平）</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/02_cookbooks.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/02_cookbooks.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 03_culinary_solutions <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.812</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/03_culinary_solutions.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/03_culinary_solutions.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 04_recipe_detail <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.938</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/04_recipe_detail.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/04_recipe_detail.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 05_tips <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.688</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/05_tips.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/05_tips.png"></figure>
+ </div>
+</div>
+<div class="card">
+ <h3>F10_gourmania · 06_videos <span style="color:#dc2626">← mild 被打得更高</span></h3>
+ <div class="pair">
+  <figure><figcaption>原版 — 你的评分: 0.875</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/standard_screenshots/06_videos.png"></figure>
+  <figure><figcaption>JITTER-MILD-v1 — 你的评分: 1.000</figcaption>
+   <img loading="lazy" src="../items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke_jitter_mild/standard_screenshots/06_videos.png"></figure>
+ </div>
+</div>
+</body></html>

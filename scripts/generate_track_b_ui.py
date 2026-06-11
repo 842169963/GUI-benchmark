@@ -1324,6 +1324,11 @@ def build_client(provider):
     raise SystemExit(f"ERROR: unsupported provider {provider!r}")
 
 
+def add_optional_max_tokens(payload, max_tokens):
+    if max_tokens is not None:
+        payload["max_tokens"] = max_tokens
+
+
 def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     content = [{"type": "text", "text": user_prompt}]
     for path in prototypes:
@@ -1343,9 +1348,9 @@ def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, 
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": content},
         ],
-        "max_tokens": max_tokens,
         "temperature": temperature,
     }
+    add_optional_max_tokens(payload, max_tokens)
     request = urllib.request.Request(
         client["endpoint"],
         data=json.dumps(payload).encode("utf-8"),
@@ -1395,6 +1400,8 @@ def anthropic_content(user_prompt, prototypes, image_max_side=None):
 
 
 def ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
+    if max_tokens is None:
+        raise ValueError("Anthropic requests require max_tokens; use an explicit integer cap.")
     response = client.messages.create(
         model=model,
         system=SYSTEM_PROMPT,
@@ -1412,6 +1419,8 @@ def ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperatur
 
 
 def ask_chatanywhere_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
+    if max_tokens is None:
+        raise ValueError("Anthropic-compatible requests require max_tokens; use an explicit integer cap.")
     payload = {
         "model": model,
         "system": SYSTEM_PROMPT,
@@ -1471,9 +1480,9 @@ def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperat
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": content},
         ],
-        "max_tokens": max_tokens,
         "temperature": temperature,
     }
+    add_optional_max_tokens(payload, max_tokens)
     request = urllib.request.Request(
         client["endpoint"],
         data=json.dumps(payload).encode("utf-8"),
@@ -1518,6 +1527,19 @@ def ask_model(provider, client, model, user_prompt, prototypes, max_tokens, temp
     raise ValueError(provider)
 
 
+def parse_max_tokens(value):
+    normalized = str(value).strip().lower()
+    if normalized in {"none", "omit", "omitted", "null"}:
+        return None
+    try:
+        parsed = int(normalized)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("max tokens must be an integer or one of: none, omit, null") from exc
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("max tokens must be positive, or use 'none' to omit the field")
+    return parsed
+
+
 def extract_html(raw):
     match = re.search(r"```(?:html)?\s*(.*?)```", raw, flags=re.IGNORECASE | re.DOTALL)
     if match:
@@ -1547,7 +1569,12 @@ def main():
                         default="chatanywhere-anthropic")
     parser.add_argument("--model", default="claude-sonnet-4-5-20250929")
     parser.add_argument("--run-name", help="Optional output directory name under generated/.")
-    parser.add_argument("--max-tokens", type=int, default=20000)
+    parser.add_argument(
+        "--max-tokens",
+        type=parse_max_tokens,
+        default=20000,
+        help="Maximum output tokens. Use 'none'/'omit' to omit max_tokens for OpenAI-compatible providers.",
+    )
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--max-prototypes", type=int, default=6)
     parser.add_argument("--max-resources", type=int, default=120)

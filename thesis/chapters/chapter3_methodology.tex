@@ -194,6 +194,24 @@ set high enough to allow complete outputs where feasible. Actual input tokens,
 output tokens, total tokens, finish reason, cost, and latency are recorded as
 efficiency and reproducibility data.
 
+The current Track~B generation protocol uses versioned prompt identifiers and
+keeps prompt wording separate from input-packing policy. The compact-input
+candidate, \texttt{TB-GEN-v16}, reduces repeated workflow context by passing a
+deduplicated route/evidence summary, separates exact visible-text controls from
+semantic visual targets, ranks local resource paths, and downscales prototype
+images for compact runs. The purpose is to reduce context and output pressure
+without silently changing the task. Prompt variants are not edited in place:
+material changes create a new prompt identifier, and failures are separated
+into capacity, provider, model instruction-following, gate, and dynamic
+validation causes before deciding whether a prompt revision is justified.
+
+For OpenAI-compatible providers, the pipeline may omit \texttt{max\_tokens}
+when the provider accepts that request, rather than imposing the script's
+default cap. If a run still stops with a length-related finish reason after the
+client cap is omitted, the failure is treated as provider or model completion
+behavior under the fixed prompt, not as automatic evidence that the prompt must
+be changed.
+
 Prompts that affect thesis results, metric computation, benchmark protocol,
 human annotation, output schemas, or reproducibility are versioned and preserved
 according to the prompt preservation policy.
@@ -283,8 +301,26 @@ and immune to judge bias, while still contributing to the leaderboard under the
 automated technical and accessibility category. Tool-checkable items include
 color contrast on the actual CSS colors, image alternative text, form-control
 labels, accessible button and link names, sensible heading order, declared
-document language, correct \mbox{ARIA} usage, and landmark regions. The score is
-the fraction of passed applicable rule checks, normalized to $[0,1]$.
+document language, correct \mbox{ARIA} usage, and landmark regions.
+
+The leaderboard accessibility score uses severity-weighted violation density
+rather than the raw pass ratio, because the pass ratio clustered too tightly in
+the development subset to discriminate artifacts. The frozen formula is:
+
+\begin{verbatim}
+weighted_violations =
+  1 * minor + 2 * moderate + 4 * serious + 8 * critical
+
+Accessibility Score =
+  1 - min(1, weighted_violations / (pass_nodes + violation_nodes))
+\end{verbatim}
+
+The weights are a recorded convention over \texttt{axe-core}'s ordinal impact
+levels. The raw pass ratio remains a diagnostic field, but it does not enter
+the leaderboard score. Because many simple content pages trigger only a narrow
+set of applicable accessibility rules, especially colour contrast, the scale-up
+item set should include forms, tables, and richer document structure where
+possible.
 
 \subsection{Dynamic Score}
 
@@ -372,16 +408,23 @@ failure taxonomy should be reused so that only the executor changes.
 Failures are recorded so that leaderboard scores remain interpretable:
 
 \begin{itemize}
-  \item \textbf{Generation failure}: no artifact, provider timeout, invalid
-  response, or truncated unusable output.
+  \item \textbf{Provider failure}: no artifact because the provider times out,
+  rejects the request, returns an HTTP/API error, or otherwise fails before a
+  usable completion is produced.
+  \item \textbf{Completion or truncation failure}: the model returns an
+  incomplete or unusable artifact, including length-related finish reasons or
+  unclosed document, style, or script blocks.
   \item \textbf{Render failure}: artifact exists but cannot be rendered into
   visible content.
   \item \textbf{Static technical failure}: required structure, route, element,
-  text, selector, or basic accessibility evidence is missing.
+  text, selector, handler, or route declaration evidence is missing.
   \item \textbf{Static visual failure}: standardized screenshot shows severe
   visual defects such as overlap, unreadable text, or unusable layout.
-  \item \textbf{Dynamic failure}: required task, route, form, button, or state
-  change fails under the dynamic validation protocol.
+  \item \textbf{Dynamic route failure}: required clicks or actions do not reach
+  the expected route or state.
+  \item \textbf{Dynamic content-validation failure}: the expected route or state
+  is reached, but the visible destination content does not satisfy the
+  validation evidence.
   \item \textbf{Evaluator/tool failure}: scoring or validation tool fails for
   reasons unrelated to the generated artifact.
 \end{itemize}
@@ -400,6 +443,26 @@ The audit may include repeated scoring consistency, order-swapped pairwise
 comparisons where pairwise scoring is used, rating-scale sensitivity if
 feasible, judge model variance, and invalid or refusal rate. Audit results are
 reported as scoring reliability evidence and threats to validity.
+
+For the static visual checklist, the reliability audit uses the same
+16-item binary rubric for human annotation and LLM judging. The audit records
+raw item agreement, page-score correlation, chance-corrected agreement such as
+Cohen's \(\kappa\), invalid or unparsable outputs, and score degeneracy such as
+all-true or near-constant responses. A strict judge prompt and few-shot
+calibration examples may be compared against a base prompt, but this comparison
+audits the measurement instrument; it does not make judge-model ranking the
+main thesis objective.
+
+The development validation also includes deliberately degraded screenshot
+variants to test whether visual judges can separate large quality gaps when the
+original artifact set is range-restricted. Mild perturbations are treated as a
+sensitivity check rather than as a guaranteed error oracle, because human
+review showed that small layout or spacing changes can be perceived as neutral
+or even better. Severe perturbations and weak-model artifacts provide the main
+low-quality evidence for full-range validation. Any final production-judge
+choice is therefore based on calibrated agreement, page-score correlation,
+behavior on weak artifacts, and documented failure modes, not on raw agreement
+alone.
 
 \section{Research Question -- Method Map}
 \label{sec:rq-map}

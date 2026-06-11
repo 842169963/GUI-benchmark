@@ -42,6 +42,7 @@ def main():
     total = matches = 0
     per_item = {k: {"match": 0, "n": 0, "human_true": 0, "llm_true": 0} for k in ITEM_IDS}
     human_scores, llm_scores = [], []
+    all_pairs = []
     pages_compared = 0
 
     for key in sorted(human):
@@ -60,6 +61,7 @@ def main():
             per_item[k]["n"] += 1
             per_item[k]["human_true"] += int(h[k])
             per_item[k]["llm_true"] += int(l[k])
+            all_pairs.append((h[k], l[k]))
             if h[k] == l[k]:
                 per_item[k]["match"] += 1
                 matches += 1
@@ -67,6 +69,19 @@ def main():
 
     def mean(xs):
         return sum(xs) / len(xs) if xs else float("nan")
+
+    def cohen_kappa(pairs):
+        """pairs: list of (human_bool, llm_bool). Chance-corrected agreement."""
+        n = len(pairs)
+        if not n:
+            return None
+        po = sum(1 for h, l in pairs if h == l) / n
+        ph = sum(1 for h, _ in pairs if h) / n
+        pl = sum(1 for _, l in pairs if l) / n
+        pe = ph * pl + (1 - ph) * (1 - pl)
+        if pe == 1.0:
+            return None  # both raters constant; kappa undefined
+        return (po - pe) / (1 - pe)
 
     def pearson(a, b):
         n = len(a)
@@ -82,6 +97,8 @@ def main():
 
     print(f"Pages compared: {pages_compared}")
     print(f"Item-level agreement: {matches}/{total} = {matches/total:.3f}")
+    kappa = cohen_kappa(all_pairs)
+    print(f"Cohen's kappa (item-level): {'undefined' if kappa is None else f'{kappa:.3f}'}")
     print(f"Human mean page score: {mean(human_scores):.3f}")
     print(f"LLM   mean page score: {mean(llm_scores):.3f}")
     r = pearson(human_scores, llm_scores)
@@ -98,6 +115,7 @@ def main():
         "llm": pathlib.Path(args.llm).name,
         "pages_compared": pages_compared,
         "item_agreement": round(matches / total, 4) if total else None,
+        "cohen_kappa_item_level": round(kappa, 4) if kappa is not None else None,
         "human_mean_page_score": round(mean(human_scores), 4),
         "llm_mean_page_score": round(mean(llm_scores), 4),
         "pearson_page_score": None if r != r else round(r, 4),

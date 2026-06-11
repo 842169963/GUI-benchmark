@@ -197,12 +197,39 @@ Why contrast is not LLM-judged: the formula needs the exact foreground and
 background luminance, which the tool reads from the DOM/CSS. An LLM can only
 estimate colors from a screenshot, so giving it the formula does not help.
 
+### Normalization decision (frozen 2026-06-10)
+
+The pass-ratio formula (`pass_nodes / (pass_nodes + violation_nodes)`) was
+piloted first but clusters all artifacts in 0.91–0.98 on the dev subset, giving
+the category almost no discriminative power. The **frozen leaderboard formula**
+is severity-weighted violation density:
+
 ```text
-Accessibility Score = passed_rule_checks / total_applicable_rule_checks   # 0–1
+weighted_violations = 1*minor + 2*moderate + 4*serious + 8*critical
+                      # counts are violation NODES per axe-core impact level
+
+Accessibility Score = 1 - min(1, weighted_violations / (pass_nodes + violation_nodes))
 ```
 
-Alternatively report `1 - min(1, weighted_violations / N_elements)`. Either way
-the output is normalized to `[0, 1]`.
+Notes on this decision:
+
+- The impact weights (1/2/4/8 doubling) are a recorded convention; axe-core
+  reports ordinal impact levels but no numeric weights. The weights are part of
+  the frozen formula and must not change after formal runs begin.
+- All inputs (`pass_nodes`, `violation_nodes`, `violations_by_severity`) are
+  already recorded by `scripts/run_track_b_accessibility.js`, so historical
+  reports can be re-scored without re-running the tool.
+- The raw pass ratio is still reported in detail files as a secondary
+  diagnostic, but it does not enter the leaderboard.
+- Like the generation-prompt freeze policy, this formula is frozen **before**
+  formal batches; any change afterwards would require re-scoring every
+  historical artifact and must be recorded as a new metric version.
+
+Known breadth limitation (recorded 2026-06-05): on simple content pages most
+axe rules are inapplicable and violations are dominated by `color-contrast`,
+so the category currently acts as a contrast/structure diagnostic. Item
+selection for the scale-up set should prefer prototypes with forms/tables to
+exercise more rules; the thesis text should state this scope honestly.
 
 ## Dynamic Score
 

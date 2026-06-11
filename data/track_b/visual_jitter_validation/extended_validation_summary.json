@@ -1,0 +1,100 @@
+{
+  "human_jitter_ordering": {
+    "orig_gt_mild": 0,
+    "orig_eq_mild": 7,
+    "orig_lt_mild": 11,
+    "orig_gt_severe": 15,
+    "orig_eq_severe": 1,
+    "orig_lt_severe": 2,
+    "mild_gt_severe": 17,
+    "mild_eq_severe": 1,
+    "mild_lt_severe": 0,
+    "n": 18
+  },
+  "human_mean_by_subset": {
+    "original": 0.8889,
+    "mild": 0.9868,
+    "severe": 0.5757,
+    "weak": 0.3438
+  },
+  "judges": {
+    "gemma-4-31b-it": {
+      "pages_paired": 62,
+      "pearson_full_range": 0.6938,
+      "cohen_kappa_item_level": 0.2942,
+      "item_agreement": 0.753,
+      "human_mean": 0.7097,
+      "llm_mean": 0.8579,
+      "per_subset_pearson": {
+        "original": {
+          "n": 15,
+          "pearson": 0.5655
+        },
+        "mild": {
+          "n": 16,
+          "pearson": 0.0771
+        },
+        "severe": {
+          "n": 16,
+          "pearson": 0.2595
+        },
+        "weak": {
+          "n": 15,
+          "pearson": 0.1722
+        }
+      }
+    },
+    "gpt-4.1-mini": {
+      "pages_paired": 62,
+      "pearson_full_range": 0.6148,
+      "cohen_kappa_item_level": 0.3603,
+      "item_agreement": 0.744,
+      "human_mean": 0.7097,
+      "llm_mean": 0.7379,
+      "per_subset_pearson": {
+        "original": {
+          "n": 15,
+          "pearson": 0.6021
+        },
+        "mild": {
+          "n": 16,
+          "pearson": -0.1999
+        },
+        "severe": {
+          "n": 16,
+          "pearson": 0.0806
+        },
+        "weak": {
+          "n": 15,
+          "pearson": 0.3925
+        }
+      }
+    },
+    "claude-sonnet-4-5-20250929": {
+      "pages_paired": 62,
+      "pearson_full_range": 0.5053,
+      "cohen_kappa_item_level": 0.2629,
+      "item_agreement": 0.7308,
+      "human_mean": 0.7097,
+      "llm_mean": 0.8216,
+      "per_subset_pearson": {
+        "original": {
+          "n": 15,
+          "pearson": -0.1254
+        },
+        "mild": {
+          "n": 16,
+          "pearson": -0.1917
+        },
+        "severe": {
+          "n": 16,
+          "pearson": 0.6355
+        },
+        "weak": {
+          "n": 15,
+          "pearson": 0.1916
+        }
+      }
+    }
+  }
+}

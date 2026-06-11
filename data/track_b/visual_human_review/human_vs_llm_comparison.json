@@ -1,35 +1,36 @@
 {
   "human": "visual_human_review.json",
-  "llm": "llm_judge_gemma-4-31b-it_strict_fewshot.json",
+  "llm": "llm_judge_claude-sonnet-4-5-20250929_strict_fewshot.json",
   "pages_compared": 15,
-  "item_agreement": 0.8708,
+  "item_agreement": 0.8125,
+  "cohen_kappa_item_level": -0.0588,
   "human_mean_page_score": 0.9167,
-  "llm_mean_page_score": 0.9125,
-  "pearson_page_score": 0.5655,
+  "llm_mean_page_score": 0.8875,
+  "pearson_page_score": -0.1254,
   "per_item": {
     "L1": {
-      "match": 14,
+      "match": 11,
       "n": 15,
       "human_true": 14,
-      "llm_true": 15
+      "llm_true": 12
     },
     "L2": {
-      "match": 13,
+      "match": 12,
       "n": 15,
       "human_true": 13,
-      "llm_true": 15
+      "llm_true": 14
     },
     "L3": {
-      "match": 14,
+      "match": 11,
       "n": 15,
       "human_true": 14,
-      "llm_true": 15
+      "llm_true": 12
     },
     "L4": {
       "match": 9,
       "n": 15,
       "human_true": 14,
-      "llm_true": 8
+      "llm_true": 10
     },
     "O1": {
       "match": 14,
@@ -38,10 +39,10 @@
       "llm_true": 15
     },
     "O2": {
-      "match": 12,
+      "match": 11,
       "n": 15,
       "human_true": 12,
-      "llm_true": 15
+      "llm_true": 14
     },
     "O3": {
       "match": 13,
@@ -56,52 +57,52 @@
       "llm_true": 15
     },
     "T1": {
-      "match": 15,
+      "match": 14,
       "n": 15,
       "human_true": 15,
-      "llm_true": 15
+      "llm_true": 14
     },
     "T2": {
       "match": 13,
       "n": 15,
       "human_true": 13,
-      "llm_true": 15
+      "llm_true": 13
     },
     "T3": {
-      "match": 13,
+      "match": 11,
       "n": 15,
       "human_true": 12,
       "llm_true": 14
     },
     "T4": {
-      "match": 13,
+      "match": 11,
       "n": 15,
       "human_true": 13,
-      "llm_true": 11
-    },
-    "C1": {
-      "match": 12,
-      "n": 15,
-      "human_true": 14,
       "llm_true": 13
     },
-    "C2": {
+    "C1": {
       "match": 13,
+      "n": 15,
+      "human_true": 14,
+      "llm_true": 14
+    },
+    "C2": {
+      "match": 11,
       "n": 15,
       "human_true": 14,
       "llm_true": 12
     },
     "C3": {
-      "match": 15,
+      "match": 14,
       "n": 15,
       "human_true": 15,
-      "llm_true": 15
+      "llm_true": 14
     },
     "C4": {
-      "match": 11,
+      "match": 12,
       "n": 15,
       "human_true": 15,
-      "llm_true": 11
+      "llm_true": 12
     }
   }
 }

@@ -187,7 +187,7 @@ def call(key, base_url, model, png, system, user, fewshot_msgs=None):
         headers={"authorization": f"Bearer {key}", "content-type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=90) as resp:
+    with urllib.request.urlopen(req, timeout=180) as resp:
         data = unwrap_openai_payload(json.loads(resp.read().decode("utf-8")))
     return data["choices"][0]["message"]["content"]
 
@@ -201,13 +201,9 @@ def main():
     ap.add_argument("--variant", choices=["base", "strict"], default="base")
     ap.add_argument("--fewshot", action="store_true",
                     help="prepend human-labelled example screenshots as calibration")
-    ap.add_argument("--anchor-set", choices=["default", "alt", "consensus"], default="default",
-                    help="alt = anchor-sensitivity check (3 different single-rater pages); "
-                         "consensus = anchors from double-labelled extended pages where "
-                         "both human raters agree on >=13/16 items (low/median/high)")
-    ap.add_argument("--out-tag", default="",
-                    help="extra suffix appended to the output filename (e.g. provider id) "
-                         "so runs under different providers do not overwrite each other")
+    ap.add_argument("--anchor-set", choices=["default", "alt"], default="default",
+                    help="alt = anchor-sensitivity check: 3 different human-labelled "
+                         "pages (lowest/median/highest score, excluding default anchors)")
     args = ap.parse_args()
 
     system = SYSTEM_STRICT if args.variant == "strict" else SYSTEM
@@ -225,55 +221,8 @@ def main():
         "F01_1daycloud::04_contact",    # human 0.75
         "F01_1daycloud::02_academy",    # human 1.00 (all true)
     ]
-    fewshot_msgs, example_keys, example_triples = None, set(), set()
-    if args.fewshot and args.anchor_set == "consensus":
-        # Anchors from the double-labelled extended set: pages where the author
-        # (rater1) and the independent rater agree on >=13/16 items, picked at
-        # the lowest/median/highest author page score. Golds = author answers
-        # (tie-break on the few disagreeing items; recorded in the notes).
-        def load_ext(name):
-            out = {}
-            for p in json.loads((OUT_DIR / name).read_text("utf-8"))["pages"]:
-                dims = p.get("dimensions")
-                if not dims:
-                    continue
-                flat = {}
-                for d in dims.values():
-                    flat.update(d)
-                if all(flat.get(i) is not None for i in ITEM_IDS):
-                    out[(p["run"], p["item"], p["page_id"])] = flat
-            return out
-        ra = load_ext("visual_human_review_extended.json")
-        rb = load_ext("visual_human_review_extended_rater2.json")
-        elig = []
-        for k in sorted(set(ra) & set(rb)):
-            agree = sum(1 for i in ITEM_IDS if ra[k][i] == rb[k][i])
-            if agree >= 13:
-                elig.append((sum(1 for i in ITEM_IDS if ra[k][i]) / 16, agree, k))
-        # Pick a GRADED anchor set by target score band (bad / genuine-mid /
-        # good), NOT by list index: index-median lands on 1.0 because the
-        # consensus pool skews high, which removes the partial-failure exemplar
-        # and collapses the judge back to yes-bias. Within each band prefer the
-        # highest inter-rater agreement.
-        def pick(target):
-            return min(elig, key=lambda e: (abs(e[0] - target), -e[1]))
-        chosen = []
-        for tgt in (0.15, 0.60, 1.0):
-            c = pick(tgt)
-            if c not in chosen:
-                chosen.append(c)
-        chosen = [(sc, k) for sc, ag, k in chosen]
-        fewshot_msgs = []
-        for sc, (run, item, page) in chosen:
-            png = ITEMS / item / "generated" / run / "standard_screenshots" / f"{page}.png"
-            fewshot_msgs.append(img_msg(user, png))
-            gold = {"answers": {i: bool(ra[(run, item, page)][i]) for i in ITEM_IDS},
-                    "confidence": 1.0}
-            fewshot_msgs.append({"role": "assistant", "content": json.dumps(gold)})
-            example_triples.add((run, item, page))
-        print("consensus anchors:",
-              [(run, page, round(sc, 4)) for sc, (run, item, page) in chosen])
-    elif args.fewshot:
+    fewshot_msgs, example_keys = None, set()
+    if args.fewshot:
         human = {f"{p['item']}::{p['page_id']}": p
                  for p in json.loads((OUT_DIR / "visual_human_review.json").read_text("utf-8"))["pages"]}
         if args.anchor_set == "alt":
@@ -301,7 +250,7 @@ def main():
     results = []
     for i, p in enumerate(pages, 1):
         key_pp = f"{p['item']}::{p['page_id']}"
-        if key_pp in example_keys or (args.run, p["item"], p["page_id"]) in example_triples:
+        if key_pp in example_keys:
             continue
         rec = {"item": p["item"], "page_id": p["page_id"]}
         try:
@@ -331,8 +280,6 @@ def main():
     if args.run != RUN:
         run_tag = re.sub(r"[^A-Za-z0-9._-]", "_", args.run.replace(RUN, "").strip("_"))
         suffix += f"_{run_tag}"
-    if args.out_tag:
-        suffix += f"_{re.sub(r'[^A-Za-z0-9._-]', '_', args.out_tag)}"
     out_path = OUT_DIR / f"llm_judge_{safe_model}{suffix}.json"
     out_path.write_text(json.dumps(out, indent=2), encoding="utf-8")
     ok = sum(1 for r in results if r["page_score"] is not None)

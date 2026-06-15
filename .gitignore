@@ -22,3 +22,7 @@ node_modules/
 data/track_b/vision2web_raw/
 data/track_b/items/
 api key*.txt
+
+# Generated supervisor-meeting decks and QA render scratch (intermediate, not tracked)
+outputs/
+presentations/

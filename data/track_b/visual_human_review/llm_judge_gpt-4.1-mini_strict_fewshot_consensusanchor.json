@@ -36,7 +36,71 @@
     },
     {
       "item": "F01_1daycloud",
+      "page_id": "02_academy",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "item": "F01_1daycloud",
       "page_id": "03_clickapp",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "04_contact",
       "dimensions": {
         "layout_hierarchy": {
           "L1": true,
@@ -356,13 +420,13 @@
     },
     {
       "item": "F10_gourmania",
-      "page_id": "02_cookbooks",
+      "page_id": "01_homepage",
       "dimensions": {
         "layout_hierarchy": {
           "L1": true,
           "L2": true,
           "L3": true,
-          "L4": false
+          "L4": true
         },
         "information_clarity": {
           "O1": true,
@@ -383,50 +447,18 @@
           "C4": true
         }
       },
-      "page_score": 0.9375,
+      "page_score": 1.0,
       "confidence": 1.0
     },
     {
       "item": "F10_gourmania",
-      "page_id": "03_culinary_solutions",
-      "dimensions": {
-        "layout_hierarchy": {
-          "L1": false,
-          "L2": true,
-          "L3": true,
-          "L4": false
-        },
-        "information_clarity": {
-          "O1": true,
-          "O2": true,
-          "O3": true,
-          "O4": true
-        },
-        "typography_readability": {
-          "T1": true,
-          "T2": false,
-          "T3": false,
-          "T4": true
-        },
-        "visual_consistency": {
-          "C1": true,
-          "C2": false,
-          "C3": true,
-          "C4": true
-        }
-      },
-      "page_score": 0.6875,
-      "confidence": 1.0
-    },
-    {
-      "item": "F10_gourmania",
-      "page_id": "04_recipe_detail",
+      "page_id": "02_cookbooks",
       "dimensions": {
         "layout_hierarchy": {
           "L1": true,
-          "L2": false,
+          "L2": true,
           "L3": true,
-          "L4": false
+          "L4": true
         },
         "information_clarity": {
           "O1": true,
@@ -437,22 +469,22 @@
         "typography_readability": {
           "T1": true,
           "T2": true,
-          "T3": false,
-          "T4": false
+          "T3": true,
+          "T4": true
         },
         "visual_consistency": {
-          "C1": false,
-          "C2": false,
+          "C1": true,
+          "C2": true,
           "C3": true,
           "C4": true
         }
       },
-      "page_score": 0.625,
+      "page_score": 1.0,
       "confidence": 1.0
     },
     {
       "item": "F10_gourmania",
-      "page_id": "05_tips",
+      "page_id": "03_culinary_solutions",
       "dimensions": {
         "layout_hierarchy": {
           "L1": false,
@@ -462,6 +494,38 @@
         },
         "information_clarity": {
           "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.25,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
           "O2": true,
           "O3": true,
           "O4": true
@@ -475,19 +539,19 @@
         "visual_consistency": {
           "C1": true,
           "C2": true,
-          "C3": false,
+          "C3": true,
           "C4": true
         }
       },
-      "page_score": 0.6875,
+      "page_score": 1.0,
       "confidence": 1.0
     },
     {
       "item": "F10_gourmania",
-      "page_id": "06_videos",
+      "page_id": "05_tips",
       "dimensions": {
         "layout_hierarchy": {
-          "L1": false,
+          "L1": true,
           "L2": true,
           "L3": true,
           "L4": false
@@ -508,10 +572,42 @@
           "C1": false,
           "C2": false,
           "C3": true,
-          "C4": true
+          "C4": false
         }
       },
       "page_score": 0.75,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0,
       "confidence": 1.0
     }
   ]

@@ -35,6 +35,12 @@ PROVIDERS = {
         "default_base_url": "https://api.openai.com/v1",
         "style": "openai-chat",
     },
+    "tuzi-openai": {
+        "api_key_env": ["TUZI_API_KEY"],
+        "base_url_env": ["TUZI_BASE_URL"],
+        "default_base_url": "https://api.tu-zi.com/v1",
+        "style": "openai-chat",
+    },
     "chatanywhere-anthropic": {
         "api_key_env": ["ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"],
         "base_url_env": ["ANTHROPIC_BASE_URL"],
@@ -208,10 +214,16 @@ def chat_smoke(config, model, max_tokens, vision_image=None):
     )
 
 
+def unwrap_openai_payload(payload):
+    if isinstance(payload, dict) and "choices" not in payload and isinstance(payload.get("data"), dict):
+        return payload["data"]
+    return payload
+
+
 def model_ids(model_response):
     if not model_response.get("ok"):
         return []
-    payload = model_response.get("json", {})
+    payload = unwrap_openai_payload(model_response.get("json", {}))
     data = payload.get("data", payload)
     ids = []
     if isinstance(data, list):
@@ -265,7 +277,7 @@ def main():
                 response = chat_smoke(config, model, cap, vision_image=args.vision_image)
                 probe.update(response)
                 if "json" in probe:
-                    payload = probe.pop("json")
+                    payload = unwrap_openai_payload(probe.pop("json"))
                     choice = (payload.get("choices") or [{}])[0] if isinstance(payload, dict) else {}
                     probe["response_metadata"] = {
                         "id": payload.get("id") if isinstance(payload, dict) else None,

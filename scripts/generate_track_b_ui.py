@@ -1282,11 +1282,17 @@ def build_prompt(item_dir, args):
 
 
 def build_client(provider):
-    if provider == "openai":
-        api_key = os.environ.get("OPENAI_API_KEY")
+    if provider in {"openai", "tuzi-openai"}:
+        if provider == "tuzi-openai":
+            api_key = os.environ.get("TUZI_API_KEY")
+            key_name = "TUZI_API_KEY"
+            base_url = os.environ.get("TUZI_BASE_URL") or "https://api.tu-zi.com/v1"
+        else:
+            api_key = os.environ.get("OPENAI_API_KEY")
+            key_name = "OPENAI_API_KEY"
+            base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("OPENAI_API_BASE")
         if not api_key:
-            raise SystemExit("ERROR: OPENAI_API_KEY not set.")
-        base_url = os.environ.get("OPENAI_BASE_URL") or os.environ.get("OPENAI_API_BASE")
+            raise SystemExit(f"ERROR: {key_name} not set.")
         endpoint = f"{(base_url or 'https://api.openai.com/v1').rstrip('/')}/chat/completions"
         return {"api_key": api_key, "endpoint": endpoint}, endpoint
 
@@ -1329,6 +1335,12 @@ def add_optional_max_tokens(payload, max_tokens):
         payload["max_tokens"] = max_tokens
 
 
+def unwrap_openai_payload(data):
+    if isinstance(data, dict) and "choices" not in data and isinstance(data.get("data"), dict):
+        return data["data"]
+    return data
+
+
 def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
     content = [{"type": "text", "text": user_prompt}]
     for path in prototypes:
@@ -1369,6 +1381,7 @@ def ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, 
         body = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"HTTP {exc.code}: {body}") from exc
 
+    data = unwrap_openai_payload(data)
     choice = data.get("choices", [{}])[0]
     message = choice.get("message", {})
     content_text = message.get("content", "")
@@ -1501,6 +1514,7 @@ def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperat
         body = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"HTTP {exc.code}: {body}") from exc
 
+    data = unwrap_openai_payload(data)
     choice = data.get("choices", [{}])[0]
     message = choice.get("message", {})
     content_text = message.get("content", "")
@@ -1516,7 +1530,7 @@ def ask_gwdg_openai(client, model, user_prompt, prototypes, max_tokens, temperat
 
 
 def ask_model(provider, client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side=None):
-    if provider == "openai":
+    if provider in {"openai", "tuzi-openai"}:
         return ask_openai(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
     if provider == "anthropic":
         return ask_anthropic(client, model, user_prompt, prototypes, max_tokens, temperature, image_max_side)
@@ -1565,7 +1579,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--items-dir", default=str(DEFAULT_ITEMS_DIR))
     parser.add_argument("--item", required=True, help="Normalized Track B item id, for example F01_1daycloud.")
-    parser.add_argument("--provider", choices=["openai", "anthropic", "chatanywhere-anthropic", "gwdg-openai"],
+    parser.add_argument("--provider", choices=["openai", "tuzi-openai", "anthropic", "chatanywhere-anthropic", "gwdg-openai"],
                         default="chatanywhere-anthropic")
     parser.add_argument("--model", default="claude-sonnet-4-5-20250929")
     parser.add_argument("--run-name", help="Optional output directory name under generated/.")

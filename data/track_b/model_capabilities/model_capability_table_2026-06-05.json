@@ -18,9 +18,39 @@
       "requested_max_tokens": 1,
       "output_path": "data/track_b/model_capabilities/model_capability_smoke_gwdg_2026-06-05.json",
       "result": "Both models returned HTTP 200. The probe used 15+1 tokens for qwen3.6 and 13+1 tokens for qwen3-omni."
+    },
+    {
+      "provider": "tuzi-openai",
+      "models": [
+        "gpt-4.1-mini"
+      ],
+      "requested_max_tokens": 1,
+      "output_path": "data/track_b/model_capabilities/model_capability_smoke_tuzi-openai_20260612_002229.json",
+      "result": "The Tuzi /models endpoint returned HTTP 200 with 748 model IDs. gpt-4.1-mini returned HTTP 200, finish_reason=stop, 12 prompt tokens, 2 completion tokens, and 1.874 seconds latency."
     }
   ],
   "candidate_models": [
+    {
+      "provider": "tuzi-openai",
+      "model": "gpt-4.1-mini",
+      "endpoint_available": true,
+      "vision_input": "not_yet_probed",
+      "published_context_window_tokens": 1047576,
+      "published_max_output_tokens": 32768,
+      "local_observed_total_context_limit_tokens": ">= 12602",
+      "local_observed_max_output_request_tokens": ">= 12000",
+      "local_observed_max_prompt_tokens": 5028,
+      "local_observed_max_completion_tokens": 7574,
+      "local_observed_failure": "F10 TB-GEN-v16 static gate passed but warned about one missing local image source; dynamic workflow passed 5/8 cases.",
+      "track_b_recommendation": "First paid/proxy fallback after GWDG for low-cost compact Track B generation smoke tests. Locally confirmed for one F10 generation, but keep provider/base URL and account billing source in metadata because Tuzi pricing/routing is gateway-specific.",
+      "sources": [
+        "data/track_b/model_capabilities/model_capability_smoke_tuzi-openai_20260612_002229.json",
+        "data/track_b/items/F10_gourmania/generated/tuzi_gpt41mini_v16_f10_smoke/generation_metadata.json",
+        "data/track_b/items/F10_gourmania/generated/tuzi_gpt41mini_v16_f10_smoke/gate_report.json",
+        "data/track_b/items/F10_gourmania/generated/tuzi_gpt41mini_v16_f10_smoke/dynamic_workflow_report.json",
+        "notes/provider_model_catalog_2026-06-04.md"
+      ]
+    },
     {
       "provider": "gwdg-openai",
       "model": "qwen3-omni-30b-a3b-instruct",
@@ -208,6 +238,8 @@
   ],
   "next_probe_command_examples": [
     "py -3.12 scripts/probe_model_capabilities.py --provider gwdg-openai --model qwen3.6-35b-a3b --model qwen3-omni-30b-a3b-instruct --chat-smoke --output-cap 1",
+    "py -3.12 scripts/probe_model_capabilities.py --provider tuzi-openai --model gpt-4.1-mini --chat-smoke --output-cap 1",
+    "py -3.12 scripts/generate_track_b_ui.py --item F10_gourmania --provider tuzi-openai --model gpt-4.1-mini --prompt-id TB-GEN-v16 --input-profile compact --max-prototypes 1 --max-tokens 12000",
     "py -3.12 scripts/probe_model_capabilities.py --provider gwdg-openai --model qwen3.6-35b-a3b --chat-smoke --output-cap 40000",
     "py -3.12 scripts/probe_model_capabilities.py --provider openai --model gemini-2.5-flash --chat-smoke --output-cap 1",
     "py -3.12 scripts/probe_model_capabilities.py --provider chatanywhere-anthropic --model claude-sonnet-4-5-20250929 --chat-smoke --output-cap 1"

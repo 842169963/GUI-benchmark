@@ -1,6 +1,135 @@
 # Revision Log
 
+## 2026-06-12
+
+### Visual-judge provider chosen (tuzi) — judge freeze config complete
+
+- Re-certified the certified config (gpt-4.1-mini / strict / default graded
+  anchors, only provider changed) on tuzi across the full extended set vs all
+  three raters: tuzi κ = 0.369 / 0.249 / 0.462 (mean 0.360) ≈ ChatAnywhere
+  0.349 / 0.251 / 0.426 (mean 0.342); both at/above the human ceiling ≈0.31.
+  Judge mean 0.664 (tuzi) vs 0.682 (ChatAnywhere) — the earlier "tuzi lenient"
+  worry was an artifact of the all-good original set + broken-gradient consensus
+  anchors, NOT a provider property; on the discriminative set tuzi marks weak
+  pages down hard.
+- Framing correction: "tuzi lenient" was imprecise — no absolute ground truth,
+  so lenient/strict is undefined; against humans both judge means (0.664/0.682)
+  sit inside the human range (0.60–0.81) and κ is equal → providers equivalent.
+- **Decision (final): production provider = ChatAnywhere.** Quality is a tie, so
+  reliability/speed + cost decide: tuzi is slow and hung once (independently
+  confirmed slow by Codex); ChatAnywhere is fast, stable, holds the original
+  certification, and is now recharged (cost no longer a constraint). tuzi kept
+  as a validated cheaper-but-slower fallback. Provider is swappable (one
+  ~5-min re-validation per switch) but must be FIXED within a formal batch.
+- FROZEN VISUAL JUDGE CONFIG: gpt-4.1-mini + strict + default graded anchors
+  (0.50 / 0.75 / 1.00, F10 homepage / F01 contact / F01 academy, author golds)
+  + 3-rep item-level majority vote, on ChatAnywhere. Anchors+golds+order frozen.
+- Tooling: `--out-tag` added to run_visual_judge.py (provider-tagged outputs,
+  no overwrite of certified files); call timeout 180→90 s. Certified
+  ChatAnywhere extended-set files backed up as `*_chatanywhere_certified.json`.
+
+### Supervisor-meeting deck built
+
+- Built `presentations/track_b_progress_2026-06-12.pptx` (12 slides, English,
+  Chinese speaker notes) via `presentations/build_deck.js` (pptxgenjs).
+  Covers: judge config explained (strict / few-shot / 3-rep vote), r and κ
+  defined with own data, literature sources for the validation bar, Exp 1
+  jitter (with original/mild/severe/weak screenshots), Exp 2 human ceiling +
+  certification, Exp 3 anchor sensitivity, generation-side status (TB-GEN-v16,
+  W03, prompt-freeze blocker), schema v1 demo table, open items with causes,
+  next steps. QA: exported slide PNGs via PowerPoint COM, fixed three layout
+  collisions (slide 6 stat wrap, slide 8 title wrap, slide 10 table columns).
+- Rev 2 after user review → `track_b_progress_2026-06-12_v2.pptx` (v1 was
+  locked/open in PowerPoint, left untouched): experiments moved to slides 5–7
+  (literature slide now follows as recap); yes-bias and temperature=0 get
+  plain-language explanations; bad-anchor caption corrected (lowest ORIGINAL
+  page; worse pages are jittered/weak variants, ineligible as anchors); r/κ
+  slide gains worked examples; human-ceiling and reference-knowledge wording
+  expanded; Exp 3 subtitle states anchors = few-shot pages; generation
+  prompt-freeze blocker removed everywhere per user; schema slide gains a
+  metric key (Rel./Stat./Dyn./axe weighted density); coverage and T1/T3 open
+  items reworded in plain language.
+
+### Rater correction (3 raters, 2 pairs); per-pair certification; tuzi provider
+
+- User clarified the "second rater" was actually **two different friends**
+  (A: pages 1–28, B: pages 29–56). Recomputed per pair: human-human κ =
+  0.294 (author-A) and 0.324 (author-B) — two independent pairs both land at
+  ≈0.3, stabilizing the ceiling estimate. gpt-4.1-mini per-pair κ =
+  0.350/0.251/0.426 (mean 0.342) straddles and on average exceeds the human
+  range; gemma (mean 0.246) and claude (0.242) sit below. Certification
+  conclusion unchanged, now based on two human pairs. Correction recorded in
+  [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md).
+- ChatAnywhere balance exhausted (403 on 4-image few-shot payloads); user
+  added a new `tuzi` provider key (`TUZI_API_KEY`/`TUZI_BASE_URL` in `.env`,
+  api.tu-zi.com, OpenAI-compatible; response sometimes wrapped in `data` —
+  `unwrap_openai_payload()` added to
+  [scripts/run_visual_judge.py](D:/master_thesis/scripts/run_visual_judge.py)).
+  Single-image probe with gpt-4.1-mini passes; anchor-sensitivity run
+  (`--anchor-set alt`) relaunched via tuzi.
+- **Anchor-sensitivity result**: with alt anchors lacking a truly-bad
+  exemplar (span 0.69–1.0), gpt-4.1-mini collapses to yes-bias (15/16 pages
+  = 1.0). Provider control (default anchors via the same tuzi key) preserves
+  variance → collapse attributable to the anchors, not the provider. The
+  single low-quality anchor (F10 homepage 0.50) carries the calibration.
+  Frozen-config hard requirement added: anchor set must include ≥1 genuinely
+  low-scoring exemplar; anchors+golds are frozen with the judge. Secondary:
+  tuzi default run is lenient-shifted vs ChatAnywhere — provider switch
+  requires revalidation. Details in
+  [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md).
+
 ## 2026-06-11
+
+### Track B leaderboard schema v1
+
+- Added `notes/track_b_leaderboard_schema_v1.md` as the meeting-demo schema
+  specification. It separates the schema container from metric formulas and
+  defines artifact-level results, model-level rows, failure-aware reporting,
+  applicable/not-applicable metric handling, category rankings, and pending
+  metric slots.
+- Rebuilt `scripts/build_track_b_dev_subset_demo.py` to output schema-aligned
+  JSON/Markdown:
+  - `data/track_b/leaderboard/dev_subset_v16_schema_v1_demo.json`
+  - `data/track_b/leaderboard/dev_subset_v16_schema_v1_demo.md`
+- The schema v1 demo includes F-series executable workflow items
+  (F01/F03/F06/F10) and the W03 static-responsive probe. Dynamic metrics are
+  marked not applicable for W03 rather than scored as zero.
+- The model-level rows now include attempted/eligible/failed items,
+  `failure_by_item`, `failure_category_counts`, completion reliability,
+  category scores, raw route/content/token/latency averages, and category
+  ranking fields. Overall remains pending until category weights are approved.
+- Validation: `py -3 -m py_compile scripts/build_track_b_dev_subset_demo.py`
+  and `py -3 scripts/build_track_b_dev_subset_demo.py` both succeeded. The
+  generated JSON declares `leaderboard_schema_version =
+  track-b-leaderboard-v1`.
+
+### Second-rater data merged; inter-rater ceiling computed; judge certified at human level
+
+- Rater2 (independent friend, blind to variants) completed the 56-page
+  extended review in two browser sessions; the two complementary exports were
+  merged by [scripts/compute_interrater.py](D:/master_thesis/scripts/compute_interrater.py)
+  into [data/track_b/visual_human_review/visual_human_review_extended_rater2.json](D:/master_thesis/data/track_b/visual_human_review/visual_human_review_extended_rater2.json)
+  (2 duplicate pages with conflicting answers kept first-session values; 2
+  pages have one missing item each).
+- **Human-human ceiling** (rater1 vs rater2, 894 item cells): agreement 0.697,
+  **κ=0.317**, page-score r=0.521 — binary visual judgments have genuinely low
+  human consensus; the judges' absolute κ must be read against this ceiling,
+  not against the generic κ>0.6 textbook bar.
+- **Judge certification (Judge's Verdict two-step)**: gpt-4.1-mini
+  strict+fewshot reaches κ=0.350/0.334 vs the two raters — **at/above the
+  human-human ceiling, symmetric across raters** → certified human-like.
+  gemma (0.293/0.221) and claude (0.286/0.194) are below the ceiling and
+  asymmetric (track rater1 idiosyncratically — likely few-shot-anchor overlap).
+- New finding recorded: **reference-knowledge effect** — rater1 (knows the
+  prototypes) scored weak-model pages 0.344 vs naive rater2's 0.686; rater
+  framing shifts absolute scores while preserving within-rater ordering.
+  Mild-jitter refutation replicated by rater2 (mild mean 0.957).
+- Details in [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md);
+  summary JSON `data/track_b/visual_jitter_validation/interrater_summary.json`.
+- Consequence: the visual-judge freeze recommendation (gpt-4.1-mini
+  strict+fewshot, 3-rep majority vote) is now **literature-standard certified**;
+  awaiting the user's formal freeze confirmation to execute appendix prompts,
+  leaderboard wiring, and Technical coverage submetrics.
 
 ### Thesis manuscript synchronization pass after multi-agent experiment edits
 
@@ -1036,3 +1165,60 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
   `data/track_b/leaderboard/dev_subset_v16_failure_demo.json` and `.md` so the
   meeting demo now covers four normalized items for `qwen3.6-35b-a3b`
   (F01/F03/F06/F10) and three items for qwen3-omni (F01/F03/F10).
+
+### Tuzi OpenAI-compatible provider smoke test
+
+- Added Tuzi support as `tuzi-openai` in:
+  - `scripts/probe_model_capabilities.py`
+  - `scripts/generate_track_b_ui.py`
+  - `scripts/run_visual_judge.py`
+  - `.env.example`
+- Basis: Tuzi is used as an OpenAI-compatible provider with
+  `TUZI_BASE_URL=https://api.tu-zi.com/v1`; no API key value was recorded.
+- Model-list and tiny chat smoke:
+  `py -3 scripts/probe_model_capabilities.py --provider tuzi-openai --model
+  gpt-4.1-mini --chat-smoke --output-cap 1`.
+  Output:
+  `data/track_b/model_capabilities/model_capability_smoke_tuzi-openai_20260612_002229.json`.
+  Result: `/models` returned HTTP 200 with 748 model IDs; `gpt-4.1-mini`
+  returned HTTP 200, `finish_reason=stop`, 12 prompt tokens, 2 completion
+  tokens, and 1.874 seconds latency.
+- Track B generation smoke:
+  `py -3 scripts/generate_track_b_ui.py --item F10_gourmania --provider
+  tuzi-openai --model gpt-4.1-mini --prompt-id TB-GEN-v16 --input-profile
+  compact --max-prototypes 1 --max-tokens 12000 --run-name
+  tuzi_gpt41mini_v16_f10_smoke`.
+  Result: generation stopped normally (`finish_reason=stop`) after 81.97
+  seconds with 5,028 prompt tokens, 7,574 completion tokens, and 12,602 total
+  tokens.
+- Static gate:
+  `py -3 scripts/check_track_b_generation.py --item F10_gourmania --run
+  tuzi_gpt41mini_v16_f10_smoke`, saved as
+  `data/track_b/items/F10_gourmania/generated/tuzi_gpt41mini_v16_f10_smoke/gate_report.json`.
+  Result: passed with zero error failures and one warning for a missing local
+  image source.
+- Standard screenshot capture:
+  `node scripts/capture_track_b_standard_screenshots.js --item F10_gourmania
+  --run tuzi_gpt41mini_v16_f10_smoke --full-page`.
+  Result: captured 1/1 detected route.
+- Dynamic workflow:
+  `py -3 scripts/run_track_b_dynamic_workflow.py --item F10_gourmania --run
+  tuzi_gpt41mini_v16_f10_smoke`.
+  Result: 5/8 cases, route success 1.000, content validation 0.625, task
+  success 0.625.
+- Updated `notes/provider_model_catalog_2026-06-04.md` and
+  `data/track_b/model_capabilities/model_capability_table_2026-06-05.json` with
+  Tuzi configuration, observed model availability, smoke results, and the
+  current provider-use order: GWDG/SAIA first; Tuzi `gpt-4.1-mini` as the first
+  low-cost paid/proxy fallback; ChatAnywhere standard models as the next
+  fallback; ChatAnywhere `-ca` variants only for explicitly labelled low-cost
+  experiments.
+- Pricing basis and uncertainty: ChatAnywhere publishes per-model token prices
+  in its documentation. Tuzi's public page describes price/routing groups, but
+  the local `/models` response does not expose per-model price fields, so Tuzi
+  cost estimates for reported runs should use the current account billing page
+  or transaction record at the time of the run.
+- Validation: `py -3 -m json.tool
+  data/track_b/model_capabilities/model_capability_table_2026-06-05.json` and
+  `py -3 -m py_compile scripts/probe_model_capabilities.py
+  scripts/generate_track_b_ui.py scripts/run_visual_judge.py` both succeeded.

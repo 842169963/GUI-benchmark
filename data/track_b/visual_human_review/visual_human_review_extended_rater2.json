@@ -1,0 +1,1798 @@
+{
+  "run": "extended_validation_2026-06-10",
+  "reviewer": "human:rater2",
+  "pages": [
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.8125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.8125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.625
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "run": "gwdg_internvl35_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "01_home",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "02_academy",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "03_clickapp",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "04_contact",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "05_digital_cards",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "06_services",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "07_company",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "01_homepage",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "02_company",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "03_customers",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "04_gitlab_duo",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "05_platform",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "06_pricing",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": false,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_mild",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "01_home",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.5625
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "02_academy",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.3125
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "03_clickapp",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.625
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "04_contact",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.4375
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "05_digital_cards",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.0625
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "06_services",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": false,
+          "T3": true,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.625
+    },
+    {
+      "item": "F01_1daycloud",
+      "page_id": "07_company",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": true
+        }
+      },
+      "page_score": 0.5625
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "01_homepage",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.0
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "02_company",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.8125
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "03_customers",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "04_gitlab_duo",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.8125
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "05_platform",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.1875
+    },
+    {
+      "item": "F03_about_gitlab",
+      "page_id": "06_pricing",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.6875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.3125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": false,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": false,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.5
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "run": "gwdg_qwen36_35b_v9_smoke_jitter_severe",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": false,
+          "C4": false
+        }
+      },
+      "page_score": 0.125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": false,
+          "T3": true,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.3125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.75
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.3125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": false,
+          "T4": false
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.6875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": false,
+          "C2": false,
+          "C3": true,
+          "C4": null
+        }
+      },
+      "page_score": 0.7333333333333333
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "run": "gwdg_qwen3_omni_30b_v9_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": false,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": false,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": false
+        }
+      },
+      "page_score": 0.3125
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "01_homepage",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.9375
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.6875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": false,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": false,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.6875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "run": "openai_gpt4omini_v9_f10_smoke",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": true,
+          "L2": true,
+          "L3": false,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": null,
+          "C4": true
+        }
+      },
+      "page_score": 0.9333333333333333
+    }
+  ]
+}

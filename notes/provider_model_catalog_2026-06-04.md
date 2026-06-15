@@ -11,6 +11,7 @@ No API keys or secret values are recorded here.
 | `GWDG_API_KEY`, `GWDG_BASE_URL` | GWDG Chat AI / SAIA OpenAI-compatible API | `https://chat-ai.academiccloud.de/v1` |
 | `OPENAI_API_KEY`, `OPENAI_BASE_URL` | ChatAnywhere OpenAI-compatible API | `https://api.chatanywhere.tech/v1` |
 | `ANTHROPIC_API_KEY`, `ANTHROPIC_BASE_URL` | ChatAnywhere Anthropic-style or OpenAI-compatible proxy endpoint currently configured in this project | `https://api.chatanywhere.org/v1` |
+| `TUZI_API_KEY`, `TUZI_BASE_URL` | Tuzi OpenAI-compatible API | `https://api.tu-zi.com/v1` |
 
 ## Sources
 
@@ -19,6 +20,8 @@ No API keys or secret values are recorded here.
 - ChatAnywhere GitHub repository README: https://github.com/chatanywhere/GPT_API_free
 - ChatAnywhere API documentation, model list/pricing page: https://docs.chatanywhere.tech/doc-2694962
 - ChatAnywhere API documentation, `GET /v1/models`: https://docs.chatanywhere.tech/api-92222074
+- Tuzi API web console/documentation entry: https://api.tu-zi.com/
+- Tuzi public API landing page: https://apihead.tu-zi.com/
 
 ## GWDG / SAIA
 
@@ -103,20 +106,77 @@ pricing/model page and should be avoided.
 `gpt-image-2` without the `-ca` suffix is listed as not supported in the
 ChatAnywhere pricing/model page.
 
+## Tuzi
+
+Tuzi is configured as an OpenAI-compatible provider in the local scripts under
+the provider name `tuzi-openai`. The default base URL is
+`https://api.tu-zi.com/v1`; the scripts send chat requests to
+`/chat/completions`.
+
+Local smoke test on 2026-06-12:
+
+- `scripts/probe_model_capabilities.py --provider tuzi-openai --model
+  gpt-4.1-mini --chat-smoke --output-cap 1` succeeded.
+- The Tuzi `/models` endpoint returned HTTP 200 and 748 available model IDs for
+  this account.
+- `gpt-4.1-mini` returned HTTP 200 with `finish_reason=stop` in 1.874 seconds,
+  using 12 prompt tokens and 2 completion tokens.
+
+Track B generation smoke test on 2026-06-12:
+
+- Command: `scripts/generate_track_b_ui.py --item F10_gourmania --provider
+  tuzi-openai --model gpt-4.1-mini --prompt-id TB-GEN-v16 --input-profile
+  compact --max-prototypes 1 --max-tokens 12000 --run-name
+  tuzi_gpt41mini_v16_f10_smoke`.
+- Result: generation stopped normally (`finish_reason=stop`) after 81.97
+  seconds, with 5,028 prompt tokens, 7,574 completion tokens, and 12,602 total
+  tokens.
+- Static gate passed with zero error failures and one warning: one generated
+  local image reference did not exist.
+- Standard screenshot capture succeeded for the single detected route.
+- Dynamic workflow simulation passed 5/8 cases, with route success 1.000,
+  content validation success 0.625, and task success 0.625.
+
+Pricing note: Tuzi's public landing page describes several routing/price
+groups, including a very low-cost default group and more expensive fast/stable
+or original-price groups. The local `/models` response used in this project did
+not expose per-model price fields, so reported cost estimates for Tuzi runs
+should use the provider's current billing page or account transaction record at
+the time of the run, not infer a precise price from the model list alone.
+
 ## Practical defaults for this thesis project
 
 - Cheapest/free smoke-test path: use GWDG/SAIA first when the task fits an
   available GWDG-hosted model, per the project cost-control rule.
 - Current GWDG model already used in Track B smoke runs: `qwen3.6-35b-a3b`.
 - Conservative GWDG fallback for fast text smoke tests: `meta-llama-3.1-8b-instruct`.
+- First paid/proxy fallback for low-cost Track B generation: Tuzi
+  `gpt-4.1-mini`, because it is now locally confirmed to support both tiny chat
+  smoke tests and a compact `TB-GEN-v16` F10 generation. Keep it as a smoke and
+  development fallback until at least two or three items have been checked.
 - Fallback rule for tests: when GWDG/SAIA is rate-limited, quota-limited,
-  timing out, or otherwise unavailable, switch to ChatAnywhere only with a
-  low-cost model first. For Track B-style HTML generation, start with
-  `gpt-4o-mini`, `gpt-4.1-mini`, or `gpt-5-mini`; use larger models only after
-  prompt/gate validation.
+  timing out, or otherwise unavailable, switch to a paid/proxy provider only
+  with a low-cost model first. Current order:
+  1. GWDG/SAIA `qwen3.6-35b-a3b` for cheap/free smoke tests.
+  2. Tuzi `gpt-4.1-mini` for low-cost paid/proxy generation smoke tests.
+  3. ChatAnywhere standard `gpt-4.1-mini`, `gpt-4o-mini`, or `gpt-5-mini`
+     when Tuzi is unavailable or a second paid provider is needed.
+  4. ChatAnywhere `-ca` variants only for explicitly labelled low-cost
+     experiments, because the provider documentation describes them as cheaper
+     but less stable than non-`-ca` routes.
+  5. Larger models such as Claude Sonnet, Gemini Pro, or GPT full-size models
+     only after the prompt/gate pipeline is validated.
+- Pricing interpretation: ChatAnywhere publishes per-model token prices in its
+  model table, including `gpt-4.1-mini` and `gpt-4.1-mini-ca`. Tuzi currently
+  requires checking its account billing/routing page for exact per-run price,
+  although the local API smoke confirms model availability. GWDG/SAIA remains
+  the preferred cost-control path because it is the free academic provider.
 - Every ChatAnywhere fallback run should record the trigger condition
   (for example GWDG rate limit, timeout, or HTTP 500), provider, base URL,
   model name, prompt id, and whether the selected model was a low-cost fallback.
+- Every Tuzi fallback run should record the provider as `tuzi-openai`, the base
+  URL, model name, prompt id, token usage, latency, finish reason, and the
+  account billing/routing price source used for cost estimation.
 - Avoid relying on ChatAnywhere `-ca` variants for reported thesis runs unless
   the run metadata records the variant and the provider caveat, because the
   docs describe them as cheaper third-party channels with potentially lower
@@ -166,5 +226,11 @@ Current practical interpretation:
 - `openai/gpt-4o-mini`, `openai/gpt-4.1`, `openai/gpt-5-mini`,
   `chatanywhere-anthropic/claude-sonnet-4-5-20250929`,
   `openai/gemini-2.5-flash`, and `openai/gemini-2.5-pro` remain paid/proxy
-  fallback candidates. Reported runs must record the configured provider and
-  base URL because proxy behavior can differ from official provider limits.
+  fallback candidates through ChatAnywhere or compatible gateways. Reported
+  runs must record the configured provider and base URL because proxy behavior
+  can differ from official provider limits.
+- `tuzi-openai/gpt-4.1-mini` is locally confirmed as a working low-cost
+  OpenAI-compatible fallback for compact Track B generation. The first F10
+  smoke result is eligible for static/dynamic evaluation but has one static
+  warning for a missing local image source and only partial dynamic content
+  success.

@@ -1,0 +1,166 @@
+{
+  "run": "openai_gpt4omini_v9_f10_smoke",
+  "reviewer": "llm:gpt-4.1-mini:strict",
+  "pages": [
+    {
+      "item": "F10_gourmania",
+      "page_id": "02_cookbooks",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "03_culinary_solutions",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "04_recipe_detail",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": false,
+          "O4": true
+        },
+        "typography_readability": {
+          "T1": false,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.75,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "05_tips",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": false
+        },
+        "information_clarity": {
+          "O1": false,
+          "O2": false,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.6875,
+      "confidence": 1.0
+    },
+    {
+      "item": "F10_gourmania",
+      "page_id": "06_videos",
+      "dimensions": {
+        "layout_hierarchy": {
+          "L1": false,
+          "L2": true,
+          "L3": true,
+          "L4": true
+        },
+        "information_clarity": {
+          "O1": true,
+          "O2": true,
+          "O3": true,
+          "O4": false
+        },
+        "typography_readability": {
+          "T1": true,
+          "T2": true,
+          "T3": true,
+          "T4": true
+        },
+        "visual_consistency": {
+          "C1": true,
+          "C2": true,
+          "C3": true,
+          "C4": true
+        }
+      },
+      "page_score": 0.875,
+      "confidence": 1.0
+    }
+  ]
+}

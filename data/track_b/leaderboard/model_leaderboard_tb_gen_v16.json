@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-06-15T14:40:53.222407+00:00",
+  "prompt_id_filter": "TB-GEN-v16",
+  "aggregation_note": "Artifact-level scores are aggregated into model-level leaderboard rows. Ineligible artifacts are excluded from score means.",
+  "provider_failure_count": 0,
+  "models": [
+    {
+      "model": "tuzi-openai/gpt-4.1-mini/TB-GEN-v16",
+      "artifact_count": 1,
+      "eligible_artifact_count": 1,
+      "failed_artifact_count": 0,
+      "completion_reliability": 1.0,
+      "attempted_items": [
+        "F10_gourmania"
+      ],
+      "ineligibility_reason_counts": {},
+      "overall_score": null,
+      "static_technical_score": 0.9230769230769231,
+      "static_visual_score": null,
+      "dynamic_score": 0.625,
+      "efficiency_score": null,
+      "average_prompt_tokens": 5028,
+      "average_completion_tokens": 7574,
+      "average_total_tokens": 12602,
+      "average_output_tokens": 7574,
+      "average_latency_seconds": 81.97,
+      "average_cost_per_app": null,
+      "cost_status": "not_estimated_no_stable_price_reference",
+      "notes": "Overall/static visual/efficiency scores remain null; raw token/latency efficiency fields are reported without USD cost estimation.",
+      "rank": 1
+    },
+    {
+      "model": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "artifact_count": 5,
+      "eligible_artifact_count": 5,
+      "failed_artifact_count": 0,
+      "completion_reliability": 1.0,
+      "attempted_items": [
+        "F01_1daycloud",
+        "F03_about_gitlab",
+        "F06_community_dynamics",
+        "F10_gourmania",
+        "W03_eventbrite"
+      ],
+      "ineligibility_reason_counts": {},
+      "overall_score": null,
+      "static_technical_score": 0.9538461538461539,
+      "static_visual_score": null,
+      "dynamic_score": 0.5583333333333333,
+      "efficiency_score": null,
+      "average_prompt_tokens": 21726,
+      "average_completion_tokens": 17588.2,
+      "average_total_tokens": 39314.2,
+      "average_output_tokens": 17588.2,
+      "average_latency_seconds": 146.742,
+      "average_cost_per_app": null,
+      "cost_status": "not_estimated_no_stable_price_reference",
+      "notes": "Overall/static visual/efficiency scores remain null; raw token/latency efficiency fields are reported without USD cost estimation.",
+      "rank": 2
+    },
+    {
+      "model": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "artifact_count": 5,
+      "eligible_artifact_count": 2,
+      "failed_artifact_count": 3,
+      "completion_reliability": 0.4,
+      "attempted_items": [
+        "F01_1daycloud",
+        "F03_about_gitlab",
+        "F10_gourmania"
+      ],
+      "ineligibility_reason_counts": {
+        "static_technical_gate_failed": 3,
+        "generation_token_truncated": 3
+      },
+      "overall_score": null,
+      "static_technical_score": 0.8461538461538463,
+      "static_visual_score": null,
+      "dynamic_score": 0.5,
+      "efficiency_score": null,
+      "average_prompt_tokens": 24499.6,
+      "average_completion_tokens": 21040.2,
+      "average_total_tokens": 45539.8,
+      "average_output_tokens": 21040.2,
+      "average_latency_seconds": 173.78,
+      "average_cost_per_app": null,
+      "cost_status": "not_estimated_no_stable_price_reference",
+      "notes": "Overall/static visual/efficiency scores remain null; raw token/latency efficiency fields are reported without USD cost estimation.",
+      "rank": 3
+    }
+  ]
+}

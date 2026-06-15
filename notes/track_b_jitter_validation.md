@@ -421,6 +421,107 @@ reported κ must state the score distribution of the set it was computed on.
   ~6x slower (reasoning model, ~25 s/page) → impractical for large formal
   batches; a cost/latency-vs-quality datapoint, not a freeze candidate.
 
+### Adjudicated-consensus anchor test (2026-06-12) — author-gold RETAINED
+
+Addressing the user's valid critique ("why are the author's labels the gold?"),
+we built an adjudicated-consensus anchor set: 3 graded consensus pages (low
+F10/05_tips, mid F03/06_pricing severe, high F01/02_academy mild) whose
+disagreeing items were resolved by author+friend adjudication (5 items total;
+golds → anchor scores 0.0625 / 0.625 / 1.0). Re-validated full-range on
+ChatAnywhere vs both raters, head-to-head on the SAME 45 pages:
+
+| Anchor gold | κ vs author | κ vs friend |
+| --- | ---: | ---: |
+| author-gold (certified default 0.50/0.75/1.0) | **0.353** | **0.340** |
+| adjudicated-consensus (0.0625/0.625/1.0) | 0.306 | 0.281 |
+
+Adjudicated is consistently LOWER → by the pre-registered rule (adopt only if
+≥ author-gold) the **certified author-gold default anchors are RETAINED and
+frozen**. Interpretation: the adjudicated low exemplar (0.0625, a genuinely
+terrible weak-model page) is too harsh and over-corrects the judge toward
+severity, slightly reducing human agreement; the moderate 0.50 low anchor
+calibrates better. Net: single-rater-gold is documented as a limitation, but
+empirically a consensus alternative did NOT improve agreement — so author-gold
+is retained on evidence, not convenience. Files:
+`llm_judge_gpt-4.1-mini_strict_fewshot_adjudicatedanchor_*.json`;
+adjudication sheet `anchor_adjudication_sheet.md`.
+
+### Controlled add-one-low-anchor test (2026-06-12) — full-range coverage REFUTED cleanly
+
+The adjudicated test above was confounded (3 changes at once, possibly within
+noise). To isolate the user's "cover the full score range with a low anchor"
+hypothesis, ran a single-variable controlled test: certified 3 anchors
+(0.50/0.75/1.0) UNCHANGED vs the same 3 PLUS one ~0.25 low anchor
+(F01/05_digital_cards jitter_severe, author gold), everything else identical,
+both fresh in the same session (noise-matched). Same 46 pages:
+
+| Config | κ vs author | κ vs friend |
+| --- | ---: | ---: |
+| control: 3 anchors (0.50/0.75/1.0) | 0.329 | 0.299 |
+| treatment: 4 anchors (+0.25 low) | 0.228 | 0.198 |
+
+Adding the low anchor LOWERS κ by ~0.10 on both raters — beyond the ±0.05
+run-to-run noise band, consistent across raters → a real effect, not noise.
+The control reproduces the original certification (0.329 vs orig 0.349 vs
+author, within noise), confirming the treatment drop is genuine.
+
+**Conclusion (clean controlled experiment): adding this low anchor HURTS
+agreement — verified, but mechanism corrected.** Full 2×2 contingency
+(judge×author, N=736 item cells): control [383/122/97/134] κ=0.3288; treatment
+[416/169/64/87] κ=0.2284 — reproduced by two independent code paths
+(pairwise and contingency-table marginals); raw tables are auditable with any
+kappa calculator.
+
+**Mechanism correction (found while verifying the data, 2026-06-12):** an
+earlier note claimed the harsh low anchor "over-corrects toward severity." The
+contingency table REFUTES this — the 4-anchor judge said Yes MORE often (585 vs
+505), i.e. it became more LENIENT, and the κ drop comes from extra judge-Yes /
+human-No disagreements (122→169). Why adding a low (bad-page) exemplar makes
+the judge more lenient is NOT explained by a single run; the robust, verified
+claim is only "adding this anchor lowered κ by ~0.10 (> ±0.05 noise)", and the
+mechanistic story is withdrawn. (Same caveat applies to the adjudicated-replace
+result above: its "0.0625 over-corrects" rationale is likewise not supported and
+should be read as "lowered κ", mechanism unknown.)
+
+**The certified 3-anchor set (0.50/0.75/1.0, author gold) is retained and the
+freeze is FINAL.** Thesis-usable: "wider anchor coverage was tested in a
+single-variable controlled experiment and significantly reduced human
+agreement (Δκ≈−0.10 > noise); a compact 3-anchor calibration is used."
+Files: `llm_judge_..._default_lowaddanchor_*.json`, `..._ctrl2.json`.
+
+### F6. Self-preference bias — planned sensitivity check (post-leaderboard)
+
+The frozen judge is gpt-4.1-mini (GPT family); the leaderboard's contestant
+generators include GPT-family models, so there is a theoretical self-preference
+risk (a judge favouring its own family's outputs). Planned reliability step,
+run AFTER the formal leaderboard exists (needs real cross-family contestant
+artifacts):
+
+- Re-judge the GPT-family contestants' artifacts (or a subset) with a
+  DIFFERENT-family judge (free gemma now; Gemini if a key becomes available)
+  and check whether the GPT contestants' RANKING shifts systematically.
+- Stable ranking → self-preference not material → report "checked, no material
+  effect". Systematic drop of GPT contestants under the cross-family judge →
+  bias is real → mitigate (panel / adjust).
+- The contrast judge does NOT need to pass the human-ceiling certification: it
+  is used only as a cross-family ranking contrast, not as ground truth (lower
+  bar than a production judge).
+- Prior expectation: effect likely small because the judge sees rendered
+  SCREENSHOTS, which carry a weak self-recognition signal vs text generation —
+  but verify, do not assume.
+
+### F7. Dual-judge / panel (PoLL) — future work
+
+Averaging a cross-family panel (e.g. GPT + Gemini) would reduce single-family
+bias and per-model variance, BUT is not a free add-on: (1) every panel member
+must individually pass the human-ceiling certification (gemma/claude failed it;
+Gemini untested and no key yet), else averaging a below-ceiling judge drags the
+panel's human-agreement DOWN; (2) the averaged panel is a new configuration that
+must be certified as a unit; (3) ~2x cost/latency per artifact. No qualifying
+second judge is available now, so the panel is deferred. A qualifying judge can
+be added later WITHOUT re-certifying gpt-4.1-mini (certify the new candidate
+against the same human data; if it passes, form and certify the panel).
+
 ### Provider re-certification on tuzi (2026-06-12) — RESOLVES provider choice
 
 Re-ran the CERTIFIED config (gpt-4.1-mini, strict, DEFAULT graded anchors —

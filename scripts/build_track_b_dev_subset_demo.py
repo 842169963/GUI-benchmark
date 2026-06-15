@@ -196,10 +196,14 @@ def artifact_result(item_id: str, model_label: str, run: str):
             "score": None,
         },
         "efficiency": {
-            "status": "raw_only",
+            "status": "raw_only_no_usd_reference",
             "score": None,
+            "prompt_tokens": gen["prompt_tokens"],
+            "completion_tokens": gen["completion_tokens"],
             "total_tokens": gen["total_tokens"],
             "latency_seconds": gen["latency_seconds"],
+            "cost_usd": None,
+            "cost_status": "not_estimated_no_stable_price_reference",
         },
         "eligibility": {
             "eligible": eligible,
@@ -252,8 +256,20 @@ def model_results(artifacts):
             "raw_averages": {
                 "route_success": avg([item["dynamic"]["route_success"] for item in eligible if item["dynamic"]["route_success"] is not None]),
                 "content_success": avg([item["dynamic"]["content_success"] for item in eligible if item["dynamic"]["content_success"] is not None]),
+                "prompt_tokens": avg([item["generation"]["prompt_tokens"] for item in group]),
                 "completion_tokens": avg([item["generation"]["completion_tokens"] for item in group]),
+                "total_tokens": avg([item["generation"]["total_tokens"] for item in group]),
                 "latency_seconds": avg([item["generation"]["latency_seconds"] for item in group]),
+            },
+            "efficiency": {
+                "status": "raw_only_no_usd_reference",
+                "score": None,
+                "average_prompt_tokens": avg([item["generation"]["prompt_tokens"] for item in group]),
+                "average_completion_tokens": avg([item["generation"]["completion_tokens"] for item in group]),
+                "average_total_tokens": avg([item["generation"]["total_tokens"] for item in group]),
+                "average_latency_seconds": avg([item["generation"]["latency_seconds"] for item in group]),
+                "average_cost_usd": None,
+                "cost_status": "not_estimated_no_stable_price_reference",
             },
             "overall_score": None,
             "rankings": {},
@@ -324,13 +340,13 @@ def markdown(payload):
         "",
         "## Model-Level Rows",
         "",
-        "| Model/config | Attempted | Eligible | Failed | Completion reliability | Static technical | Dynamic task | Route | Content | Overall | Failure detail |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Model/config | Attempted | Eligible | Failed | Completion reliability | Static technical | Dynamic task | Route | Content | Avg prompt tokens | Avg completion tokens | Avg total tokens | Avg latency (s) | Cost status | Overall | Failure detail |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: | --- |",
     ]
     for row in rows:
         failure_detail = ", ".join(f"{item}:{detail['category']}" for item, detail in row["failure_by_item"].items()) or "none"
         lines.append(
-            "| `{model}` | {attempted} | {eligible} | {failed} | {rel} | {tech} | {dyn} | {route} | {content} | {overall} | {failure} |".format(
+            "| `{model}` | {attempted} | {eligible} | {failed} | {rel} | {tech} | {dyn} | {route} | {content} | {prompt_tokens} | {completion_tokens} | {total_tokens} | {latency} | {cost_status} | {overall} | {failure} |".format(
                 model=row["model_key"],
                 attempted=len(row["attempted_items"]),
                 eligible=len(row["eligible_items"]),
@@ -340,6 +356,11 @@ def markdown(payload):
                 dyn=fmt(row["category_scores"]["dynamic"]),
                 route=fmt(row["raw_averages"]["route_success"]),
                 content=fmt(row["raw_averages"]["content_success"]),
+                prompt_tokens=fmt(row["efficiency"]["average_prompt_tokens"]),
+                completion_tokens=fmt(row["efficiency"]["average_completion_tokens"]),
+                total_tokens=fmt(row["efficiency"]["average_total_tokens"]),
+                latency=fmt(row["efficiency"]["average_latency_seconds"]),
+                cost_status=row["efficiency"]["cost_status"],
                 overall=fmt(row["overall_score"]),
                 failure=failure_detail,
             )
@@ -349,8 +370,8 @@ def markdown(payload):
         "",
         "## Artifact-Level Rows",
         "",
-        "| Item | Branch | Model | Finish | Gate | Dynamic | Screenshots | Eligible | Failure category |",
-        "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- |",
+        "| Item | Branch | Model | Finish | Gate | Dynamic | Total tokens | Latency (s) | Screenshots | Eligible | Failure category |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- |",
     ])
     for item in payload["artifact_results"]:
         dynamic = "n/a"
@@ -358,13 +379,15 @@ def markdown(payload):
             dynamic = f"{item['dynamic']['passed_cases']}/{item['dynamic']['case_count']}"
         screenshots = fmt(item["static_visual"]["screenshot_coverage"])
         lines.append(
-            "| {item} | {branch} | `{model}` | `{finish}` | {gate} | {dynamic} | {screens} | {eligible} | `{failure}` |".format(
+            "| {item} | {branch} | `{model}` | `{finish}` | {gate} | {dynamic} | {tokens} | {latency} | {screens} | {eligible} | `{failure}` |".format(
                 item=item["item_id"],
                 branch=item["item_branch"],
                 model=item["model_label"],
                 finish=item["generation"]["finish_reason"],
                 gate="pass" if item["static_technical"]["passed"] else "fail",
                 dynamic=dynamic,
+                tokens=fmt(item["efficiency"]["total_tokens"]),
+                latency=fmt(item["efficiency"]["latency_seconds"]),
                 screens=screenshots,
                 eligible="yes" if item["eligibility"]["eligible"] else "no",
                 failure=item["eligibility"]["failure_category"],
@@ -377,7 +400,7 @@ def markdown(payload):
         "",
         "- Static visual score: schema slot present; pending validated visual judge / human rubric.",
         "- Accessibility score: schema slot present; pending integration of axe weighted-density reports.",
-        "- Efficiency score: raw token/latency fields present; normalized score pending cost reference.",
+        "- Efficiency score: raw token/latency fields are reported; normalized score and USD cost remain null until a stable price/cost reference is fixed.",
         "- Overall score: intentionally pending until category weights are approved.",
     ])
     return "\n".join(lines) + "\n"

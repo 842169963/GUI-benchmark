@@ -1,0 +1,581 @@
+{
+  "generated_at": "2026-06-15T14:40:53.222407+00:00",
+  "prompt_id_filter": "TB-GEN-v16",
+  "direct_evaluation_target": "generated UI/Web app artifact",
+  "leaderboard_ranking_target": "generator LLM/model configuration",
+  "artifact_count": 11,
+  "eligible_artifact_count": 8,
+  "provider_failures": [],
+  "artifacts": [
+    {
+      "item_id": "F01_1daycloud",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen36_35b_v16_f01_dev",
+      "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v16_f01_dev\\index.html",
+        "metadata": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v16_f01_dev\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.9230769230769231,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v16_f01_dev\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.5833333333333334,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.5833333333333334,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 0.5833333333333334,
+        "case_count": 12,
+        "passed_case_count": 7,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v16_f01_dev\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 23893,
+        "output_tokens": 18370,
+        "total_tokens": 42263,
+        "finish_reason": "stop",
+        "elapsed_seconds": 122.52,
+        "max_tokens_setting": 20000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F01_1daycloud",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen3_omni_30b_v16_f01_dev",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev\\index.html",
+        "metadata": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.46153846153846156,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 3,
+        "failed_warning_count": 4,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0,
+        "route_success_rate": 0,
+        "content_validation_success_rate": 0.5,
+        "case_count": 12,
+        "passed_case_count": 0,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 23796,
+        "output_tokens": 20000,
+        "total_tokens": 43796,
+        "finish_reason": "length",
+        "elapsed_seconds": 149.25,
+        "max_tokens_setting": 20000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed",
+        "generation_token_truncated"
+      ]
+    },
+    {
+      "item_id": "F01_1daycloud",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens\\index.html",
+        "metadata": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.46153846153846156,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 3,
+        "failed_warning_count": 4,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0,
+        "route_success_rate": 0,
+        "content_validation_success_rate": 0.5,
+        "case_count": 12,
+        "passed_case_count": 0,
+        "report": "data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen3_omni_30b_v16_f01_dev_omit_maxtokens\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 23796,
+        "output_tokens": 41740,
+        "total_tokens": 65536,
+        "finish_reason": "length",
+        "elapsed_seconds": 325.65,
+        "max_tokens_setting": null,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed",
+        "generation_token_truncated"
+      ]
+    },
+    {
+      "item_id": "F03_about_gitlab",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen36_35b_v16_f03_compact_smoke",
+      "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen36_35b_v16_f03_compact_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen36_35b_v16_f03_compact_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.9230769230769231,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen36_35b_v16_f03_compact_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.5,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.5,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 0.5,
+        "case_count": 8,
+        "passed_case_count": 4,
+        "report": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen36_35b_v16_f03_compact_smoke\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 16261,
+        "output_tokens": 13115,
+        "total_tokens": 29376,
+        "finish_reason": "stop",
+        "elapsed_seconds": 81.97,
+        "max_tokens_setting": 40000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F03_about_gitlab",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen3_omni_30b_v16_f03_compact_smoke",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen3_omni_30b_v16_f03_compact_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen3_omni_30b_v16_f03_compact_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.9230769230769231,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen3_omni_30b_v16_f03_compact_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.375,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.375,
+        "route_success_rate": 0.75,
+        "content_validation_success_rate": 0.5,
+        "case_count": 8,
+        "passed_case_count": 3,
+        "report": "data\\track_b\\items\\F03_about_gitlab\\generated\\gwdg_qwen3_omni_30b_v16_f03_compact_smoke\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 16180,
+        "output_tokens": 15600,
+        "total_tokens": 31780,
+        "finish_reason": "stop",
+        "elapsed_seconds": 124.15,
+        "max_tokens_setting": 30000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F06_community_dynamics",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens",
+      "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens\\index.html",
+        "metadata": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 1.0,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 0,
+        "report": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.4,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.4,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 0.4,
+        "case_count": 10,
+        "passed_case_count": 4,
+        "report": "data\\track_b\\items\\F06_community_dynamics\\generated\\gwdg_qwen36_35b_v16_f06_dev_omit_maxtokens\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 28901,
+        "output_tokens": 28353,
+        "total_tokens": 57254,
+        "finish_reason": "stop",
+        "elapsed_seconds": 213.87,
+        "max_tokens_setting": null,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F10_gourmania",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen36_35b_v16_f10_dev",
+      "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v16_f10_dev\\index.html",
+        "metadata": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v16_f10_dev\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.9230769230769231,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v16_f10_dev\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.75,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.75,
+        "route_success_rate": 1,
+        "content_validation_success_rate": 0.75,
+        "case_count": 8,
+        "passed_case_count": 6,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v16_f10_dev\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 29455,
+        "output_tokens": 11578,
+        "total_tokens": 41033,
+        "finish_reason": "stop",
+        "elapsed_seconds": 109.0,
+        "max_tokens_setting": 20000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F10_gourmania",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen3_omni_30b_v16_f10_dev",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev\\index.html",
+        "metadata": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.6153846153846154,
+        "passed": false,
+        "available": true,
+        "failed_error_count": 2,
+        "failed_warning_count": 3,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.625,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.625,
+        "route_success_rate": 0.75,
+        "content_validation_success_rate": 0.75,
+        "case_count": 8,
+        "passed_case_count": 5,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 29363,
+        "output_tokens": 20000,
+        "total_tokens": 49363,
+        "finish_reason": "length",
+        "elapsed_seconds": 192.66,
+        "max_tokens_setting": 20000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": false,
+      "ineligibility_reasons": [
+        "static_technical_gate_failed",
+        "generation_token_truncated"
+      ]
+    },
+    {
+      "item_id": "F10_gourmania",
+      "item_branch": "executable_workflow",
+      "run": "gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens",
+      "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens\\index.html",
+        "metadata": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.7692307692307693,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 3,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_standard_screenshots",
+        "screenshot_coverage": null,
+        "manifest": null
+      },
+      "dynamic": {
+        "score": 0.625,
+        "status": "available",
+        "evaluator": "browser-workflow-v1",
+        "task_success_rate": 0.625,
+        "route_success_rate": 0.75,
+        "content_validation_success_rate": 0.75,
+        "case_count": 8,
+        "passed_case_count": 5,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen3_omni_30b_v16_f10_dev_omit_maxtokens\\browser_workflow_normalized_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 29363,
+        "output_tokens": 7861,
+        "total_tokens": 37224,
+        "finish_reason": "stop",
+        "elapsed_seconds": 77.19,
+        "max_tokens_setting": null,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "F10_gourmania",
+      "item_branch": "executable_workflow",
+      "run": "tuzi_gpt41mini_v16_f10_smoke",
+      "model_key": "tuzi-openai/gpt-4.1-mini/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\F10_gourmania\\generated\\tuzi_gpt41mini_v16_f10_smoke\\index.html",
+        "metadata": "data\\track_b\\items\\F10_gourmania\\generated\\tuzi_gpt41mini_v16_f10_smoke\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 0.9230769230769231,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 1,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\tuzi_gpt41mini_v16_f10_smoke\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_rubric_scoring",
+        "screenshot_coverage": 1,
+        "manifest": "data\\track_b\\items\\F10_gourmania\\generated\\tuzi_gpt41mini_v16_f10_smoke\\standard_screenshots\\manifest.json"
+      },
+      "dynamic": {
+        "score": 0.625,
+        "status": "available",
+        "evaluator": "route-simulation-v1",
+        "task_success_rate": 0.625,
+        "route_success_rate": 1.0,
+        "content_validation_success_rate": 0.625,
+        "case_count": 8,
+        "passed_case_count": 5,
+        "report": "data\\track_b\\items\\F10_gourmania\\generated\\tuzi_gpt41mini_v16_f10_smoke\\dynamic_workflow_report.json"
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 5028,
+        "output_tokens": 7574,
+        "total_tokens": 12602,
+        "finish_reason": "stop",
+        "elapsed_seconds": 81.97,
+        "max_tokens_setting": 12000,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    },
+    {
+      "item_id": "W03_eventbrite",
+      "item_branch": "static_responsive",
+      "run": "gwdg_qwen36_35b_v16_w03_static_omit_maxtokens",
+      "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "prompt_id": "TB-GEN-v16",
+      "artifact": {
+        "html": "data\\track_b\\items\\W03_eventbrite\\generated\\gwdg_qwen36_35b_v16_w03_static_omit_maxtokens\\index.html",
+        "metadata": "data\\track_b\\items\\W03_eventbrite\\generated\\gwdg_qwen36_35b_v16_w03_static_omit_maxtokens\\generation_metadata.json"
+      },
+      "static_technical": {
+        "score": 1.0,
+        "passed": true,
+        "available": true,
+        "failed_error_count": 0,
+        "failed_warning_count": 0,
+        "report": "data\\track_b\\items\\W03_eventbrite\\generated\\gwdg_qwen36_35b_v16_w03_static_omit_maxtokens\\gate_report.json"
+      },
+      "static_visual": {
+        "score": null,
+        "status": "pending_rubric_scoring",
+        "screenshot_coverage": 1,
+        "manifest": "data\\track_b\\items\\W03_eventbrite\\generated\\gwdg_qwen36_35b_v16_w03_static_omit_maxtokens\\standard_screenshots\\manifest.json"
+      },
+      "dynamic": {
+        "score": null,
+        "status": "not_applicable",
+        "evaluator": null,
+        "task_success_rate": null,
+        "route_success_rate": null,
+        "content_validation_success_rate": null,
+        "case_count": null,
+        "passed_case_count": null,
+        "report": null
+      },
+      "efficiency": {
+        "score": null,
+        "status": "raw_only_no_usd_reference",
+        "input_tokens": 10120,
+        "output_tokens": 16525,
+        "total_tokens": 26645,
+        "finish_reason": "stop",
+        "elapsed_seconds": 206.35,
+        "max_tokens_setting": null,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
+      },
+      "overall_score": null,
+      "eligible_for_leaderboard": true,
+      "ineligibility_reasons": []
+    }
+  ]
+}

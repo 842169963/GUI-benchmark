@@ -2,6 +2,58 @@
 
 ## 2026-06-12
 
+### Deck rev 3 — synced to final freeze + adjudication findings
+
+- Regenerated `presentations/track_b_progress_2026-06-12_v3.pptx` (v2 left in
+  place, possibly open) to match the latest results. Factual corrections:
+  medium anchor 0.875 → 0.75 (frozen anchors 0.50/0.75/1.0, F10 home / F01
+  contact / F01 academy, slide 3); judge reframed from "awaiting confirmation"
+  to FROZEN/FINAL (slides 6, 11, 12); provider claim corrected — the "tuzi
+  lenient" worry was debunked as an artifact, providers are quality-equivalent,
+  ChatAnywhere chosen for speed/stability (slides 7, 11). Added the
+  "why author labels as gold?" defense (adjudicated-consensus anchors built and
+  tested head-to-head, scored LOWER κ 0.31 vs 0.35 → author-gold retained) and
+  the Goldilocks anchor refinement (moderate 0.50 beats both absence → collapse
+  and a harsher 0.25 → over-correction) to the Exp 3 slide. Speaker notes gained
+  the κ>0.6 explanation (objective tasks + training + countable wording, not
+  yes/no; our κ≈0.3 matches subjective UI-judge literature). QA: exported PNGs
+  via PowerPoint COM, slides 3/6/7/11/12 verified clean.
+
+### Adjudicated-consensus anchors tested; author-gold retained; judge freeze FINAL
+
+- Responding to the user's "why author labels as gold" critique, built an
+  adjudicated-consensus anchor set (3 graded double-labelled pages, 5 disagreeing
+  items resolved by author+friend adjudication; anchor scores 0.0625/0.625/1.0;
+  sheet `anchor_adjudication_sheet.md`, new `--anchor-set adjudicated`). Full-range
+  re-validation on ChatAnywhere, head-to-head on the SAME 45 pages:
+  author-gold κ 0.353/0.340 vs adjudicated 0.306/0.281 → adjudicated consistently
+  LOWER. Per the pre-registered rule, **author-gold default anchors RETAINED**.
+  The harsh 0.0625 low exemplar over-corrects the judge; the moderate 0.50 low
+  anchor calibrates better. Single-rater-gold documented as a limitation but
+  empirically the consensus alternative did not improve agreement.
+- Also explained/recorded (F6/F7 in jitter notes): self-preference sensitivity
+  check is a planned POST-leaderboard step (re-judge GPT-family contestants with
+  a cross-family judge, check ranking stability; contrast judge needs no
+  certification). Dual-judge panel = future work (each member must pass human-
+  ceiling cert; none qualifies now). Visual judge stays SCREENSHOT-ONLY by design
+  (construct validity + avoids reopening the self-preference channel that code
+  fingerprints carry + code/structure already covered by technical/accessibility
+  layers).
+- **Controlled add-one-low-anchor test** (clean single-variable, after the user
+  correctly flagged the adjudicated test as confounded): 3 anchors vs 3+one 0.25
+  low anchor, same session/pages. Control κ 0.329/0.299 vs treatment 0.228/0.198
+  — adding the low anchor lowers κ ~0.10 (> ±0.05 noise), consistent across both
+  raters. Full-range coverage REFUTED cleanly; the harsh-low-anchor effect is
+  real. Control reproduced the original certification (within noise).
+- Also explained (recorded): high-κ datasets reach κ>0.6 via objective/verifiable
+  tasks + annotator training/guidelines/calibration + countable item wording —
+  NOT via "yes/no" (we already use yes/no). Our κ≈0.3 ceiling matches the
+  subjective UI-judge literature (MLLM-as-UI-Judge, WebDevJudge report moderate
+  correlation), confirming the compare-to-human-ceiling framing.
+- **VISUAL JUDGE FREEZE FINAL**: gpt-4.1-mini + strict + default graded anchors
+  (0.50/0.75/1.0, author golds, 3 anchors — wider coverage tested & rejected) +
+  3-rep majority vote, on ChatAnywhere.
+
 ### Visual-judge provider chosen (tuzi) — judge freeze config complete
 
 - Re-certified the certified config (gpt-4.1-mini / strict / default graded
@@ -1222,3 +1274,22 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
   data/track_b/model_capabilities/model_capability_table_2026-06-05.json` and
   `py -3 -m py_compile scripts/probe_model_capabilities.py
   scripts/generate_track_b_ui.py scripts/run_visual_judge.py` both succeeded.
+
+### Track B raw efficiency reporting in leaderboard builders
+
+- Updated `scripts/build_track_b_dev_subset_demo.py` and
+  `scripts/build_track_b_mini_leaderboard.py` to surface raw efficiency fields
+  in leaderboard outputs: average prompt tokens, completion tokens, total
+  tokens, latency, completion reliability, failed artifact count, and cost
+  status.
+- Basis: existing `generation_metadata.json` files already record prompt,
+  completion, total token usage, finish reason, and elapsed seconds. The
+  provider catalog records that exact USD costs should not be inferred without
+  a stable provider price or account billing reference.
+- Decision: use `raw_only_no_usd_reference` for the current efficiency status.
+  `efficiency_score`, `average_cost_usd`, and `overall_score` remain null until
+  a stable cost reference or billing source is fixed. This avoids presenting
+  proxy/GWDG/Tuzi costs as precise comparable USD values.
+- Scope boundary: no visual-judge files or adjudicated-anchor outputs were
+  modified. Accessibility weighted-density implementation remains a separate
+  future task.

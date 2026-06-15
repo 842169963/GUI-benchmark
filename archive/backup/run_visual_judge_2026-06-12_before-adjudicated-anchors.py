@@ -201,11 +201,10 @@ def main():
     ap.add_argument("--variant", choices=["base", "strict"], default="base")
     ap.add_argument("--fewshot", action="store_true",
                     help="prepend human-labelled example screenshots as calibration")
-    ap.add_argument("--anchor-set", choices=["default", "alt", "consensus", "adjudicated", "default_lowadd"], default="default",
+    ap.add_argument("--anchor-set", choices=["default", "alt", "consensus"], default="default",
                     help="alt = anchor-sensitivity check (3 different single-rater pages); "
-                         "consensus = double-labelled extended pages with >=13/16 agreement; "
-                         "adjudicated = 3 graded consensus anchors whose disagreeing items were "
-                         "resolved by author+friend adjudication (frozen gold)")
+                         "consensus = anchors from double-labelled extended pages where "
+                         "both human raters agree on >=13/16 items (low/median/high)")
     ap.add_argument("--out-tag", default="",
                     help="extra suffix appended to the output filename (e.g. provider id) "
                          "so runs under different providers do not overwrite each other")
@@ -274,51 +273,6 @@ def main():
             example_triples.add((run, item, page))
         print("consensus anchors:",
               [(run, page, round(sc, 4)) for sc, (run, item, page) in chosen])
-    elif args.fewshot and args.anchor_set == "adjudicated":
-        # 3 graded consensus anchors; the items where author and friend
-        # disagreed were resolved by adjudication (2026-06-12, recorded in
-        # notes/track_b_jitter_validation.md). Gold = agreed items as-is +
-        # these adjudicated overrides. Frozen with the judge.
-        ADJ_ANCHORS = [
-            ("gwdg_internvl35_30b_v9_smoke", "F10_gourmania", "05_tips",
-             {"L2": False, "T3": False}),
-            ("gwdg_qwen36_35b_v9_smoke_jitter_severe", "F03_about_gitlab", "06_pricing",
-             {"L2": False, "T2": True, "C3": False}),
-            ("gwdg_qwen36_35b_v9_smoke_jitter_mild", "F01_1daycloud", "02_academy", {}),
-        ]
-        def load_ext(name):
-            out = {}
-            for p in json.loads((OUT_DIR / name).read_text("utf-8"))["pages"]:
-                dims = p.get("dimensions")
-                if not dims:
-                    continue
-                flat = {}
-                for d in dims.values():
-                    flat.update(d)
-                out[(p["run"], p["item"], p["page_id"])] = flat
-            return out
-        ra = load_ext("visual_human_review_extended.json")
-        rb = load_ext("visual_human_review_extended_rater2.json")
-        fewshot_msgs = []
-        for run, item, page, override in ADJ_ANCHORS:
-            a = ra[(run, item, page)]
-            b = rb[(run, item, page)]
-            gold = {}
-            for it in ITEM_IDS:
-                if it in override:
-                    gold[it] = override[it]
-                elif a.get(it) == b.get(it) and a.get(it) is not None:
-                    gold[it] = bool(a[it])
-                else:
-                    raise SystemExit(f"adjudicated anchor {page} item {it}: disagreement "
-                                     f"without override (a={a.get(it)} b={b.get(it)})")
-            png = ITEMS / item / "generated" / run / "standard_screenshots" / f"{page}.png"
-            fewshot_msgs.append(img_msg(user, png))
-            fewshot_msgs.append({"role": "assistant",
-                                 "content": json.dumps({"answers": gold, "confidence": 1.0})})
-            example_triples.add((run, item, page))
-            print(f"adjudicated anchor {item}/{page}: gold score "
-                  f"{sum(1 for v in gold.values() if v)/16:.4f}")
     elif args.fewshot:
         human = {f"{p['item']}::{p['page_id']}": p
                  for p in json.loads((OUT_DIR / "visual_human_review.json").read_text("utf-8"))["pages"]}
@@ -341,25 +295,6 @@ def main():
             gold = {"answers": {it: bool(flat[it]) for it in ITEM_IDS}, "confidence": 1.0}
             fewshot_msgs.append({"role": "assistant", "content": json.dumps(gold)})
             example_keys.add(k)
-        if args.anchor_set == "default_lowadd":
-            # Controlled add-one-anchor test: keep the certified default 3
-            # anchors unchanged, ADD a single ~0.25 low-end exemplar (author
-            # gold, same source as the defaults) to test whether full-range
-            # coverage helps. Single isolated variable vs the default control.
-            LOW = ("gwdg_qwen36_35b_v9_smoke_jitter_severe", "F01_1daycloud", "05_digital_cards")
-            ext = {(p["run"], p["item"], p["page_id"]): p
-                   for p in json.loads((OUT_DIR / "visual_human_review_extended.json").read_text("utf-8"))["pages"]}
-            rec = ext[LOW]
-            flat = {}
-            for d in rec["dimensions"].values():
-                flat.update(d)
-            png = ITEMS / LOW[1] / "generated" / LOW[0] / "standard_screenshots" / f"{LOW[2]}.png"
-            fewshot_msgs.append(img_msg(user, png))
-            gold = {"answers": {it: bool(flat[it]) for it in ITEM_IDS}, "confidence": 1.0}
-            fewshot_msgs.append({"role": "assistant", "content": json.dumps(gold)})
-            example_triples.add(LOW)
-            print(f"added low anchor {LOW[1]}/{LOW[2]}: gold score "
-                  f"{sum(1 for it in ITEM_IDS if flat[it])/16:.4f}")
 
     key, base_url = load_provider(args.provider)
     pages = collect_pages(args.run)
@@ -391,7 +326,7 @@ def main():
     suffix = "" if args.variant == "base" else f"_{args.variant}"
     if args.fewshot:
         suffix += "_fewshot"
-    if args.anchor_set not in ("default",):
+    if args.anchor_set != "default":
         suffix += f"_{args.anchor_set}anchor"
     if args.run != RUN:
         run_tag = re.sub(r"[^A-Za-z0-9._-]", "_", args.run.replace(RUN, "").strip("_"))

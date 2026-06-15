@@ -1,6 +1,6 @@
 {
   "leaderboard_schema_version": "track-b-leaderboard-v1",
-  "generated_at": "2026-06-11T20:57:41.512063+00:00",
+  "generated_at": "2026-06-15T14:40:53.134593+00:00",
   "scope": {
     "prompt_id": "TB-GEN-v16",
     "input_profile": "compact",
@@ -79,10 +79,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 23893,
+        "completion_tokens": 18370,
         "total_tokens": 42263,
-        "latency_seconds": 122.52
+        "latency_seconds": 122.52,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -145,10 +149,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 16261,
+        "completion_tokens": 13115,
         "total_tokens": 29376,
-        "latency_seconds": 81.97
+        "latency_seconds": 81.97,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -211,10 +219,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 28901,
+        "completion_tokens": 28353,
         "total_tokens": 57254,
-        "latency_seconds": 213.87
+        "latency_seconds": 213.87,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -277,10 +289,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 29455,
+        "completion_tokens": 11578,
         "total_tokens": 41033,
-        "latency_seconds": 109.0
+        "latency_seconds": 109.0,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -344,10 +360,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 10120,
+        "completion_tokens": 16525,
         "total_tokens": 26645,
-        "latency_seconds": 206.35
+        "latency_seconds": 206.35,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -410,10 +430,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 23796,
+        "completion_tokens": 41740,
         "total_tokens": 65536,
-        "latency_seconds": 325.65
+        "latency_seconds": 325.65,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": false,
@@ -476,10 +500,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 16180,
+        "completion_tokens": 15600,
         "total_tokens": 31780,
-        "latency_seconds": 124.15
+        "latency_seconds": 124.15,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -542,10 +570,14 @@
         "score": null
       },
       "efficiency": {
-        "status": "raw_only",
+        "status": "raw_only_no_usd_reference",
         "score": null,
+        "prompt_tokens": 29363,
+        "completion_tokens": 7861,
         "total_tokens": 37224,
-        "latency_seconds": 77.19
+        "latency_seconds": 77.19,
+        "cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "eligibility": {
         "eligible": true,
@@ -585,8 +617,20 @@
       "raw_averages": {
         "route_success": 1,
         "content_success": 0.5583333333333333,
+        "prompt_tokens": 21726,
         "completion_tokens": 17588.2,
+        "total_tokens": 39314.2,
         "latency_seconds": 146.742
+      },
+      "efficiency": {
+        "status": "raw_only_no_usd_reference",
+        "score": null,
+        "average_prompt_tokens": 21726,
+        "average_completion_tokens": 17588.2,
+        "average_total_tokens": 39314.2,
+        "average_latency_seconds": 146.742,
+        "average_cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "overall_score": null,
       "rankings": {
@@ -633,8 +677,20 @@
       "raw_averages": {
         "route_success": 0.75,
         "content_success": 0.625,
+        "prompt_tokens": 23113,
         "completion_tokens": 21733.666666666668,
+        "total_tokens": 44846.666666666664,
         "latency_seconds": 175.66333333333333
+      },
+      "efficiency": {
+        "status": "raw_only_no_usd_reference",
+        "score": null,
+        "average_prompt_tokens": 23113,
+        "average_completion_tokens": 21733.666666666668,
+        "average_total_tokens": 44846.666666666664,
+        "average_latency_seconds": 175.66333333333333,
+        "average_cost_usd": null,
+        "cost_status": "not_estimated_no_stable_price_reference"
       },
       "overall_score": null,
       "rankings": {

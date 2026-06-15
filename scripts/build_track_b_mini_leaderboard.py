@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
@@ -117,6 +117,7 @@ def artifact_result(item_dir: Path, run_dir: Path):
     usage = usage_from_metadata(metadata or {})
     dynamic_score = dynamic.get("task_success_rate") if dynamic else None
     dynamic_available = dynamic_score is not None
+    dynamic_required = not item_dir.name.startswith("W")
     static_visual_score = None
     static_visual_status = "pending_standard_screenshots"
     screenshot_coverage = None
@@ -125,7 +126,7 @@ def artifact_result(item_dir: Path, run_dir: Path):
         static_visual_status = "pending_rubric_scoring"
 
     efficiency_score = None
-    efficiency_status = "pending_cost_reference"
+    efficiency_status = "raw_only_no_usd_reference"
     category_scores = [
         gate_score["score"],
         static_visual_score,
@@ -134,10 +135,15 @@ def artifact_result(item_dir: Path, run_dir: Path):
     ]
     overall_score = mean(category_scores) if all(score is not None for score in category_scores) else None
     finish_reason = usage.get("finish_reason")
-    eligible = bool(gate_score["passed"] and finish_reason != "length" and dynamic_available)
+    eligible = bool(
+        gate_score["passed"]
+        and finish_reason not in {"length", "max_tokens"}
+        and (dynamic_available or not dynamic_required)
+    )
 
     return {
         "item_id": item_dir.name,
+        "item_branch": "static_responsive" if item_dir.name.startswith("W") else "executable_workflow",
         "run": run_dir.name,
         "model_key": model_key(metadata),
         "prompt_id": metadata.get("prompt_id") if metadata else None,
@@ -157,6 +163,7 @@ def artifact_result(item_dir: Path, run_dir: Path):
         },
         "dynamic": {
             "score": dynamic_score,
+            "status": "available" if dynamic_available else ("missing" if dynamic_required else "not_applicable"),
             "evaluator": dynamic.get("evaluator") if dynamic else None,
             "task_success_rate": dynamic.get("task_success_rate") if dynamic else None,
             "route_success_rate": dynamic.get("route_success_rate") if dynamic else None,
@@ -169,10 +176,12 @@ def artifact_result(item_dir: Path, run_dir: Path):
             "score": efficiency_score,
             "status": efficiency_status,
             **usage,
+            "cost_usd": None,
+            "cost_status": "not_estimated_no_stable_price_reference",
         },
         "overall_score": overall_score,
         "eligible_for_leaderboard": eligible,
-        "ineligibility_reasons": ineligibility_reasons(gate_score, finish_reason, dynamic_available),
+        "ineligibility_reasons": ineligibility_reasons(gate_score, finish_reason, dynamic_required, dynamic_available),
     }
 
 
@@ -185,13 +194,13 @@ def model_key(metadata):
     return f"{provider}/{model}/{prompt}"
 
 
-def ineligibility_reasons(gate_score, finish_reason, dynamic_available):
+def ineligibility_reasons(gate_score, finish_reason, dynamic_required, dynamic_available):
     reasons = []
     if not gate_score["passed"]:
         reasons.append("static_technical_gate_failed")
-    if finish_reason == "length":
+    if finish_reason in {"length", "max_tokens"}:
         reasons.append("generation_token_truncated")
-    if not dynamic_available:
+    if dynamic_required and not dynamic_available:
         reasons.append("dynamic_report_missing")
     return reasons
 
@@ -215,22 +224,34 @@ def aggregate_model_rows(artifacts, include_ineligible=False):
     rows = []
     for model, group in sorted(grouped.items()):
         eligible = [item for item in group if item["eligible_for_leaderboard"]]
+        failed = [item for item in group if not item["eligible_for_leaderboard"]]
         scoring_group = eligible if eligible else group
+        reason_counts = Counter(
+            reason
+            for item in failed
+            for reason in (item["ineligibility_reasons"] or ["unknown_ineligibility"])
+        )
         rows.append({
             "model": model,
             "artifact_count": len(group),
             "eligible_artifact_count": len(eligible),
+            "failed_artifact_count": len(failed),
+            "completion_reliability": len(eligible) / len(group) if group else None,
             "attempted_items": sorted({item["item_id"] for item in group}),
+            "ineligibility_reason_counts": dict(reason_counts),
             "overall_score": avg([item["overall_score"] for item in scoring_group]),
             "static_technical_score": avg([item["static_technical"]["score"] for item in scoring_group]),
             "static_visual_score": avg([item["static_visual"]["score"] for item in scoring_group]),
             "dynamic_score": avg([item["dynamic"]["score"] for item in scoring_group]),
             "efficiency_score": avg([item["efficiency"]["score"] for item in scoring_group]),
-            "average_total_tokens": avg([item["efficiency"]["total_tokens"] for item in scoring_group]),
-            "average_output_tokens": avg([item["efficiency"]["output_tokens"] for item in scoring_group]),
-            "average_latency_seconds": avg([item["efficiency"]["elapsed_seconds"] for item in scoring_group]),
+            "average_prompt_tokens": avg([item["efficiency"]["input_tokens"] for item in group]),
+            "average_completion_tokens": avg([item["efficiency"]["output_tokens"] for item in group]),
+            "average_total_tokens": avg([item["efficiency"]["total_tokens"] for item in group]),
+            "average_output_tokens": avg([item["efficiency"]["output_tokens"] for item in group]),
+            "average_latency_seconds": avg([item["efficiency"]["elapsed_seconds"] for item in group]),
             "average_cost_per_app": None,
-            "notes": "Overall/static visual/efficiency scores remain null until visual rubric scoring and cost reference are defined.",
+            "cost_status": "not_estimated_no_stable_price_reference",
+            "notes": "Overall/static visual/efficiency scores remain null; raw token/latency efficiency fields are reported without USD cost estimation.",
         })
     rows.sort(
         key=lambda row: (
@@ -267,30 +288,55 @@ def leaderboard_markdown(model_rows, prompt_id, provider_failure_count):
         "",
         f"Provider failures recorded: {provider_failure_count}",
         "",
-        "| Rank | Model | Eligible artifacts | Static Technical | Static Visual | Dynamic | Efficiency | Overall | Avg total tokens | Avg latency (s) |",
-        "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Rank | Model | Attempted | Eligible | Failed | Completion reliability | Static Technical | Static Visual | Dynamic | Efficiency | Overall | Avg prompt tokens | Avg completion tokens | Avg total tokens | Avg latency (s) | Cost status |",
+        "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for row in model_rows:
         lines.append(
-            "| {rank} | {model} | {eligible} | {static_technical} | {static_visual} | {dynamic} | {efficiency} | {overall} | {tokens} | {latency} |".format(
+            "| {rank} | {model} | {attempted} | {eligible} | {failed} | {reliability} | {static_technical} | {static_visual} | {dynamic} | {efficiency} | {overall} | {prompt_tokens} | {completion_tokens} | {tokens} | {latency} | {cost_status} |".format(
                 rank=row["rank"],
                 model=row["model"],
+                attempted=row["artifact_count"],
                 eligible=row["eligible_artifact_count"],
+                failed=row["failed_artifact_count"],
+                reliability=format_score(row["completion_reliability"]),
                 static_technical=format_score(row["static_technical_score"]),
                 static_visual=format_score(row["static_visual_score"]),
                 dynamic=format_score(row["dynamic_score"]),
                 efficiency=format_score(row["efficiency_score"]),
                 overall=format_score(row["overall_score"]),
+                prompt_tokens=format_number(row["average_prompt_tokens"]),
+                completion_tokens=format_number(row["average_completion_tokens"]),
                 tokens=format_number(row["average_total_tokens"]),
                 latency=format_number(row["average_latency_seconds"]),
+                cost_status=row["cost_status"],
             )
         )
+    failed_rows = [
+        row for row in model_rows
+        if row.get("ineligibility_reason_counts")
+    ]
+    if failed_rows:
+        lines.extend([
+            "",
+            "Failure summary:",
+            "",
+            "| Model | Ineligibility reasons |",
+            "| --- | --- |",
+        ])
+        for row in failed_rows:
+            reasons = ", ".join(
+                f"{reason}: {count}"
+                for reason, count in sorted(row["ineligibility_reason_counts"].items())
+            )
+            lines.append(f"| {row['model']} | {reasons} |")
     lines.extend([
         "",
         "Notes:",
         "",
         "- Static Visual is pending until the standardized screenshots are scored with a visual rubric.",
-        "- Efficiency is pending until a cost reference or normalization rule is fixed.",
+        "- Efficiency score remains pending, but raw token and latency fields are reported for quality-vs-efficiency comparison.",
+        "- USD cost is not estimated in this output because no stable provider price or billing reference is fixed.",
         "- Overall remains pending while any component score is pending.",
         "- Current demo ranking falls back to Dynamic score while Overall is pending.",
     ])

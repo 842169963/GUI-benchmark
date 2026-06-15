@@ -20,6 +20,28 @@ traceable basis.
 - Do not add unsupported background statements, result claims, benchmark claims,
   or novelty claims merely because they sound plausible.
 
+## Literature check before new research directions
+
+Before starting a new research direction, method, evaluation route, or major
+experimental design change, first check relevant real literature instead of
+inventing an approach from general plausibility.
+
+- Search for directly related work in the thesis domain first, then optionally
+  include transferable methods from adjacent or other fields when the analogy is
+  technically reasonable.
+- Use only verifiable literature sources such as papers, preprints with stable
+  identifiers, books, or official project documentation. Do not cite papers,
+  venues, authors, years, DOIs, or results unless they have been checked.
+- Summarize candidate directions with enough bibliographic detail for manual
+  verification: title, authors, year, venue or source, DOI/arXiv/URL when
+  available, and the specific idea that may transfer to this thesis.
+- Clearly separate literature-backed facts from the agent's own interpretation,
+  proposed adaptation, or uncertainty.
+- Present the candidate directions to the user for manual approval before
+  implementing experiments, changing thesis claims, or committing to the route.
+- If the literature search is inconclusive, say so explicitly and list what was
+  searched rather than filling the gap with unsupported claims.
+
 ## Thesis-impacting prompt preservation
 
 Prompts are part of the experimental method for this thesis. When working on

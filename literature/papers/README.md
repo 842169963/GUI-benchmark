@@ -5,6 +5,11 @@ The PDF files themselves are intentionally not tracked in the public GitHub
 repository, because redistributing publisher PDFs in a public repository may
 create copyright issues.
 
+For GPT Deep Research or other web-connected tools, use the public source list
+in this folder instead of uploading the local PDF copies:
+
+- `paper_sources.json`
+
 For supervisor review, use the citation audit in:
 
 - `advisor_package_2026-06-17_minimal/literature_and_citations.md`
@@ -29,10 +34,15 @@ For supervisor review, use the citation audit in:
 
 ## Public citation links used in the supervisor package
 
+- A Systematic Study of Position Bias in LLM-as-a-Judge: https://aclanthology.org/2025.ijcnlp-long.18/
 - Vision2Web: https://arxiv.org/abs/2603.26648
+- Design2Code: https://arxiv.org/abs/2403.03163
+- ArtifactsBench: https://arxiv.org/abs/2507.04952
+- FlowEval: https://arxiv.org/abs/2605.04165
 - UIClip: https://dl.acm.org/doi/10.1145/3654777.3676408
 - CheckEval: https://arxiv.org/abs/2403.18771
 - MLLM as a UI Judge: https://arxiv.org/abs/2510.08783
+- Training Computer Use Agents to Assess GUI Usability: https://arxiv.org/abs/2604.26020
 - WebDevJudge: https://arxiv.org/abs/2510.18560
 - Judge's Verdict: https://arxiv.org/abs/2510.09738
 - Cohen 1960: https://doi.org/10.1177/001316446002000104

@@ -1,0 +1,94 @@
+[
+  {
+    "local_file": "2025.ijcnlp-long bias llm as a judge.18.pdf",
+    "title": "A Systematic Study of Position Bias in LLM-as-a-Judge",
+    "source_page": "https://aclanthology.org/2025.ijcnlp-long.18/",
+    "pdf_url": "https://aclanthology.org/2025.ijcnlp-long.18.pdf",
+    "note": "Open ACL Anthology page/PDF; use this URL for GPT Deep Research."
+  },
+  {
+    "local_file": "2025.ijcnlp-long bias llm as a judge china.18.pdf",
+    "title": "A Systematic Study of Position Bias in LLM-as-a-Judge",
+    "source_page": "https://aclanthology.org/2025.ijcnlp-long.18/",
+    "pdf_url": "https://aclanthology.org/2025.ijcnlp-long.18.pdf",
+    "note": "Local duplicate/translated copy; public source is ACL Anthology."
+  },
+  {
+    "local_file": "ArtifactsBench Bridging the Visual-Interactive Gap in LLM Code Generation Evaluation.pdf",
+    "title": "ArtifactsBench: Bridging the Visual-Interactive Gap in LLM Code Generation Evaluation",
+    "source_page": "https://arxiv.org/abs/2507.04952",
+    "pdf_url": "https://arxiv.org/pdf/2507.04952",
+    "note": "Open arXiv source."
+  },
+  {
+    "local_file": "Chinese Vision2Web A Hierarchical Benchmark for Visual Website Development with_dual.pdf",
+    "title": "Vision2Web: A Hierarchical Benchmark for Visual Website Development with Agent Verification",
+    "source_page": "https://arxiv.org/abs/2603.26648",
+    "pdf_url": "https://arxiv.org/pdf/2603.26648",
+    "note": "Local translated/dual copy; public source is arXiv."
+  },
+  {
+    "local_file": "Vision2Web A Hierarchical Benchmark for Visual Website Development with.pdf",
+    "title": "Vision2Web: A Hierarchical Benchmark for Visual Website Development with Agent Verification",
+    "source_page": "https://arxiv.org/abs/2603.26648",
+    "pdf_url": "https://arxiv.org/pdf/2603.26648",
+    "note": "Open arXiv source."
+  },
+  {
+    "local_file": "FlowEval Reference-based Evaluation of Generated User Interfaces.pdf",
+    "title": "FlowEval: Reference-based Evaluation of Generated User Interfaces",
+    "source_page": "https://arxiv.org/abs/2605.04165",
+    "pdf_url": "https://arxiv.org/pdf/2605.04165",
+    "note": "Open arXiv source; OpenReview page also exists."
+  },
+  {
+    "local_file": "MLLM as a UI Judge Benchmarking Multimodal LLMs for.pdf",
+    "title": "MLLM as a UI Judge: Benchmarking Multimodal LLMs for Predicting Human Perception of User Interfaces",
+    "source_page": "https://arxiv.org/abs/2510.08783",
+    "pdf_url": "https://arxiv.org/pdf/2510.08783",
+    "note": "Open arXiv source."
+  },
+  {
+    "local_file": "chinese MLLM as a UI Judge_ Benchmarking Multimodal LLMs for Predicting Human Perception of User Interfaces - MLLM as a UI Judge Benchmarking Multimodal LLMs for.pdf",
+    "title": "MLLM as a UI Judge: Benchmarking Multimodal LLMs for Predicting Human Perception of User Interfaces",
+    "source_page": "https://arxiv.org/abs/2510.08783",
+    "pdf_url": "https://arxiv.org/pdf/2510.08783",
+    "note": "Local translated copy; public source is arXiv."
+  },
+  {
+    "local_file": "Training Computer Use Agents to Assess the Usability of Graphical User Interfaces1.pdf",
+    "title": "Training Computer Use Agents to Assess the Usability of Graphical User Interfaces",
+    "source_page": "https://arxiv.org/abs/2604.26020",
+    "pdf_url": "https://arxiv.org/pdf/2604.26020",
+    "note": "Open arXiv source."
+  },
+  {
+    "local_file": "chinese Training Computer Use Agents to Assess the Usability of Graphical User Interfaces - Training Computer Use Agents to Assess the Usability of Graphical User Interfaces1.pdf",
+    "title": "Training Computer Use Agents to Assess the Usability of Graphical User Interfaces",
+    "source_page": "https://arxiv.org/abs/2604.26020",
+    "pdf_url": "https://arxiv.org/pdf/2604.26020",
+    "note": "Local translated copy; public source is arXiv."
+  },
+  {
+    "local_file": "UIClip_ A Data-driven Model for Assessing User Interface Design - 实例论文.pdf",
+    "title": "UIClip: A Data-driven Model for Assessing User Interface Design",
+    "source_page": "https://arxiv.org/abs/2404.12500",
+    "pdf_url": "https://arxiv.org/pdf/2404.12500",
+    "doi": "https://doi.org/10.1145/3654777.3676408",
+    "note": "Open arXiv source plus ACM DOI."
+  },
+  {
+    "local_file": "degin2code front-end automatedv3.pdf",
+    "title": "Design2Code: Benchmarking Multimodal Code Generation for Automated Front-End Engineering",
+    "source_page": "https://arxiv.org/abs/2403.03163",
+    "pdf_url": "https://arxiv.org/pdf/2403.03163",
+    "note": "Open arXiv source."
+  },
+  {
+    "local_file": "UI-Vision ADesktop-centric GUI Benchmark for Visual Perception and Interaction.pdf",
+    "title": "UI-Vision: desktop-centric GUI benchmark for visual perception and interaction",
+    "source_page": null,
+    "pdf_url": null,
+    "note": "Needs manual source verification before citing or adding a public link."
+  }
+]

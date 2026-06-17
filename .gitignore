@@ -27,14 +27,12 @@ api key*.txt
 outputs/
 presentations/
 
-# Public-repository hygiene: keep local administrative files, paper PDFs, and backups out of Git
+# Public-repository hygiene: keep local administrative files and paper PDFs out of Git
 register/
 literature/papers/
-archive/backup/
 proposal/*.pdf
 proposal/*.docx
 thesis/*.pdf
-Meeting Summary/6.16 meeting*.txt
 
 # Local advisor package archives; keep the unpacked minimal package trackable
 advisor_package_2026-06-17/

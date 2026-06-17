@@ -1,0 +1,401 @@
+% !TEX root = ../master_thesis.tex
+\chapter{Benchmark Design and Methodology}
+\label{chap:methodology}
+
+This chapter defines the benchmark and evaluation protocol used in this thesis.
+The central object being scored is the generated UI or Web app artifact. The
+leaderboard ranking target is the generator LLM: artifact-level scores are
+aggregated across a fixed benchmark item set into model-level leaderboard rows.
+
+The chapter first states the research questions, then defines the benchmark
+object model, generation protocol, rendering protocol, metric categories,
+dynamic validation strategy, reliability audit, and the mapping from research
+questions to methods.
+
+\section{Research Questions}
+\label{sec:rqs}
+
+The thesis investigates how to evaluate LLM-generated web interfaces with a
+reproducible benchmark and leaderboard. It uses automated scoring, human review,
+and LLM-based judging as measurement instruments, but these instruments are not
+the main leaderboard target.
+
+\paragraph{RQ1 -- Benchmark and leaderboard design.}
+\begin{quote}
+\textit{How can a reproducible benchmark and leaderboard be designed for
+evaluating LLM-generated web interfaces?}
+\end{quote}
+
+RQ1 defines the fixed benchmark dataset, benchmark item schema, generation
+protocol, generated artifact format, metadata requirements, and aggregation from
+artifact-level scores to generator-model leaderboard rows. Track~A/UIClip-style
+material is retained only as a small baseline or sanity check, not as the main
+research question or primary contribution.
+
+\paragraph{RQ2 -- Metric operationalization and aggregation.}
+\begin{quote}
+\textit{How can static technical, static visual, dynamic task-based, and
+efficiency metrics be operationalized and aggregated for generated web apps?}
+\end{quote}
+
+RQ2 defines the category scores used by the leaderboard: Static Technical
+Score, Static Visual Score, Dynamic Score, and Efficiency Score. An optional
+Overall Score may be reported, but category-specific rankings remain visible
+because different users may prioritize visual quality, functional correctness,
+or cost efficiency differently.
+
+\paragraph{RQ3 -- Static and dynamic quality relationship.}
+\begin{quote}
+\textit{How are static quality scores related to dynamic task-success outcomes
+in LLM-generated web apps?}
+\end{quote}
+
+RQ3 evaluates the same generated artifacts with both static and dynamic
+signals. The analysis reports correlations and mismatch cases, such as visually
+strong interfaces that fail tasks or visually plain interfaces that complete
+required workflows reliably.
+
+\paragraph{Reliability audit.}
+\begin{quote}
+\textit{How stable and bias-sensitive are the LLM-based visual or rubric scores
+used in the evaluation pipeline?}
+\end{quote}
+
+The reliability audit supports the scoring protocol. It records repeated
+scoring consistency, order-swap sensitivity for pairwise comparisons when used,
+rating-scale sensitivity if feasible, judge-model variance, and invalid or
+refusal rates. It is not a separate main research question and does not make
+judge-model comparison the thesis target.
+
+\section{Overall Benchmark Design}
+\label{sec:design}
+
+The benchmark is based on fixed items and controlled generation. A generator
+model receives the same benchmark context and standardized prompt schema as
+other models in the same comparison batch. The model produces executable web
+artifacts, and those artifacts are scored with the same evaluation protocol.
+
+\textbf{Direct evaluation target.} The generated UI/Web app artifact is scored
+for one benchmark item. Scores include technical coverage, visual quality,
+dynamic task behavior, and efficiency metadata.
+
+\textbf{Leaderboard ranking target.} The generator LLM or generator model
+configuration is ranked. Artifact-level scores are aggregated across benchmark
+items into model-level rows.
+
+\textbf{Primary mode.} The main mode is New LLM mode: a generator model
+API/interface is added to the pipeline, the fixed benchmark set is run, and the
+result is a model row in the leaderboard.
+
+\textbf{Secondary mode.} A single HTML file or zipped project may be scored as
+an artifact-level report, but this is secondary. It is not the main leaderboard
+basis unless the artifact was generated under the fixed benchmark protocol and
+includes complete model, prompt, item, timestamp, and generation metadata. For
+controlled thesis experiments, complete provider-parameter, token-usage,
+latency, and finish-reason metadata are also recorded. For a public
+artifact-scoring mode, the benchmark can accept a submitted executable artifact
+with minimal optional metadata and still return an artifact-level diagnostic
+report, but such reports are not used as controlled model-comparison evidence
+unless the missing metadata are supplied.
+
+\begin{figure}[t]
+  \centering
+  \placeholderfigure{%
+    [Figure 3.1: Benchmark pipeline.\\
+    Fixed benchmark items and prompt schema feed generator models.\\
+    Generated artifacts are scored with static technical, static visual,
+    dynamic, and efficiency metrics.\\
+    Artifact-level scores aggregate into generator-model leaderboard rows.]}
+  \caption{Benchmark and leaderboard pipeline. Generated artifacts are the
+  direct scoring target; generator models are the leaderboard ranking target.}
+  \label{fig:pipeline}
+\end{figure}
+
+\section{Benchmark Item and Generated Artifact}
+\label{sec:item-artifact}
+
+A benchmark item is the fixed test specification. It is not a generated output.
+Each item contains the information needed to generate and evaluate a web
+interface:
+
+\begin{itemize}
+  \item natural-language requirement text;
+  \item expected pages or routes;
+  \item required elements, text, controls, forms, and selectors;
+  \item dynamic tasks or workflows;
+  \item validation rules;
+  \item predefined pages or routes for static visual screenshots;
+  \item metadata such as source, category, difficulty, and whether dynamic
+  validation is required.
+\end{itemize}
+
+The recommended planning schema is:
+
+\begin{verbatim}
+benchmark_item/
+  requirement.md
+  pages.json
+  elements.json
+  tasks.json
+  validation_rules.json
+  visual_pages.json
+  metadata.json
+\end{verbatim}
+
+A generated artifact is the output produced by one generator model for one
+benchmark item. The minimal artifact is an executable web implementation plus
+generation metadata. The metadata records model identity, provider, prompt ID,
+timestamp, provider parameters, token usage, latency, cost, and finish reason.
+
+\section{Dataset Tracks}
+\label{sec:tracks}
+
+\subsection{Track A: Baseline or Sanity Check}
+\label{sec:track-a}
+
+Track~A uses a reduced UIClip-style screenshot baseline. Its purpose is to
+anchor the study in prior screenshot-based GUI evaluation and to provide a
+sanity check for pairwise judging. It is not the primary contribution and does
+not define the main leaderboard objective.
+
+Track~A can reuse existing UIClip preference labels for a small sample of
+screenshots. No new large annotation campaign is required for this baseline.
+
+\subsection{Track B: Generated Web Interfaces}
+\label{sec:track-b}
+
+Track~B is the main benchmark track. It uses requirement-driven web interface
+generation tasks, primarily from a reduced Vision2Web Level~1/Level~2 subset.
+Level~3 full-stack tasks are excluded because they introduce backend state,
+deployment, and long-horizon engineering requirements that are outside the
+current benchmark scope.
+
+The development prototype should begin with 2--5 benchmark web app items. If
+feasible, the thesis experiment may expand to 10--20 benchmark tasks. Expansion
+depends on generation cost, scoring cost, rendering reliability, and the amount
+of usable dynamic validation available in the selected items.
+
+\section{Generation Protocol}
+\label{sec:generation-protocol}
+
+For direct generator comparisons, all models in a comparison batch receive the
+same benchmark item context and the same standardized prompt schema. Model-
+specific prompt tuning is not allowed within a batch because it would confound
+generator quality with prompt engineering.
+
+The main input to the leaderboard pipeline is a generator model API/interface.
+For each model, the pipeline loads the fixed benchmark items, applies the
+standardized prompt, saves generated artifacts, records generation metadata, and
+runs the evaluation protocol.
+
+The evaluation should avoid presenting any fixed truncating output-token cap as
+the final policy. If a provider requires a maximum output setting, it should be
+set high enough to allow complete outputs where feasible. Actual input tokens,
+output tokens, total tokens, finish reason, cost, and latency are recorded as
+efficiency and reproducibility data.
+
+Prompts that affect thesis results, metric computation, benchmark protocol,
+human annotation, output schemas, or reproducibility are versioned and preserved
+according to the prompt preservation policy.
+
+\section{Rendering and Screenshot Protocol}
+\label{sec:rendering}
+
+Generated artifacts are rendered locally with a controlled browser environment.
+Rendering produces the evidence used by later scoring modules.
+
+For static visual scoring, the pipeline visits only the predefined pages or
+routes specified by the benchmark item and captures standardized screenshots.
+The browser engine, viewport, zoom level, wait rule, and screenshot mode are
+kept fixed across artifacts. These screenshots are the input to static visual
+evaluation.
+
+Agent trace screenshots are not used as the main static visual scoring input.
+They may be stored for debugging and dynamic failure analysis only, because
+agent traces can vary in length, path, and content across generated apps.
+
+Rendering failures such as blank pages, fatal JavaScript errors that prevent
+visible content, or missing entry files are recorded as artifact-level failures.
+
+\section{Metric Categories}
+\label{sec:metric-categories}
+
+\subsection{Static Technical Score}
+
+Static technical metrics evaluate structure and requirement coverage without
+executing a user task. Candidate submetrics include HTML completeness, required
+element coverage, required text coverage, route declaration coverage, link
+target declaration, form field coverage, selector or ID coverage, accessibility
+basics, and static requirement fidelity.
+
+Static technical checks can verify that a required button exists and declares a
+target. They do not prove that clicking the button completes a task; that is a
+dynamic metric.
+
+The current Track~B gate treats complete HTML, non-truncated style and script
+blocks, defined click handlers, declared route identifiers, and working
+workflow-required controls as hard checks. Exact visible-label matching is a
+hard check only for workflow actions that specify quoted UI labels; more
+semantic click descriptions are recorded as diagnostic warnings and are resolved
+by route or task validation.
+
+\subsection{Static Visual Score}
+
+Static visual metrics evaluate standardized predefined-route screenshots.
+Candidate visual dimensions include visual hierarchy, information organization,
+typography and readability, contrast, spacing and alignment, consistency, and
+overall aesthetic quality.
+
+Page-level visual scores are aggregated into an artifact-level Static Visual
+Score. Agent trace screenshots are excluded from the main static visual score.
+
+\subsection{Dynamic Score}
+
+Dynamic metrics evaluate interaction behavior. A metric is dynamic when it
+requires clicking, typing, navigating, submitting, waiting for state changes, or
+validating task completion.
+
+Candidate submetrics include task success rate, step success rate, route
+execution success, button functionality success, form completion success,
+state-change success, retry count, failure localization, and robustness or
+pass@k.
+
+The current implementation separates the dynamic metric schema from the
+executor. Early pilot runs may use deterministic route simulation, while the
+browser workflow evaluator executes the same workflow cases in Chromium with
+Playwright, clicks generated controls, and validates visible destination
+content. A future implementation may replace this evaluator with a real
+computer-use agent, but the metric schema should remain stable: change the
+executor, not the metric schema.
+
+\subsection{Efficiency Score}
+
+Efficiency metrics track input tokens, output tokens, total tokens, generation
+cost, evaluation cost, generation latency, evaluation latency, and
+cost-performance trade-offs.
+
+Efficiency is reported both as raw metadata and, when a reference is defined, as
+a normalized score. Cost-performance plots and Pareto frontiers are used to show
+whether a model is dominated by another model with both lower cost and higher
+quality.
+
+\subsection{Optional Overall Score}
+
+The initial optional composite score is:
+
+\begin{verbatim}
+Overall Score =
+0.25 * Static Technical Score
++ 0.25 * Static Visual Score
++ 0.35 * Dynamic Score
++ 0.15 * Efficiency Score
+\end{verbatim}
+
+This composite is a reporting convenience. Category-specific scores remain
+visible and are interpreted separately.
+
+\section{Dynamic Validation Strategy}
+\label{sec:dynamic-method}
+
+The thesis first implements workflow-based dynamic validation rather than heavy
+real-agent execution. This choice keeps the pipeline reproducible and avoids
+confounding generated-interface quality with the planning or grounding failures
+of a separate agent.
+
+For Vision2Web-derived Level~2 items, dynamic tasks can be derived from
+workflow actions and validations. The evaluator checks whether the generated
+artifact supports the expected route, form, state, or content outcome. The
+current pipeline distinguishes deterministic route simulation from
+browser-workflow validation. Route simulation reads the generated artifact and
+checks route/content evidence without driving a real browser. Browser-workflow
+validation opens the generated HTML in Chromium, executes workflow clicks with
+Playwright, records route success, and validates visible destination content.
+Both are dynamic validation signals, but neither is presented as a full
+real-agent usability study.
+
+The browser-workflow evaluator is currently used as a pilot implementation of
+the dynamic layer. Its pilot results are used to validate the protocol and
+identify workflow-design issues, not as final thesis results until the benchmark
+item set, workflow normalization, and reporting rules are fixed. In particular,
+workflow cases that depend on nested navigation must be normalized so that each
+independently scored case contains the prerequisite steps needed to expose its
+target control.
+
+Real-agent execution remains an optional future upgrade or small cross-check
+after the main pipeline is stable. If added later, the same task success and
+failure taxonomy should be reused so that only the executor changes.
+
+\section{Failure Taxonomy}
+\label{sec:failure-taxonomy}
+
+Failures are recorded so that leaderboard scores remain interpretable:
+
+\begin{itemize}
+  \item \textbf{Generation failure}: no artifact, provider timeout, invalid
+  response, or truncated unusable output.
+  \item \textbf{Render failure}: artifact exists but cannot be rendered into
+  visible content.
+  \item \textbf{Static technical failure}: required structure, route, element,
+  text, selector, or basic accessibility evidence is missing.
+  \item \textbf{Static visual failure}: standardized screenshot shows severe
+  visual defects such as overlap, unreadable text, or unusable layout.
+  \item \textbf{Dynamic failure}: required task, route, form, button, or state
+  change fails under the dynamic validation protocol.
+  \item \textbf{Evaluator/tool failure}: scoring or validation tool fails for
+  reasons unrelated to the generated artifact.
+\end{itemize}
+
+Evaluator or tool failures are reported separately from generated-artifact
+quality when possible.
+
+\section{Reliability Audit}
+\label{sec:reliability-audit}
+
+LLM-based visual or rubric scoring can be affected by prompt sensitivity,
+position bias, scale effects, model variance, and invalid outputs. These issues
+are audited but are not the main thesis target.
+
+The audit may include repeated scoring consistency, order-swapped pairwise
+comparisons where pairwise scoring is used, rating-scale sensitivity if
+feasible, judge model variance, and invalid or refusal rate. Audit results are
+reported as scoring reliability evidence and threats to validity.
+
+\section{Research Question -- Method Map}
+\label{sec:rq-map}
+
+Table~\ref{tab:rq-map} maps the research questions to data, methods, metrics,
+and outputs.
+
+\begin{table}[t]
+  \centering
+  \caption{Research question -- method mapping.}
+  \label{tab:rq-map}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{p{0.7cm} p{4.0cm} p{2.4cm} p{3.0cm} p{3.9cm}}
+    \toprule
+    \textbf{RQ} & \textbf{Question} & \textbf{Data} & \textbf{Method}
+      & \textbf{Primary outputs} \\
+    \midrule
+    1 & Benchmark and leaderboard design
+      & Fixed benchmark items; generated artifacts
+      & New LLM mode; artifact scoring; model-level aggregation
+      & Benchmark schema; prompt protocol; leaderboard row format \\
+    \addlinespace
+    2 & Metric operationalization and aggregation
+      & Generated artifacts; screenshots; task validations; metadata
+      & Static technical, static visual, dynamic, and efficiency scoring
+      & Category scores; optional Overall Score; cost-performance plots \\
+    \addlinespace
+    3 & Static and dynamic quality relationship
+      & Same Track~B artifacts scored statically and dynamically
+      & Correlation analysis and mismatch case analysis
+      & Static-dynamic correlations; qualitative divergence cases \\
+    \addlinespace
+    Audit & Scoring reliability
+      & Selected scoring outputs
+      & Repeated scoring, order-swap checks, variance and invalid-rate logs
+      & Reliability and bias audit results \\
+    \bottomrule
+  \end{tabular}
+\end{table}

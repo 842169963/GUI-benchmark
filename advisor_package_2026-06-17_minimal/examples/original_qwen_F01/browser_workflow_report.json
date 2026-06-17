@@ -1,0 +1,475 @@
+{
+  "item_id": "F01_1daycloud",
+  "run": "gwdg_qwen36_35b_v9_smoke",
+  "html": "D:\\master_thesis\\data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v9_smoke\\index.html",
+  "start_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+  "start_route": "home",
+  "evaluator": "browser-workflow-v1",
+  "case_count": 12,
+  "passed_case_count": 8,
+  "route_success_case_count": 12,
+  "content_validation_success_case_count": 8,
+  "task_success_rate": 0.6666666666666666,
+  "route_success_rate": 1,
+  "content_validation_success_rate": 0.6666666666666666,
+  "passed": false,
+  "console_errors": [],
+  "cases": [
+    {
+      "block_index": 0,
+      "case_index": 0,
+      "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the \"App Store\" navigation menu item",
+          "passed": true,
+          "label": "App Store",
+          "chosen": {
+            "text": "App Store",
+            "target": "clickapp",
+            "href": "#clickapp",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "clickapp",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the OneClick App heading",
+          "kind": "text",
+          "needle": "OneClick App",
+          "passed": true
+        },
+        {
+          "validation": "The page displays a form with app selection options",
+          "kind": "text",
+          "needle": "The page displays a form with app selection options",
+          "passed": false
+        }
+      ],
+      "final_route": "clickapp",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 1,
+      "objective": "Verify that clicking the Services navigation menu item successfully navigates to the services page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "home"
+        },
+        {
+          "action": "Click the \"Services\" navigation menu item",
+          "passed": true,
+          "label": "Services",
+          "chosen": {
+            "text": "Services",
+            "target": "services",
+            "href": "#services",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "services",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#services",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the Services heading",
+          "kind": "text",
+          "needle": "Services",
+          "passed": true
+        },
+        {
+          "validation": "The page displays service information content",
+          "kind": "text",
+          "needle": "service information",
+          "passed": false
+        }
+      ],
+      "final_route": "services",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#services",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 2,
+      "objective": "Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "home"
+        },
+        {
+          "action": "Click the \"Learning Hub\" navigation menu item",
+          "passed": true,
+          "label": "Learning Hub",
+          "chosen": {
+            "text": "Learning Hub",
+            "target": "academy",
+            "href": "#academy",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "academy",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#academy",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the OneDay Academy heading",
+          "kind": "text",
+          "needle": "OneDay Academy",
+          "passed": true
+        },
+        {
+          "validation": "The page displays a list of course cards",
+          "kind": "card_grid",
+          "needle": null,
+          "passed": false
+        }
+      ],
+      "final_route": "academy",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#academy",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 3,
+      "objective": "Verify that clicking the Contact navigation menu item successfully navigates to the contact page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "home"
+        },
+        {
+          "action": "Click the \"Contact\" navigation menu item",
+          "passed": true,
+          "label": "Contact",
+          "chosen": {
+            "text": "Contact",
+            "target": "contact",
+            "href": "#contact",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "contact",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#contact",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the Contact us heading",
+          "kind": "text",
+          "needle": "Contact us",
+          "passed": true
+        },
+        {
+          "validation": "The page displays a contact form with fields",
+          "kind": "form",
+          "needle": null,
+          "passed": true
+        }
+      ],
+      "final_route": "contact",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#contact",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 1,
+      "case_index": 0,
+      "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page.",
+      "actions": [
+        {
+          "action": "Click the \"App Store\" navigation menu item",
+          "passed": true,
+          "label": "App Store",
+          "chosen": {
+            "text": "App Store",
+            "target": "clickapp",
+            "href": "#clickapp",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "clickapp",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "clickapp",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 1,
+      "case_index": 1,
+      "objective": "Verify that clicking the Company navigation menu item successfully navigates to the company page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the \"Company\" navigation menu item",
+          "passed": true,
+          "label": "Company",
+          "chosen": {
+            "text": "Company",
+            "target": "company",
+            "href": "#company",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "company",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#company",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays company information content",
+          "kind": "text",
+          "needle": "company information",
+          "passed": false
+        }
+      ],
+      "final_route": "company",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#company",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 1,
+      "case_index": 2,
+      "objective": "Verify that clicking the logo at the top of the page successfully navigates to the home page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "browser:back",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "home"
+        },
+        {
+          "action": "Click the logo at the top of the page",
+          "passed": true,
+          "label": "logo",
+          "chosen": {
+            "text": "1DAY CLOUD",
+            "target": "home",
+            "href": "#home",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "home",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page displays the home page content",
+          "kind": "text",
+          "needle": "home",
+          "passed": true
+        },
+        {
+          "validation": "The page displays the AI-Enabled No-Code Low-Code Platform heading",
+          "kind": "text",
+          "needle": "AI-Enabled No-Code Low-Code Platform",
+          "passed": true
+        }
+      ],
+      "final_route": "home",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 2,
+      "case_index": 0,
+      "objective": "Verify that clicking the App Store navigation menu item successfully navigates to the digital cards page.",
+      "actions": [
+        {
+          "action": "Click the \"App Store\" navigation menu item",
+          "passed": true,
+          "label": "App Store",
+          "chosen": {
+            "text": "App Store",
+            "target": "clickapp",
+            "href": "#clickapp",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "clickapp",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "clickapp",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#clickapp",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 3,
+      "case_index": 0,
+      "objective": "Verify that clicking the Services navigation menu item successfully navigates to the services page.",
+      "actions": [
+        {
+          "action": "Click the \"Services\" navigation menu item",
+          "passed": true,
+          "label": "Services",
+          "chosen": {
+            "text": "Services",
+            "target": "services",
+            "href": "#services",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "services",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#services",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "services",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#services",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 4,
+      "case_index": 0,
+      "objective": "Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page.",
+      "actions": [
+        {
+          "action": "Click the \"Learning Hub\" navigation menu item",
+          "passed": true,
+          "label": "Learning Hub",
+          "chosen": {
+            "text": "Learning Hub",
+            "target": "academy",
+            "href": "#academy",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "academy",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#academy",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "academy",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#academy",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 5,
+      "case_index": 0,
+      "objective": "Verify that clicking the Contact navigation menu item successfully navigates to the contact page.",
+      "actions": [
+        {
+          "action": "Click the \"Contact\" navigation menu item",
+          "passed": true,
+          "label": "Contact",
+          "chosen": {
+            "text": "Contact",
+            "target": "contact",
+            "href": "#contact",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "contact",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#contact",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "contact",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#contact",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 6,
+      "case_index": 0,
+      "objective": "Verify that clicking the Company navigation menu item successfully navigates to the company page.",
+      "actions": [
+        {
+          "action": "Click the \"Company\" navigation menu item",
+          "passed": true,
+          "label": "Company",
+          "chosen": {
+            "text": "Company",
+            "target": "company",
+            "href": "#company",
+            "score": 120
+          },
+          "route_before": "home",
+          "route_after": "company",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#home",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#company",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "company",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F01_1daycloud/generated/gwdg_qwen36_35b_v9_smoke/index.html#company",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "prompt_id": "TB-GEN-v9",
+  "provider": "gwdg-openai",
+  "model": "qwen3.6-35b-a3b",
+  "base_url": "https://chat-ai.academiccloud.de/v1/chat/completions",
+  "temperature": 0.2,
+  "max_tokens": 20000,
+  "started_at": "2026-05-27T18:02:30.382178+02:00",
+  "elapsed_seconds": 91.95,
+  "response_metadata": {
+    "id": "chatcmpl-99336525de122fd9",
+    "model": "qwen3.6-35b-a3b",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 32068,
+      "total_tokens": 43197,
+      "completion_tokens": 11129,
+      "prompt_tokens_details": null
+    }
+  },
+  "item_id": "F01_1daycloud",
+  "source_meta": {
+    "normalized_at": "2026-05-21T23:17:50.591482",
+    "item_id": "F01_1daycloud",
+    "source_dataset": "zai-org/Vision2Web",
+    "source_config": "frontend",
+    "source_level": "Level 2",
+    "source_task_name": "1daycloud",
+    "source_license": "CC-BY-NC-SA-4.0",
+    "raw_dir": "data\\track_b\\vision2web_raw\\frontend\\1daycloud",
+    "workflow_steps": 7,
+    "num_test_cases": 6,
+    "resources_count": 35,
+    "prototypes": [
+      "academy.jpg",
+      "clickapp.jpg",
+      "contact.jpg",
+      "digital_cards.jpg",
+      "home.jpg",
+      "services.jpg"
+    ],
+    "use_for_static": true,
+    "use_for_dynamic": true,
+    "copied_prototypes": true,
+    "copied_resources": true
+  },
+  "system_prompt": "You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.\nCreate a polished, working website implementation that can be opened directly from a local index.html file.\n",
+  "user_prompt": "Prompt ID: TB-GEN-v9\n\nBuild a minimal complete single-file HTML implementation for the Track B GUI item below.\n\nHard requirements:\n- Return exactly one complete HTML document ending with </html>.\n- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.\n- Local assets must be referenced as ../../resources/<subpath>.\n- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.\n- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.\n- Implement every route in the route contract as a <section id=\"...\" data-track-route>.\n- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.\n\nMandatory workflow controls:\n- The following exact workflow click labels were extracted from the workflow checks. Every label below must appear as visible text inside an <a> or <button> element:\n- App Store\n- Company\n- Contact\n- Learning Hub\n- Services\n- logo at the top of the page\n- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.\n- Every workflow control must include data-route-target=\"<route_id>\" and onclick=\"showPage('<route_id>')\".\n- If a click target is a feature phrase such as \"GitLab Duo\", use that feature phrase as the visible label.\n- Choose the route target from the route contract that best matches the label and workflow validation.\n- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the extracted workflow click labels.\n\nStrict compactness limits:\n- Use one shared header and one shared footer only.\n- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.\n- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.\n- Do not copy long requirement text. Use short labels and short summaries.\n- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.\n- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.\n\nRoute contract:\n- Create <section id=\"home\" data-track-route> for prototype home.jpg.\n- Create <section id=\"academy\" data-track-route> for prototype academy.jpg.\n- Create <section id=\"clickapp\" data-track-route> for prototype clickapp.jpg.\n- Create <section id=\"contact\" data-track-route> for prototype contact.jpg.\n- Create <section id=\"digital_cards\" data-track-route> for prototype digital_cards.jpg.\n- Create <section id=\"services\" data-track-route> for prototype services.jpg.\n\nRequired JavaScript:\n<script>\nwindow.__TRACK_B_ROUTES = [\"home\", \"academy\", \"clickapp\", \"contact\", \"digital_cards\", \"services\"];\nfunction showPage(routeId) {\n  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;\n  document.querySelectorAll('[data-track-route]').forEach(function(section) {\n    section.hidden = section.id !== routeId;\n  });\n  document.querySelectorAll('[data-route-target]').forEach(function(link) {\n    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');\n  });\n  if (history.replaceState) history.replaceState(null, '', '#' + routeId);\n  setTimeout(function() { window.scrollTo(0, 0); }, 0);\n}\ndocument.addEventListener('DOMContentLoaded', function() {\n  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];\n  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);\n});\n</script>\n\nItem ID: F01_1daycloud\nSource task: 1daycloud\nSource level: Level 2\nUse for dynamic validation: True\n\nNormalized requirement:\n# Requirement\n\nSource task: `1daycloud`\n\nThe generated interface should implement the following Vision2Web Level 2 frontend requirement.\n\nI want to build a OneDay Cloud website. When someone opens the site, they arrive at the homepage which serves as the main entry point to all the platform's services and products. The homepage has a navigation menu at the top that provides access to different sections of the website.\n\nFrom the homepage, if I click on the \"App Store\" option in the navigation menu, it takes me to the App Store page. Within the App Store, I can access different applications including OneClick App and the Digital Business Card Directory. The OneClick App page showcases a service where users can select an existing application from OneDay App Store or create their own, with options to enter mobile number and send OTP code. The Digital Business Card Directory page presents a digital business card solution where users can create their digital business card and share it through a searchable directory of business cards.\n\nIf I go back to the homepage and click on \"Services\" in the navigation menu, I'm taken to the Services page. This page provides an overview of all the services that OneDay Cloud offers. It includes service descriptions, pricing information if applicable, and details about what OneDay Cloud can provide to its customers, such as App Store 1Store, Smart Application Designer SMA, and Ready Backend Design & Hosting for API Developers.\n\nFrom the homepage, I can also access the Learning Hub page by clicking on \"Learning Hub\" in the navigation menu. This takes me to the OneDay Academy page, which appears to be an educational resource or training platform where users can learn about OneDay Cloud's products, cloud technologies, or related topics. The page includes various courses and workshops such as \"Learn The Dashboard From A To Z\", \"No Code Apps in Dashboard\", \"No-Code Workshops\", \"Website & App Builder\", \"OneDay AI Apps\", \"Webinar & Demo\", \"App Builder Workshop\", and \"Oneday Apps\", each with a \"Start Now\" button to begin the learning experience.\n\nThe homepage navigation also includes a \"Company\" option. When I click on it, I'm directed to the Company page, which likely provides information about OneDay Cloud as an organization, including company background, mission, vision, and other corporate information.\n\nIf I need to get in touch with OneDay Cloud, I can click on the \"Contact\" link in the navigation menu from the homepage. This takes me to the Contact page, where I can find contact information including address (2393 Ulaya, Ulaya District, 7235 Riyadh 12244, Saudi Arabia), phone & WhatsApp (00966114868394), email (info@1daycloud.com), website (1daycloud.com), and bank account details. The page also includes a contact form where users can submit their full name, email, mobile number, subject, and message.\n\nEach of these pages maintains the same navigation menu structure, so from any page, I can easily navigate to any other section by clicking the appropriate menu item. This allows me to explore the App Store (which includes OneClick App and Digital Business Card Directory), review the Services offered, access learning materials in the Learning Hub (OneDay Academy), learn about the Company, or reach out through the Contact page, all while being able to return to the homepage at any time by clicking the OneDay Cloud logo or home link.\n\n\nWorkflow checks:\n[\n  {\n    \"depends_on\": [],\n    \"index\": 0,\n    \"summary\": \"Navigation menu validation from home page testing sequential access to App Store, Services, Learning Hub, and Contact pages\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click the \\\"App Store\\\" navigation menu item\"\n        ],\n        \"validations\": [\n          \"The page displays the OneClick App heading\",\n          \"The page displays a form with app selection options\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the Services navigation menu item successfully navigates to the services page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"browser:back\",\n          \"Click the \\\"Services\\\" navigation menu item\"\n        ],\n        \"validations\": [\n          \"The page displays the Services heading\",\n          \"The page displays service information content\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"browser:back\",\n          \"Click the \\\"Learning Hub\\\" navigation menu item\"\n        ],\n        \"validations\": [\n          \"The page displays the OneDay Academy heading\",\n          \"The page displays a list of course cards\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the Contact navigation menu item successfully navigates to the contact page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"browser:back\",\n          \"Click the \\\"Contact\\\" navigation menu item\"\n        ],\n        \"validations\": [\n          \"The page displays the Contact us heading\",\n          \"The page displays a contact form with fields\"\n        ]\n      }\n    ],\n    \"prototype\": {\n      \"home\": {\n        \"fullpage\": true,\n        \"idx\": 0\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 1,\n    \"summary\": \"Navigation menu validation from clickapp page testing access to Services, Learning Hub, Company, Contact pages, and logo click functionality\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the App Store navigation menu item successfully navigates to the clickapp page.\",\n        \"actions\": [\n          \"Click the \\\"App Store\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      },\n      {\n        \"objective\": \"Verify that clicking the Company navigation menu item successfully navigates to the company page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click the \\\"Company\\\" navigation menu item\"\n        ],\n        \"validations\": [\n          \"The page displays company information content\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the logo at the top of the page successfully navigates to the home page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"browser:back\",\n          \"Click the logo at the top of the page\"\n        ],\n        \"validations\": [\n          \"The page displays the home page content\",\n          \"The page displays the AI-Enabled No-Code Low-Code Platform heading\"\n        ]\n      }\n    ],\n    \"prototype\": {\n      \"clickapp\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 2,\n    \"summary\": \"Navigation menu validation from digital cards page testing access to Services, Learning Hub, Company, and Contact pages\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the App Store navigation menu item successfully navigates to the digital cards page.\",\n        \"actions\": [\n          \"Click the \\\"App Store\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"digital_cards\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 3,\n    \"summary\": \"Navigation menu validation from services page testing access to App Store, Learning Hub, Company, and Contact pages\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the Services navigation menu item successfully navigates to the services page.\",\n        \"actions\": [\n          \"Click the \\\"Services\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"services\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 4,\n    \"summary\": \"Navigation menu validation from academy page testing access to App Store, Services, Company, and Contact pages\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the Learning Hub navigation menu item successfully navigates to the academy page.\",\n        \"actions\": [\n          \"Click the \\\"Learning Hub\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"academy\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 5,\n    \"summary\": \"Navigation menu validation from contact page testing access to App Store, Services, Learning Hub, and Company pages\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the Contact navigation menu item successfully navigates to the contact page.\",\n        \"actions\": [\n          \"Click the \\\"Contact\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"contact\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 6,\n    \"summary\": \"Navigation to company page validation testing access via Company navigation menu item\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the Company navigation menu item successfully navigates to the company page.\",\n        \"actions\": [\n          \"Click the \\\"Company\\\" navigation menu item\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"company\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  }\n]\n\nAvailable local resource paths:\n- ../../resources/images/18VktibE5awplYOsWzwL3y_f9AzxlVkrnvT0CBQJ1hhgO9NrHwpfi6To247qSSrX.jpg\n- ../../resources/images/1day-cloud-logo--white-plain.jpg\n- ../../resources/images/1LQeyisk4QE6dYM6xdb8kXItZCKYK5VKjo_AxZvEdodGA7ynokNRKNlvnCjHz4Yp.jpeg\n- ../../resources/images/7abRA9NmcxgJeI2BRZLkXtqW8XmwiB9j6oxGudZp6uJ77mtSEywE30FAPoFCZ47g.jpeg\n- ../../resources/images/a5V8JXzihdDqjD3nrZteqB5DKYkibATiIC749_4fe369opd4LPOO0KI3drHgclHw.jpeg\n- ../../resources/images/btn1.jpg\n- ../../resources/images/btn2.jpg\n- ../../resources/images/bwWKBLux4U0xNRfONferIJOZQ65f15dh9DOzPSAhga1bFMoYGwKH7oq4dVh8hobg.jpg\n- ../../resources/images/c9sYUkkfsx3232QNONadlbvjCv48nusScRNN1xG2qIh4jwcURBzvaaluyzPvZ44J.jpg\n- ../../resources/images/cloud_left.jpg\n- ../../resources/images/cloud_right.jpg\n- ../../resources/images/digital_cards.jpg\n- ../../resources/images/Ei6tHV9bRIALb71kanhAoByI4ExtTvbhVtTojNRbuAZ2PUbYNJhv0qg1112niLwu.jpg\n- ../../resources/images/facebook.jpg\n- ../../resources/images/getstarted.jpg\n- ../../resources/images/global_video_thumb.jpg\n- ../../resources/images/Hvq40A48Km2KslTozrRY4NTO9y3zP5dOWkHG2LB72DEqsAFeGS7cAfMHbM3gwcug.jpg\n- ../../resources/images/IKvAl5_6Nc2z8XLJO2kNFHHl02Ckoo5W5mlV9ZclMRGisrGgG52W1iDtbc229EU8.jpg\n- ../../resources/images/instagram.jpg\n- ../../resources/images/kd_gVpdne2e7pI3hOQc_l53Ij9lFpIO4ZN1aMmbA54lGnbMe91uT6t_LJu8izIT6.jpg\n- ../../resources/images/linkedin.jpg\n- ../../resources/images/logo.jpg\n- ../../resources/images/lWr65s3pDNx9u3iI8_pQVRKnuKBLU6Rw6vWFNjcXIN8cUEnFXXx3WqmFXnEeTD9J.jpeg\n- ../../resources/images/NHe5XmMxBQ11builmuJ5Nj3eXD5VDWqN6NWrOhXyhIiKAeZeGouSP_uYO_fcy3ZJ.jpg\n- ../../resources/images/OBSET_vvZe4QnZA1_imY1mW72KIqfZmTA5n9FZ7bM_HuXk2vrNrdDEMDD3lJHWw0.jpg\n- ../../resources/images/oSUxk9BzYVp1ncXREEPoV9HdEIIkaVoDM3z1wrlrSLZEpD2XhPmlPrbO5sQnBhUa.jpg\n- ../../resources/images/q74sfrNaMUv8hrbnefInh4qEb3xNps63uwdr954M9xoDLbjeuCNxdIQJ29bSvMsP.jpg\n- ../../resources/images/tQI4BXJT3xaDem75nJ3xRrz7mZSo2ia8O5MDdUoPMBKpJBszbvOs17ZJuQC4UI1c.jpg\n- ../../resources/images/twitter.jpg\n- ../../resources/images/un-check.jpg\n- ../../resources/images/vDKvchorKNADomFLA4v2441YgjSDM5eoCMQPZ2nvsk0qger48JAzAiL7lFfY9Hzm.jpg\n- ../../resources/images/X5LWu0_G2UStn69RGgc2cAjr8rs_JpNxkAE7GTjhwnFP6yHnN570ezLfEr39lTHI.jpg\n- ../../resources/images/youtube.jpg\n- ../../resources/images/Zh8jsBgQftPiAqFDbe3SqnF2ISD66NiMd8o8XZKTFzYJPdOvmUtHD4tDlsQ2eLbG.jpeg\n- ../../resources/images/ZTEjGQ0ocsDFm7gUaPl1Wej8DlAcPc0fnod9dHOxJbG36Ml27D4R8FfZrp2P5qlX.jpg\n\nPrototype screenshots are attached after this text in this order:\n- home.jpg\n- academy.jpg\n- clickapp.jpg\n- contact.jpg\n- digital_cards.jpg\n- services.jpg\n",
+  "workflow_controls": [
+    {
+      "visible_text": "App Store",
+      "route_id": "clickapp",
+      "context": "Click the \"App Store\" navigation menu item"
+    },
+    {
+      "visible_text": "Services",
+      "route_id": "services",
+      "context": "Click the \"Services\" navigation menu item"
+    },
+    {
+      "visible_text": "Learning Hub",
+      "route_id": "academy",
+      "context": "Click the \"Learning Hub\" navigation menu item"
+    },
+    {
+      "visible_text": "Contact",
+      "route_id": "contact",
+      "context": "Click the \"Contact\" navigation menu item"
+    },
+    {
+      "visible_text": "Company",
+      "route_id": "clickapp",
+      "context": "Click the \"Company\" navigation menu item"
+    },
+    {
+      "visible_text": "logo at the top of the page",
+      "route_id": "clickapp",
+      "context": "Click the logo at the top of the page"
+    },
+    {
+      "visible_text": "App Store",
+      "route_id": "digital_cards",
+      "context": "Click the \"App Store\" navigation menu item"
+    }
+  ],
+  "prototype_files": [
+    "prototypes/home.jpg",
+    "prototypes/academy.jpg",
+    "prototypes/clickapp.jpg",
+    "prototypes/contact.jpg",
+    "prototypes/digital_cards.jpg",
+    "prototypes/services.jpg"
+  ],
+  "resource_paths_in_prompt": [
+    "images/18VktibE5awplYOsWzwL3y_f9AzxlVkrnvT0CBQJ1hhgO9NrHwpfi6To247qSSrX.jpg",
+    "images/1day-cloud-logo--white-plain.jpg",
+    "images/1LQeyisk4QE6dYM6xdb8kXItZCKYK5VKjo_AxZvEdodGA7ynokNRKNlvnCjHz4Yp.jpeg",
+    "images/7abRA9NmcxgJeI2BRZLkXtqW8XmwiB9j6oxGudZp6uJ77mtSEywE30FAPoFCZ47g.jpeg",
+    "images/a5V8JXzihdDqjD3nrZteqB5DKYkibATiIC749_4fe369opd4LPOO0KI3drHgclHw.jpeg",
+    "images/btn1.jpg",
+    "images/btn2.jpg",
+    "images/bwWKBLux4U0xNRfONferIJOZQ65f15dh9DOzPSAhga1bFMoYGwKH7oq4dVh8hobg.jpg",
+    "images/c9sYUkkfsx3232QNONadlbvjCv48nusScRNN1xG2qIh4jwcURBzvaaluyzPvZ44J.jpg",
+    "images/cloud_left.jpg",
+    "images/cloud_right.jpg",
+    "images/digital_cards.jpg",
+    "images/Ei6tHV9bRIALb71kanhAoByI4ExtTvbhVtTojNRbuAZ2PUbYNJhv0qg1112niLwu.jpg",
+    "images/facebook.jpg",
+    "images/getstarted.jpg",
+    "images/global_video_thumb.jpg",
+    "images/Hvq40A48Km2KslTozrRY4NTO9y3zP5dOWkHG2LB72DEqsAFeGS7cAfMHbM3gwcug.jpg",
+    "images/IKvAl5_6Nc2z8XLJO2kNFHHl02Ckoo5W5mlV9ZclMRGisrGgG52W1iDtbc229EU8.jpg",
+    "images/instagram.jpg",
+    "images/kd_gVpdne2e7pI3hOQc_l53Ij9lFpIO4ZN1aMmbA54lGnbMe91uT6t_LJu8izIT6.jpg",
+    "images/linkedin.jpg",
+    "images/logo.jpg",
+    "images/lWr65s3pDNx9u3iI8_pQVRKnuKBLU6Rw6vWFNjcXIN8cUEnFXXx3WqmFXnEeTD9J.jpeg",
+    "images/NHe5XmMxBQ11builmuJ5Nj3eXD5VDWqN6NWrOhXyhIiKAeZeGouSP_uYO_fcy3ZJ.jpg",
+    "images/OBSET_vvZe4QnZA1_imY1mW72KIqfZmTA5n9FZ7bM_HuXk2vrNrdDEMDD3lJHWw0.jpg",
+    "images/oSUxk9BzYVp1ncXREEPoV9HdEIIkaVoDM3z1wrlrSLZEpD2XhPmlPrbO5sQnBhUa.jpg",
+    "images/q74sfrNaMUv8hrbnefInh4qEb3xNps63uwdr954M9xoDLbjeuCNxdIQJ29bSvMsP.jpg",
+    "images/tQI4BXJT3xaDem75nJ3xRrz7mZSo2ia8O5MDdUoPMBKpJBszbvOs17ZJuQC4UI1c.jpg",
+    "images/twitter.jpg",
+    "images/un-check.jpg",
+    "images/vDKvchorKNADomFLA4v2441YgjSDM5eoCMQPZ2nvsk0qger48JAzAiL7lFfY9Hzm.jpg",
+    "images/X5LWu0_G2UStn69RGgc2cAjr8rs_JpNxkAE7GTjhwnFP6yHnN570ezLfEr39lTHI.jpg",
+    "images/youtube.jpg",
+    "images/Zh8jsBgQftPiAqFDbe3SqnF2ISD66NiMd8o8XZKTFzYJPdOvmUtHD4tDlsQ2eLbG.jpeg",
+    "images/ZTEjGQ0ocsDFm7gUaPl1Wej8DlAcPc0fnod9dHOxJbG36Ml27D4R8FfZrp2P5qlX.jpg"
+  ],
+  "output_files": {
+    "html": "index.html",
+    "raw_response": "raw_response.txt",
+    "metadata": "generation_metadata.json"
+  }
+}

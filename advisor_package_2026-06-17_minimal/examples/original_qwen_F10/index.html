@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Norene Gilletz's Gourmania</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;color:#444;background:#fff;min-height:100vh;display:flex;flex-direction:column}
+a{color:#7aab2a;text-decoration:none}
+a:hover{text-decoration:underline}
+button{cursor:pointer}
+
+/* Header */
+.site-header{background:url('../../resources/images/pattern_1-e1508965919155.jpg') repeat;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #555}
+.logo-area{text-align:center;flex:1}
+.logo-area h1{font-size:2.2em;color:#e86b2c;font-family:'Brush Script MT',cursive,serif;line-height:1}
+.logo-area h1 small{display:block;font-size:0.45em;color:#7aab2a;font-family:Georgia,serif;letter-spacing:1px}
+.nav-menu{display:flex;gap:24px;list-style:none;padding:0}
+.nav-menu a{font-size:0.95em;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:8px 0;border-bottom:3px solid transparent;transition:border-color .2s}
+.nav-menu a:hover,.nav-menu a[aria-current="page"]{border-bottom-color:#e86b2c;text-decoration:none}
+.header-icons{display:flex;gap:16px;align-items:center}
+.header-icons button{background:none;border:none;font-size:1.5em;color:#444}
+
+/* Main */
+main{flex:1;padding:20px 40px;max-width:1200px;margin:0 auto;width:100%}
+section{padding:10px 0}
+section h1{text-align:center;font-size:2em;margin:20px 0 10px;color:#444;text-transform:uppercase;letter-spacing:2px}
+section h1::after{content:'';display:block;width:120px;height:3px;background:#7aab2a;margin:8px auto 0}
+section>p{text-align:center;margin:10px 0 24px;font-style:italic;font-size:1.1em;color:#e86b2c}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:20px 0}
+.card{border:2px solid #ddd;border-radius:10px;overflow:hidden;background:#fff;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.card img{width:100%;height:auto;display:block}
+.card-body{padding:12px}
+.card-body h3{font-size:1em;margin-bottom:6px;color:#444}
+.card-body p{font-size:.85em;color:#666;line-height:1.4}
+
+/* Cookbooks grid */
+.book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
+.book-grid img{width:100%;height:auto;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+
+/* Culinary solutions */
+.solutions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:20px 0;max-width:800px;margin-left:auto;margin-right:auto}
+.solution-card{border:2px solid #e86b2c;border-radius:12px;padding:24px;text-align:center;font-size:1.05em;color:#444;min-height:80px;display:flex;align-items:center;justify-content:center}
+
+/* Recipe detail */
+.recipe-detail{max-width:700px;margin:0 auto}
+.recipe-detail img{width:100%;max-width:700px;height:auto;display:block;margin:10px auto}
+.recipe-detail h2{font-size:1.3em;color:#7aab2a;margin:10px 0}
+.recipe-detail ul{margin:10px 0 16px 20px}
+.recipe-detail li{margin-bottom:4px;font-size:.95em}
+.recipe-detail ol{margin:10px 0 16px 20px}
+.recipe-detail ol li{margin-bottom:8px;font-size:.95em;line-height:1.5}
+.recipe-featured{text-align:center;margin:30px 0}
+.recipe-featured img{width:150px;height:auto;border:1px solid #ddd;padding:4px}
+
+/* Tips */
+.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:800px;margin:20px auto}
+.tip-card{border-radius:12px;padding:24px;text-align:center;border:2px solid}
+.tip-card.orange{background:#ffe0cc;border-color:#e86b2c}
+.tip-card.green{background:#e8f5c8;border-color:#7aab2a}
+.tip-card h3{margin-bottom:10px;font-size:1.1em}
+.tip-card p{font-size:.9em;line-height:1.5}
+.pagination{text-align:center;margin:20px 0}
+.pagination a{margin:0 4px;color:#7aab2a}
+
+/* Videos */
+.video-tabs{display:flex;gap:0;margin:0 0 16px;border-bottom:2px solid #7aab2a;max-width:800px;margin-left:auto;margin-right:auto}
+.video-tabs button{padding:10px 20px;border:none;background:none;font-size:1em;color:#444;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.video-tabs button.active{border-bottom-color:#7aab2a;color:#7aab2a}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:900px;margin:0 auto}
+.video-card{border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.video-card img{width:100%;height:auto;display:block}
+.video-card .play-overlay{position:relative}
+.video-card .play-overlay::after{content:'▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2em;color:#fff;background:rgba(232,107,44,.85);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:50px;text-align:center}
+.video-card .video-title{padding:10px;font-size:.85em;text-align:center;background:#888;color:#fff}
+
+/* Footer */
+.site-footer{background:#fff;border-top:4px solid #444;padding:20px 40px;text-align:center}
+.affiliate-logos{display:flex;justify-content:center;gap:40px;margin:16px 0;align-items:center}
+.affiliate-logos img{height:40px}
+.affiliate-note{font-size:.85em;color:#666;max-width:800px;margin:0 auto 16px;line-height:1.4}
+.footer-brand{background:url('../../resources/images/pattern_2-e1509128537578.jpg') repeat;padding:20px;text-align:center;border-radius:8px;margin-top:10px}
+.footer-brand img{width:120px;height:auto;margin:10px 0}
+.social-icons{display:flex;justify-content:center;gap:12px;margin:10px 0}
+.social-icons a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;color:#fff;font-size:1.1em;font-weight:bold}
+.social-icons .fb{background:#3b5998}
+.social-icons .tw{background:#1da1f2}
+.social-icons .ig{background:#e1306c}
+.social-icons .yt{background:#ff0000}
+.copyright{font-size:.8em;color:#666;margin-top:8px}
+
+/* Shop badge */
+.shop-badge{position:fixed;right:0;top:50%;transform:translateY(-50%);background:#7aab2a;color:#fff;padding:12px 8px;writing-mode:vertical-rl;font-size:.9em;letter-spacing:1px;border-radius:8px 0 0 8px;z-index:10}
+
+/* Responsive tweaks */
+@media(max-width:1000px){
+  .book-grid{grid-template-columns:repeat(3,1fr)}
+  .solutions-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .book-grid{grid-template-columns:repeat(2,1fr)}
+  .solutions-grid{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr}
+  .nav-menu{gap:12px}
+  .nav-menu a{font-size:.8em}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-icons">
+    <button aria-label="Menu">☰</button>
+  </div>
+  <div class="logo-area">
+    <h1>Norene Gilletz's<br>Gourmania<small>For People Who Are Crazy About Food</small></h1>
+  </div>
+  <div class="header-icons">
+    <button aria-label="Search">🔍</button>
+  </div>
+</header>
+
+<nav>
+  <ul class="nav-menu">
+    <li><a href="#homepage" data-route-target="homepage" onclick="showPage('homepage')">HOME</a></li>
+    <li><a href="#homepage" data-route-target="homepage" onclick="showPage('homepage')">RECIPES</a></li>
+    <li><a href="#cookbooks" data-route-target="cookbooks" onclick="showPage('cookbooks')">COOKBOOKS</a></li>
+    <li><a href="#homepage" data-route-target="homepage" onclick="showPage('homepage')">MY FOOD LINE</a></li>
+    <li><a href="#videos" data-route-target="videos" onclick="showPage('videos')">MEDIA</a></li>
+    <li><a href="#culinary_solutions" data-route-target="culinary_solutions" onclick="showPage('culinary_solutions')">WHAT WE DO</a></li>
+    <li><a href="#homepage" data-route-target="homepage" onclick="showPage('homepage')">NEWSLETTER</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- HOMEPAGE -->
+<section id="homepage" data-track-route>
+  <img src="../../resources/images/pinnapplebanner-1140x560.jpg" alt="Sweet Delights banner" style="width:100%;max-width:800px;display:block;margin:0 auto 10px;border-radius:4px">
+  <p>Food that's good for you should taste good!</p>
+
+  <h1>Featured Cookbooks</h1>
+  <div class="card-grid">
+    <div class="card">
+      <img src="../../resources/images/FrequentFiberCookbook.jpg" alt="The Brain Boosting Diet">
+      <div class="card-body">
+        <h3>The Brain Boosting Diet</h3>
+        <p>Help people cope with memory loss through diet. Packed with over 200 recipes.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="../../resources/images/HealthyHelpings.jpg" alt="Healthy Helpings">
+      <div class="card-body">
+        <h3>Healthy Helpings</h3>
+        <p>800 scrumptious and simple recipes with nutritional tips for a lean lifestyle.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="../../resources/images/SilverPlatter-SimpleTo.jpg" alt="The Silver Platter">
+      <div class="card-body">
+        <h3>The Silver Platter</h3>
+        <p>More than 160 recipes that allow us to explore new dishes, tastes, and presentations.</p>
+      </div>
+    </div>
+  </div>
+
+  <h1>What's Cooking</h1>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-body" style="background:#e86b2c;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">Latest News</div>
+      <div class="card-body">
+        <ul style="margin-left:16px;font-size:.9em">
+          <li><a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">The Shabbat Table – One Pot Dinners</a></li>
+          <li><a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">The Shabbat Table – Comfort Me with Chicken Soup!</a></li>
+          <li><a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">The Shabbat Table – Super Bowl Winners</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body" style="background:#7aab2a;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">New Podcast</div>
+      <div class="card-body" style="text-align:center">
+        <img src="../../resources/images/Norene_00_2018-mp3-image-150x150.jpg" alt="Podcast" style="width:100px;height:100px;border-radius:4px">
+        <p style="margin-top:8px"><a href="#homepage" onclick="showPage('homepage')">View our Podcasts</a></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body" style="background:#e86b2c;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">Reasons to Celebrate</div>
+      <div class="card-body">
+        <p style="font-size:.9em">Hanukkah – Sundown Sunday December 2nd, 2018<br><a href="#homepage" onclick="showPage('homepage')">Be sure to check out my "Lots of Latkes" post</a></p>
+      </div>
+    </div>
+  </div>
+
+  <h1>Favourite Holiday Recipes</h1>
+  <div class="card-grid">
+    <a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')" style="text-decoration:none">
+      <div class="card">
+        <img src="../../resources/images/gefelte-fish-byjohn-uher.jpg" alt="Gefilte Fish">
+        <div class="card-body"><h3>Gefilte Fish</h3></div>
+      </div>
+    </a>
+    <a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')" style="text-decoration:none">
+      <div class="card">
+        <img src="../../resources/images/beans-280x280.jpg" alt="Hamentaschen">
+        <div class="card-body"><h3>Hamentaschen</h3></div>
+      </div>
+    </a>
+    <a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')" style="text-decoration:none">
+      <div class="card">
+        <img src="../../resources/images/challah-280x280.jpg" alt="Challah">
+        <div class="card-body"><h3>Challah</h3></div>
+      </div>
+    </a>
+  </div>
+  <p style="text-align:center;margin-top:8px"><a href="#recipe_detail" data-route-target="recipe_detail" onclick="showPage('recipe_detail')" style="font-weight:bold;font-size:1.1em">FAVOURITE HOLIDAY RECIPES</a></p>
+
+  <h1>Recipe Categories</h1>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-body" style="background:#e86b2c;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">Appetizers</div>
+      <div class="card-body" style="text-align:center"><img src="../../resources/images/beefwrappedbread-280x280.jpg" alt="Appetizers" style="width:100%;height:auto"></div>
+    </div>
+    <div class="card">
+      <div class="card-body" style="background:#7aab2a;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">Soups & Sauces</div>
+      <div class="card-body" style="text-align:center"><img src="../../resources/images/butternutsoup-280x280.jpg" alt="Soups" style="width:100%;height:auto"></div>
+    </div>
+    <div class="card">
+      <div class="card-body" style="background:#e86b2c;color:#fff;border-radius:10px 10px 0 0;padding:10px;text-align:center;font-weight:bold">Bread, Bagel Rolls, Muffins</div>
+      <div class="card-body" style="text-align:center"><img src="../../resources/images/muffintin-280x280.jpg" alt="Muffins" style="width:100%;height:auto"></div>
+    </div>
+  </div>
+
+  <h1>Browse Videos</h1>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/Panicfreedemo-320x180.jpg" alt="Panic-Free Passover"></div>
+      <div class="video-title">Panic-Free Passover Cooking Demo</div>
+    </div>
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/studio4-320x180.jpg" alt="Studio 4"></div>
+      <div class="video-title">Norene Gilletz on Studio 4</div>
+    </div>
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/bestnoodle-320x180.jpg" alt="Cheese Noodle Kugel"></div>
+      <div class="video-title">The Best Classic Cheese Noodle Kugel</div>
+    </div>
+  </div>
+</section>
+
+<!-- COOKBOOKS -->
+<section id="cookbooks" data-track-route hidden>
+  <h1>My Cookbooks</h1>
+  <div class="book-grid">
+    <img src="../../resources/images/FoodProcessorBible.jpg" alt="The New Food Processor Bible">
+    <img src="../../resources/images/FrequentFiberCookbook.jpg" alt="The Brain Boosting Diet">
+    <img src="../../resources/images/SilverPlatter-SimpleTo.jpg" alt="The Silver Platter">
+    <img src="../../resources/images/NorenesHealthyKitchen.jpg" alt="Norene's Healthy Kitchen">
+    <img src="../../resources/images/SecondHelpings-267x350.jpg" alt="Second Helpings, Please!">
+    <img src="../../resources/images/ColonHealth-280x345.jpg" alt="The Colon Health Cookbook">
+    <img src="../../resources/images/PCOS-269x350.jpg" alt="The PCOS Diet Cookbook">
+    <img src="../../resources/images/LowIodine-280x346.jpg" alt="The Low Iodine Diet Cookbook">
+    <img src="../../resources/images/MealleaniYumm-271x350.jpg" alt="Meal Lean Yumm!">
+    <img src="../../resources/images/microways.jpg" alt="Micro Ways">
+    <img src="../../resources/images/HealthyHelpings.jpg" alt="Healthy Helpings">
+    <img src="../../resources/images/FoodProcessor-254x350.jpg" alt="The Pleasures of Your Food Processor">
+  </div>
+</section>
+
+<!-- CULINARY SOLUTIONS -->
+<section id="culinary_solutions" data-track-route hidden>
+  <h1>Culinary Solutions</h1>
+  <div class="solutions-grid">
+    <div class="solution-card">Food Articles</div>
+    <div class="solution-card">Cookbook Editing and Indexing</div>
+    <div class="solution-card">Food Photography</div>
+    <div class="solution-card">Recipe Makeovers</div>
+    <div class="solution-card">Food Styling</div>
+    <div class="solution-card">Recipe Development</div>
+    <div class="solution-card">Food Consultants</div>
+    <div class="solution-card">Nutrient Analysis / Food Labels</div>
+  </div>
+</section>
+
+<!-- RECIPE DETAIL -->
+<section id="recipe_detail" data-track-route hidden>
+  <div class="recipe-detail">
+    <h1 style="text-transform:uppercase">Gefilte Fish 1</h1>
+    <h2>Fish &amp; Dairy</h2>
+    <img src="../../resources/images/gefelte-fish-byjohn-uher.jpg" alt="Gefilte Fish">
+    <h3>Ingredients</h3>
+    <ul>
+      <li>2 lbs fish fillets (pike, carp, &amp; whitefish)</li>
+      <li>4 medium onions</li>
+      <li>4 tsp salt</li>
+      <li>1 tsp pepper</li>
+      <li>1 qt water</li>
+      <li>3 eggs</li>
+      <li>3/4 cup ice water</li>
+      <li>3 tbsp matzo meal</li>
+      <li>3 carrots, sliced</li>
+    </ul>
+    <h3>Instructions</h3>
+    <ol>
+      <li>Reserve the head, skin, and bones from the fish. Place these trimmings, 3 onions, 2 tsp salt and the pepper into the quart of water. Simmer about 20 minutes.</li>
+      <li>Grind the fish fillets with the remaining onion. Place in a chopping bowl, add the eggs, ice water, matzo meal, and remaining seasoning. Chop mixture until very fine and thoroughly blended. Moisten hands, and shape mixture into balls.</li>
+      <li>Drop balls into the boiling stock, and add carrots. Cover and simmer for 1 1/2 hours. If the stock cooks down too much, add a little water. Cool the fish slightly. Remove to a bowl, strain the stock over it, and garnish with the carrot slices. Chill and serve with horseradish.</li>
+    </ol>
+    <p>Makes 12 servings.</p>
+
+    <h1 style="margin-top:30px">This Recipe Is Featured In These Books &amp; Articles</h1>
+    <div class="recipe-featured">
+      <img src="../../resources/images/SecondHelpings-267x350.jpg" alt="Second Helpings Please cookbook">
+    </div>
+
+    <h1>Share This Recipe On:</h1>
+    <div style="text-align:center;margin:16px 0">
+      <a href="#homepage" onclick="showPage('homepage')" style="font-size:1.5em;margin:0 8px" aria-label="Facebook">f</a>
+      <a href="#homepage" onclick="showPage('homepage')" style="font-size:1.5em;margin:0 8px" aria-label="Twitter">t</a>
+      <a href="#homepage" onclick="showPage('homepage')" style="font-size:1.5em;margin:0 8px" aria-label="Pinterest">P</a>
+      <a href="#homepage" onclick="showPage('homepage')" style="font-size:1.5em;margin:0 8px" aria-label="Email">✉</a>
+    </div>
+    <p style="text-align:center"><a href="#homepage" onclick="showPage('homepage')" style="font-weight:bold">Print this recipe</a></p>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section id="tips" data-track-route hidden>
+  <h1>Tips</h1>
+  <div class="tips-grid">
+    <div class="tip-card orange">
+      <h3>Too Much Batter?</h3>
+      <p>If there's too much batter to fit in your processor, process the eggs, oil, honey, brown sugar, and vanilla extract for 2 to 3 minutes. Transfer mixture to a large mixing bowl. Add the dry ingredients, tea and orange juice to the bowl; mix just until blended. Stir in the grated apples and carrot and bake as directed.</p>
+    </div>
+    <div class="tip-card green">
+      <h3>Sodi-Yum!</h3>
+      <p>Celery salt adds wonderful flavor to coleslaw and other marinated salads.</p>
+    </div>
+    <div class="tip-card green">
+      <h3>Lemon Aid</h3>
+      <p>Lemon juice removes onion odors from your hands, knives, and cutting boards.</p>
+    </div>
+    <div class="tip-card orange">
+      <h3>Fight Onion Breath</h3>
+      <p>Eat a couple of sprigs of fresh parsley, chew on citrus peel, or rinse your mouth with lemon juice and water to eliminate onion breath. (The odor comes from eating raw onions, not cooked ones.)</p>
+    </div>
+  </div>
+  <div class="pagination">
+    <a href="#tips" onclick="showPage('tips')">1</a>
+    <a href="#tips" onclick="showPage('tips')">2</a>
+    <a href="#tips" onclick="showPage('tips')">3</a>
+    <span>…</span>
+    <a href="#tips" onclick="showPage('tips')">20</a>
+    <a href="#tips" onclick="showPage('tips')">→</a>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos" data-track-route hidden>
+  <h1>Media</h1>
+  <div class="video-tabs">
+    <button class="active">All</button>
+    <button>My Videos</button>
+    <button>Recommended</button>
+  </div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/Panicfreedemo-320x180.jpg" alt="Panic-Free Passover"></div>
+      <div class="video-title">Panic-Free Passover Cooking Demo</div>
+    </div>
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/fruitoftheland-320x180.jpg" alt="Fruit of the Land"></div>
+      <div class="video-title">Cooking Demo at Fruit of the Land – Tabbouleh Salad</div>
+    </div>
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/bestnoodle-320x180.jpg" alt="Cheese Noodle Kugel"></div>
+      <div class="video-title">The Best Classic Cheese Noodle Kugel | JOY of KOSHER with Norene Gilletz</div>
+    </div>
+    <div class="video-card">
+      <div class="play-overlay"><img src="../../resources/images/studio4-320x180.jpg" alt="Studio 4"></div>
+      <div class="video-title">Norene Gilletz on Studio 4 with Host Fanny Kiefer</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="shop-badge">Shop</div>
+
+<footer class="site-footer">
+  <div class="affiliate-logos">
+    <img src="../../resources/images/amazon-logo_transparent-300x80.jpg" alt="Amazon">
+    <img src="../../resources/images/amazon-logo_transparent-300x80.jpg" alt="Amazon Canada">
+    <img src="../../resources/images/chapters-indigo-logo-medium-300x109.jpg" alt="Indigo">
+  </div>
+  <p class="affiliate-note">Our affiliates pay us a small referral fee when you click on our links and purchase my books (or anything at all) from them. It has NO impact on the price you pay!</p>
+  <div class="footer-brand">
+    <img src="../../resources/images/footer-logo.jpg" alt="Gourmania Logo">
+    <div class="social-icons">
+      <a href="#homepage" onclick="showPage('homepage')" class="fb" aria-label="Facebook">f</a>
+      <a href="#homepage" onclick="showPage('homepage')" class="tw" aria-label="Twitter">𝕏</a>
+      <a href="#homepage" onclick="showPage('homepage')" class="ig" aria-label="Instagram">◎</a>
+      <a href="#homepage" onclick="showPage('homepage')" class="yt" aria-label="YouTube">▶</a>
+    </div>
+    <p class="copyright">All images and recipes © 2026 Norene Gilletz unless otherwise noted.<br>A creation of BlackSun Design</p>
+  </div>
+</footer>
+
+<script>
+window.__TRACK_B_ROUTES = ["homepage", "cookbooks", "culinary_solutions", "recipe_detail", "tips", "videos"];
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+  setTimeout(function() { window.scrollTo(0, 0); }, 0);
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+{
+  "item_id": "F10_gourmania",
+  "run": "gwdg_qwen36_35b_v9_smoke",
+  "html": "D:\\master_thesis\\data\\track_b\\items\\F10_gourmania\\generated\\gwdg_qwen36_35b_v9_smoke\\index.html",
+  "workflow": "D:\\master_thesis\\data\\track_b\\workflows_normalized\\F10_gourmania_browser_v1.json",
+  "start_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+  "start_route": "homepage",
+  "evaluator": "browser-workflow-v1",
+  "case_count": 8,
+  "passed_case_count": 7,
+  "route_success_case_count": 8,
+  "content_validation_success_case_count": 7,
+  "task_success_rate": 0.875,
+  "route_success_rate": 1,
+  "content_validation_success_rate": 0.875,
+  "passed": false,
+  "console_errors": [],
+  "cases": [
+    {
+      "block_index": 0,
+      "case_index": 0,
+      "objective": "Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click \"COOKBOOKS\" in the navigation menu",
+          "passed": true,
+          "label": "COOKBOOKS",
+          "chosen": {
+            "text": "COOKBOOKS",
+            "target": "cookbooks",
+            "href": "#cookbooks",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "cookbooks",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#cookbooks",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page navigates to the cookbooks page",
+          "kind": "route",
+          "needle": null,
+          "passed": true
+        },
+        {
+          "validation": "The page displays the heading \"MY COOKBOOKS\"",
+          "kind": "text",
+          "needle": "MY COOKBOOKS",
+          "passed": true
+        },
+        {
+          "validation": "A grid of cookbook cover images is displayed on the page",
+          "kind": "image_grid",
+          "needle": null,
+          "passed": true
+        }
+      ],
+      "final_route": "cookbooks",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#cookbooks",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 1,
+      "objective": "Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Navigate back using the browser back button",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click \"MEDIA\" in the navigation menu",
+          "passed": true,
+          "label": "MEDIA",
+          "chosen": {
+            "text": "MEDIA",
+            "target": "videos",
+            "href": "#videos",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "videos",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#videos",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page navigates to the videos page",
+          "kind": "route",
+          "needle": null,
+          "passed": true
+        },
+        {
+          "validation": "Video content thumbnails with play buttons are displayed on the page",
+          "kind": "media_grid",
+          "needle": null,
+          "passed": true
+        },
+        {
+          "validation": "The MEDIA tab in the navigation menu is highlighted or active",
+          "kind": "active_nav",
+          "needle": "MEDIA",
+          "passed": true
+        }
+      ],
+      "final_route": "videos",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#videos",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 2,
+      "objective": "Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Navigate back using the browser back button",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click \"WHAT WE DO\" in the navigation menu",
+          "passed": true,
+          "label": "WHAT WE DO",
+          "chosen": {
+            "text": "WHAT WE DO",
+            "target": "culinary_solutions",
+            "href": "#culinary_solutions",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "culinary_solutions",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#culinary_solutions",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page navigates to the culinary solutions page",
+          "kind": "route",
+          "needle": null,
+          "passed": true
+        },
+        {
+          "validation": "The page displays the heading \"CULINARY SOLUTIONS\"",
+          "kind": "text",
+          "needle": "CULINARY SOLUTIONS",
+          "passed": true
+        },
+        {
+          "validation": "Multiple service category cards are displayed on the page",
+          "kind": "card_grid",
+          "needle": null,
+          "passed": false
+        }
+      ],
+      "final_route": "culinary_solutions",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#culinary_solutions",
+      "route_success": true,
+      "content_validation_success": false,
+      "passed": false,
+      "error": null
+    },
+    {
+      "block_index": 0,
+      "case_index": 3,
+      "objective": "Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Navigate back using the browser back button",
+          "passed": true,
+          "method": "reset_to_initial_page",
+          "route_after": "homepage"
+        },
+        {
+          "action": "Click the recipe card named \"Gefilte Fish\" in the \"FAVOURITE HOLIDAY RECIPES\" section",
+          "passed": true,
+          "label": "Gefilte Fish",
+          "chosen": {
+            "text": "Gefilte Fish",
+            "target": "recipe_detail",
+            "href": "#recipe_detail",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "recipe_detail",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#recipe_detail",
+          "changed": true
+        }
+      ],
+      "validations": [
+        {
+          "validation": "The page navigates to the recipe detail page",
+          "kind": "route",
+          "needle": null,
+          "passed": true
+        },
+        {
+          "validation": "The page displays the recipe title \"GEFILTE FISH 1\"",
+          "kind": "text",
+          "needle": "GEFILTE FISH 1",
+          "passed": true
+        },
+        {
+          "validation": "Recipe ingredients and instructions are displayed on the page",
+          "kind": "text_all",
+          "needle": "ingredients instructions",
+          "passed": true
+        }
+      ],
+      "final_route": "recipe_detail",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#recipe_detail",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 1,
+      "case_index": 0,
+      "objective": "Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click \"COOKBOOKS\" in the navigation menu",
+          "passed": true,
+          "label": "COOKBOOKS",
+          "chosen": {
+            "text": "COOKBOOKS",
+            "target": "cookbooks",
+            "href": "#cookbooks",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "cookbooks",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#cookbooks",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "cookbooks",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#cookbooks",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 2,
+      "case_index": 0,
+      "objective": "Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click \"MEDIA\" in the navigation menu",
+          "passed": true,
+          "label": "MEDIA",
+          "chosen": {
+            "text": "MEDIA",
+            "target": "videos",
+            "href": "#videos",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "videos",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#videos",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "videos",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#videos",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 3,
+      "case_index": 0,
+      "objective": "Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click \"WHAT WE DO\" in the navigation menu",
+          "passed": true,
+          "label": "WHAT WE DO",
+          "chosen": {
+            "text": "WHAT WE DO",
+            "target": "culinary_solutions",
+            "href": "#culinary_solutions",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "culinary_solutions",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#culinary_solutions",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "culinary_solutions",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#culinary_solutions",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    },
+    {
+      "block_index": 4,
+      "case_index": 0,
+      "objective": "Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.",
+      "actions": [
+        {
+          "action": "Click the recipe card named \"Gefilte Fish\" in the \"FAVOURITE HOLIDAY RECIPES\" section",
+          "passed": true,
+          "label": "Gefilte Fish",
+          "chosen": {
+            "text": "Gefilte Fish",
+            "target": "recipe_detail",
+            "href": "#recipe_detail",
+            "score": 120
+          },
+          "route_before": "homepage",
+          "route_after": "recipe_detail",
+          "url_before": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#homepage",
+          "url_after": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#recipe_detail",
+          "changed": true
+        }
+      ],
+      "validations": [],
+      "final_route": "recipe_detail",
+      "final_url": "file:///D:/master_thesis/data/track_b/items/F10_gourmania/generated/gwdg_qwen36_35b_v9_smoke/index.html#recipe_detail",
+      "route_success": true,
+      "content_validation_success": true,
+      "passed": true,
+      "error": null
+    }
+  ]
+}

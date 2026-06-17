@@ -417,6 +417,18 @@ reported κ must state the score distribution of the set it was computed on.
 - Provider identity shifts absolute scores (tuzi lenient vs ChatAnywhere);
   certified config is default-anchors on ChatAnywhere. Switching provider
   requires re-validation.
+- **Held-out / disjoint-item anchors (user-endorsed 2026-06-16, to try later).**
+  Current anchors are drawn from F10/F01 — items that are ALSO ranked, so the
+  judge sees example pages from items it later scores. The certified κ is
+  leakage-free (the 3 anchor pages are excluded from all scoring/evaluation), so
+  this is item-layout *familiarity*, not answer leakage, and it carries human
+  gold (not self-preference). The cleanest production design is to source the
+  anchors from a held-out CALIBRATION item that never enters the leaderboard, or
+  from a non-contestant model's artifact. This eliminates item-familiarity
+  entirely and also separates "needs a bad exemplar" from "needs THESE pages"
+  (cf. the earlier untested-anchor-variant note). Requires one full-range
+  re-validation, then freeze (same discipline). Document as a limitation of the
+  frozen v1 either way.
 - gpt-5-mini is better calibrated (less saturation, mean nearer human) but
   ~6x slower (reasoning model, ~25 s/page) → impractical for large formal
   batches; a cost/latency-vs-quality datapoint, not a freeze candidate.

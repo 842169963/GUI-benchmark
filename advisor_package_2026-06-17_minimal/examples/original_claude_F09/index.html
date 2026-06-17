@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elections BC - A non-partisan Office of the Legislature</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; color: #333; background: #f5f5dc; }
+.top-bar { background: #5a5a5a; color: white; padding: 8px 20px; display: flex; justify-content: flex-end; align-items: center; gap: 20px; flex-wrap: wrap; font-size: 13px; }
+.top-bar input { padding: 5px 10px; border: none; border-radius: 3px; width: 200px; }
+.top-bar a { color: white; text-decoration: none; }
+.header { background: #f5f5dc; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo img { height: 60px; }
+.logo-text { font-size: 32px; font-weight: bold; }
+.logo-text .bc { color: #d32f2f; }
+.logo-subtitle { font-size: 14px; color: #333; }
+.register-btn { background: #5a5a5a; color: white; padding: 12px 24px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block; }
+.nav { background: #d32f2f; display: flex; justify-content: center; flex-wrap: wrap; }
+.nav a { color: white; padding: 15px 25px; text-decoration: none; font-size: 16px; font-weight: bold; }
+.nav a:hover { background: #b71c1c; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.hero { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+.hero-main { flex: 2; background: white; padding: 40px; min-width: 300px; }
+.hero-main h1 { font-size: 36px; margin-bottom: 20px; text-transform: uppercase; }
+.hero-main p { margin-bottom: 20px; line-height: 1.6; }
+.hero-main .btn { background: #d32f2f; color: white; padding: 12px 30px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block; }
+.hero-image { flex: 1; min-width: 300px; }
+.hero-image img { width: 100%; height: auto; }
+.sidebar { flex: 1; background: #5a5a5a; color: white; padding: 20px; min-width: 250px; }
+.sidebar h3 { margin-bottom: 15px; }
+.sidebar ul { list-style: none; }
+.sidebar li { padding: 10px 0; border-bottom: 1px solid #777; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.card { background: white; padding: 30px; }
+.card h2 { font-size: 20px; margin-bottom: 15px; text-transform: uppercase; }
+.card p { margin-bottom: 15px; line-height: 1.6; }
+.card .btn { background: #5a5a5a; color: white; padding: 10px 25px; border: none; border-radius: 25px; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-block; }
+.footer { background: #5a5a5a; color: white; padding: 30px 20px; margin-top: 40px; }
+.footer-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a { color: white; text-decoration: none; }
+.content-layout { display: flex; gap: 20px; flex-wrap: wrap; }
+.sidebar-left { flex: 0 0 250px; background: #e8e8d0; min-width: 200px; }
+.sidebar-left ul { list-style: none; }
+.sidebar-left li { border-bottom: 1px solid #ccc; }
+.sidebar-left a { display: block; padding: 12px 15px; text-decoration: none; color: #333; }
+.sidebar-left a:hover, .sidebar-left a.active { background: #8b1a1a; color: white; }
+.main-content { flex: 1; background: white; padding: 30px; min-width: 300px; }
+.main-content h1 { font-size: 32px; margin-bottom: 20px; text-transform: uppercase; }
+.main-content h2 { font-size: 24px; margin: 20px 0 10px; }
+.main-content p { line-height: 1.6; margin-bottom: 15px; }
+.main-content ul { margin-left: 20px; margin-bottom: 15px; }
+.main-content li { margin-bottom: 8px; line-height: 1.6; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+th { background: #f0f0f0; font-weight: bold; }
+.breadcrumb { margin-bottom: 20px; font-size: 14px; }
+.breadcrumb a { color: #d32f2f; text-decoration: none; }
+select { padding: 8px; margin: 10px 0; border: 1px solid #ccc; }
+[data-track-route] { display: none; }
+[data-track-route]:not([hidden]) { display: block; }
+@media (max-width: 768px) {
+  .nav { flex-direction: column; }
+  .nav a { padding: 12px; }
+  .hero { flex-direction: column; }
+  .content-layout { flex-direction: column; }
+  .sidebar-left { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <input type="text" placeholder="Search by keyword">
+  <a href="#">JOBS</a>
+  <a href="#">NEWS</a>
+  <a href="#">CONTACT</a>
+  <a href="#">EN</a>
+</div>
+
+<div class="header">
+  <div class="logo">
+    <img src="../../resources/images/ebc-logo.jpg" alt="Elections BC Logo">
+    <div>
+      <div class="logo-text">ELECTIONS <span class="bc">BC</span></div>
+      <div class="logo-subtitle">A non-partisan Office of the Legislature</div>
+    </div>
+  </div>
+  <button class="register-btn" onclick="showPage('voter_registration')" data-route-target="voter_registration">Register to Vote</button>
+</div>
+
+<nav class="nav">
+  <a href="#" onclick="showPage('homepage'); return false;">Provincial Elections</a>
+  <a href="#">Candidates & Parties</a>
+  <a href="#" onclick="showPage('2026_local_elections'); return false;">Local Elections</a>
+  <a href="#">Events & Services</a>
+  <a href="#" onclick="showPage('resources_and_reports'); return false;" data-route-target="resources_and_reports">Resources</a>
+</nav>
+
+<section id="homepage" data-track-route>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-main">
+        <h1>2024 Provincial Election Report</h1>
+        <p>Read the final volume of the Chief Electoral Officer's report on the 2024 Provincial General Election.</p>
+        <button class="btn" onclick="showPage('2024_provincial_election')" data-route-target="2024_provincial_election">Learn more</button>
+      </div>
+      <div class="hero-image">
+        <img src="../../resources/images/i-voted-sticker-1.jpg" alt="I Voted Sticker">
+      </div>
+      <div class="sidebar">
+        <h3>WHAT'S NEW</h3>
+        <ul>
+          <li>Job Opportunity: Audit Manager</li>
+          <li>Scheduled Maintenance: Elections BC Services Portal</li>
+          <li>Job Opportunity: District Electoral Officers</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="cards">
+      <div class="card">
+        <h2>2026 General Local Elections</h2>
+        <p>The next general local elections will be held on October 17, 2026.</p>
+        <button class="btn" onclick="showPage('2026_local_elections')" data-route-target="2026_local_elections">Learn more</button>
+      </div>
+      <div class="card">
+        <h2>2024 B.C. Election Financing Reports</h2>
+        <p>Financing reports for the 2024 Provincial Election are now available.</p>
+        <button class="btn" href="#">Learn more</button>
+      </div>
+      <div class="card">
+        <h2>Contribution Limits</h2>
+        <p>See the provincial and local contribution limits for 2026.</p>
+        <button class="btn" href="#">Learn more</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="2024_provincial_election" data-track-route>
+  <div class="container">
+    <div class="content-layout">
+      <aside class="sidebar-left">
+        <ul>
+          <li><a href="#" class="active">2024 Provincial Election</a></li>
+          <li><a href="#">Who Can Vote</a></li>
+          <li><a href="#">Ways to Vote</a></li>
+          <li><a href="#" onclick="showPage('voter_registration'); return false;">Register to Vote</a></li>
+          <li><a href="#">Voter ID</a></li>
+          <li><a href="#">Election Integrity</a></li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <div class="breadcrumb">Elections BC > 2024 Provincial Election</div>
+        <h1>2024 Provincial Election</h1>
+        <p>British Columbia's 43rd Provincial General Election was held on Saturday, October 19, 2024. 2,109,658 voters cast their ballot, representing 58.45% of registered voters.</p>
+        
+        <h2>Read the report of the Chief Electoral Officer on the October 19, 2024 Provincial General Election:</h2>
+        <ul>
+          <li>Volume I: Administration</li>
+          <li>Volume II: Financing and Expenses</li>
+          <li>Volume II: Recommendations for Legislative Change</li>
+        </ul>
+        
+        <h2>View final voting results:</h2>
+        <ul>
+          <li>Statement of Votes – 43rd Provincial General Election – October 19, 2024 (PDF)</li>
+          <li>Provincial Voting Results (DataBC)</li>
+        </ul>
+        
+        <p>The modernized voting process used in 2024 was the result of legislative amendments in 2019 and 2023. These changes resulted in significant benefits for voters, election officials, and political campaigns, including:</p>
+        <ul>
+          <li>Making the voting process more accessible and efficient</li>
+          <li>Providing better service to voters through a first-come, first served model</li>
+          <li>Reporting preliminary results faster on election night</li>
+        </ul>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="2026_local_elections" data-track-route>
+  <div class="container">
+    <div class="content-layout">
+      <aside class="sidebar-left">
+        <ul>
+          <li><a href="#" class="active">2026 General Local Elections</a></li>
+          <li><a href="#">Who Does What</a></li>
+          <li><a href="#">Local Chief Election Officers</a></li>
+          <li><a href="#">Elector Organizations</a></li>
+          <li><a href="#" onclick="showPage('local_election_forms'); return false;" data-route-target="local_election_forms">Local Forms</a></li>
+          <li><a href="#">Local Guides</a></li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <div class="breadcrumb">Elections BC > Local Elections > 2026 General Local Elections</div>
+        <h1>2026 General Local Elections</h1>
+        <p>The next general local elections will be held on October 17, 2026.</p>
+        
+        <h2>What are general local elections</h2>
+        <p>General local elections include elections for:</p>
+        <ul>
+          <li>mayors and municipal councillors</li>
+          <li>regional district directors</li>
+          <li>school boards trustees</li>
+          <li>specified parks boards</li>
+          <li>local community commissions, and</li>
+          <li>the Islands Trust.</li>
+        </ul>
+        
+        <h2>Key dates</h2>
+        <table>
+          <tr><th>Milestone</th><th>Date</th></tr>
+          <tr><td>Election period begins</td><td>January 1, 2026</td></tr>
+          <tr><td>Nomination period begins</td><td>September 1, 2026</td></tr>
+          <tr><td>Close of nominations</td><td>September 11, 2026</td></tr>
+          <tr><td>Campaign period begins</td><td>September 19, 2026</td></tr>
+          <tr><td>General Voting Day</td><td>October 17, 2026</td></tr>
+        </table>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="local_election_forms" data-track-route>
+  <div class="container">
+    <div class="content-layout">
+      <aside class="sidebar-left">
+        <ul>
+          <li><a href="#" onclick="showPage('2026_local_elections'); return false;">2026 General Local Elections</a></li>
+          <li><a href="#">Who Does What</a></li>
+          <li><a href="#">Local Chief Election Officers</a></li>
+          <li><a href="#">Elector Organizations</a></li>
+          <li><a href="#" class="active">Local Forms</a></li>
+          <li><a href="#">Local Guides</a></li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <div class="breadcrumb">Elections BC > Local Elections > Local Forms</div>
+        <h1>Local Forms</h1>
+        <p>See below for local government, registration, financing and disclosure forms.</p>
+        
+        <label for="filer-type">Select filer type:</label>
+        <select id="filer-type">
+          <option>All</option>
+          <option>Candidate</option>
+          <option>Elector Organization</option>
+          <option>Third Party Advertising Sponsor</option>
+        </select>
+        
+        <table>
+          <tr><th>Filer type</th><th>Report type(s)</th><th>Forms</th></tr>
+          <tr><td>Candidate</td><td>Disclosure Statements</td><td>Campaign Financing Summary (4301)<br>Summary of Campaign Contributions (4302)</td></tr>
+          <tr><td>Candidate</td><td>Registration</td><td>Candidate Financial Agent Appointment (4322)</td></tr>
+          <tr><td>Elector Organization</td><td>Registration</td><td>Application (4401)<br>Administration (4402)</td></tr>
+          <tr><td>Elector Organization</td><td>Annual Financial Report</td><td>Designation Financial Report (4444)</td></tr>
+          <tr><td>Third Party Advertising Sponsor</td><td>Registration</td><td>Registration Application (4701)</td></tr>
+          <tr><td>Third Party Advertising Sponsor</td><td>Disclosure</td><td>Summary of Total Value of Advertising (4501)</td></tr>
+        </table>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="resources_and_reports" data-track-route>
+  <div class="container">
+    <div class="content-layout">
+      <aside class="sidebar-left">
+        <ul>
+          <li><a href="#" class="active">Resources</a></li>
+          <li><a href="#">Maps</a></li>
+          <li><a href="#">Forms & Guides</a></li>
+          <li><a href="#">Results</a></li>
+          <li><a href="#">Voters List</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="#">Legislation</a></li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <div class="breadcrumb">Elections BC > Resources</div>
+        <h1>Resources</h1>
+        <p>This section of our website includes maps and other geography products, voting results and data from past electoral events, voters lists, reports of the Chief Electoral Officer and legislation.</p>
+        <p>Click the links in the left column to explore these resources.</p>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="voter_registration" data-track-route>
+  <div class="container">
+    <div class="content-layout">
+      <aside class="sidebar-left">
+        <ul>
+          <li><a href="#" onclick="showPage('2024_provincial_election'); return false;">2024 Provincial Election</a></li>
+          <li><a href="#">Who Can Vote</a></li>
+          <li><a href="#">Ways to Vote</a></li>
+          <li><a href="#" class="active">Register to Vote</a></li>
+          <li><a href="#">Voter ID</a></li>
+          <li><a href="#">Election Integrity</a></li>
+        </ul>
+      </aside>
+      <main class="main-content">
+        <div class="breadcrumb">Elections BC > 2024 Provincial Election > Register to Vote</div>
+        <h1>Register to Vote</h1>
+        <p>To register to vote in British Columbia, you must be:</p>
+        <ul>
+          <li>a Canadian citizen,</li>
+          <li>18 or older, and</li>
+          <li>a B.C. resident for the past six months.</li>
+        </ul>
+        
+        <p>If you meet these criteria, registration is easy! You can register or update your information:</p>
+        <ul>
+          <li><strong>online</strong></li>
+          <li><strong>by phone</strong> at 1-800-661-8683 (Monday to Friday, 8:30 a.m. to 4:30 p.m. PST)</li>
+          <li><strong>by mail, fax or email</strong> by sending us this form</li>
+          <li><strong>in person</strong> at our office at #100 – 1112 Fort St, Victoria, BC, V8V 3K8</li>
+        </ul>
+        
+        <p>Registering in advance has many benefits. Registered voters will receive important updates from Elections BC after an election is called, including information about where, when and how to vote. Registering in advance also makes the voting process faster and easier.</p>
+        
+        <h2>Register for the List of Future Voters</h2>
+        <p>Elections BC maintains a list of eligible 16 and 17-year-olds who will be automatically added to the Provincial Voters List when they turn 18. This will make it easier for young voters to receive information about voting from Elections BC, and will speed up the voting process for everyone.</p>
+        
+        <p>To register as a future voter, you must be:</p>
+        <ul>
+          <li>16 or 17 years old,</li>
+          <li>a Canadian citizen, and</li>
+          <li>a B.C. resident.</li>
+        </ul>
+        
+        <p>You can register as a future voter:</p>
+        <ul>
+          <li><strong>online</strong></li>
+          <li><strong>by phone</strong> at 1-800-661-8683</li>
+          <li><strong>by mail, fax or email</strong> by sending us this form</li>
+          <li><strong>in person</strong> at our office at #100 – 1112 Fort St, Victoria, BC, V8V 3K8</li>
+        </ul>
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div>
+      <p>Toll-Free: 1-800-661-8683</p>
+      <p>TTY: 1-888-456-5448</p>
+      <p>electionsbc@elections.bc.ca</p>
+      <p>Toll-Free Fax: 1-866-466-0665</p>
+    </div>
+    <div class="footer-links">
+      <a href="#">Accessibility</a>
+      <a href="#">Sitemap</a>
+      <a href="#">Privacy</a>
+      <a href="#">Social Media Policy</a>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 20px; font-size: 12px;">Copyright © 2026 Elections BC</div>
+</footer>
+
+<script>
+window.__TRACK_B_ROUTES = ["homepage", "2024_provincial_election", "2026_local_elections", "local_election_forms", "resources_and_reports", "voter_registration"];
+function showPage(routeId) {
+  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+  document.querySelectorAll('[data-track-route]').forEach(function(section) {
+    section.hidden = section.id !== routeId;
+  });
+  document.querySelectorAll('[data-route-target]').forEach(function(link) {
+    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+  });
+  location.hash = routeId;
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+});
+</script>
+
+</body>
+</html>

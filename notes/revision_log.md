@@ -1,6 +1,71 @@
 # Revision Log
 
+## 2026-06-16
+
+### Future-work recorded: held-out / disjoint-item anchors
+
+- User endorsed (in the deck-prep discussion) trying held-out anchors later: the
+  current few-shot anchors come from F10/F01, which are also ranked items, so the
+  judge sees example pages from items it later scores. Certified κ is leakage-free
+  (anchor pages excluded from all scoring), so the residual issue is item-layout
+  familiarity, not answer leakage. Cleanest fix = draw anchors from a held-out
+  calibration item (never ranked) or a non-contestant model, eliminating
+  familiarity and separating "needs a bad exemplar" from "needs THESE pages".
+  Added to the F5 future-work list in
+  [notes/track_b_jitter_validation.md](D:/master_thesis/notes/track_b_jitter_validation.md);
+  requires one full-range re-validation then freeze. Not a v1 change — documented
+  as a limitation.
+
 ## 2026-06-12
+
+### Deck rev 6/7 — coverage detail + progress-vs-plan slide
+
+- rev 6 (`..._v6.pptx`): slide 5 third caption reworded ("r rises once the set
+  spans bad AND good pages (not all good)" — "real quality spread" was unclear);
+  closing speaker notes expanded with the full Technical-coverage submetric
+  definition (per metric_specification.md: required element / text / route /
+  form-field / selector / a11y coverage; mean of applicable submetrics; why it's
+  needed = relaxed gate made pass-ratio non-discriminating), the κ-vs-Krippendorff
+  note, and the ~90% "satisfied" base rate (recorded in revision_log L392).
+- rev 7 (`..._v7.pptx`, 12 slides): added a "Where We Are in the Thesis" slide
+  (new slide 11, before Next Steps) — DONE / IN PROGRESS / NEXT three-column
+  status against the thesis_progress.md plan, headline "methodology de-risked
+  (judge validated & frozen)", ~60%-by-volume footer. Framing: the scientifically
+  uncertain part (judge validation) is retired; remaining work is execution +
+  RQ4 static-vs-dynamic analysis + writing. QA: new slide verified clean.
+
+### Deck rev 5 — slide 4/5 correspondence + citations
+
+- `track_b_progress_2026-06-12_v5.pptx`. Slide 5: the three numbers read as
+  two distinct claims now — added framing labels "① Can it tell good from bad?"
+  (0.91–0.94 pairwise accuracy) and "② Why the original r looked low — range
+  restriction" (κ 0.067→0.360, r 0.60→0.69) with a divider; simplified the
+  conclusion to the range-restriction defence and dropped the mild clause
+  (already in the image caption). Slide 4: κ card now cites Cohen (1960) for
+  why raw agreement is unusable (lucky matches counted as skill); r card pitfall
+  now closes the loop ("widen the range and it rises to 0.69, next slide").
+  Reference for the meeting Q&A: raw-agreement inflation = Cohen 1960 (κ =
+  proportion of agreement after chance removed); κ>0.6 band = Landis & Koch
+  1977; Pe≈0.84 because ~91% of checklist answers are "satisfied" (Pe=p²+(1−p)²).
+
+### Deck rev 4 — clarity pass per user review
+
+- `presentations/track_b_progress_2026-06-12_v4.pptx` (11 slides, down from 12).
+  Added a real scoring-interface screenshot to slide 2 (captured
+  `review_extended.html` via Edge headless → `presentations/review_ui_card.png`,
+  shows the 16-item Yes/No checklist beside the artifact). Removed forward "Exp N"
+  references on the concept slides (3, 4). Slide 4: spelled out the κ
+  calculation ((0.85−0.84)/(1−0.84)≈0.07) so the base-rate collapse is concrete.
+  Slide 5: rewrote the stat captions to explain before→after (good-pages-only →
+  full range) and why r/κ rise. Slide 6: simplified the human-ceiling box to the
+  one-line decision rule and replaced the reference-knowledge side finding with a
+  plain "bottom line" (side finding cut per user). Slide 7: reframed the "why
+  author gold" defense honestly (consensus anchors did NOT improve agreement →
+  kept simpler choice; single-rater gold = documented limitation). Slide 9:
+  dropped the W-series probe (per user); replaced with a reproducibility/failure
+  card. Slide 10: made the not-applicable principle generic. Removed the Open
+  Items slide entirely (per user); folded its limitations into the closing
+  slide's speaker notes for Q&A. QA: slides 2/4/5/6/7/9 verified.
 
 ### Deck rev 3 — synced to final freeze + adjudication findings
 
@@ -1293,3 +1358,19 @@ Applied 7 targeted corrections to `thesis_outline.md` after reviewing inline ann
 - Scope boundary: no visual-judge files or adjudicated-anchor outputs were
   modified. Accessibility weighted-density implementation remains a separate
   future task.
+
+### Track B category-specific leaderboard demo views
+
+- Updated the same leaderboard builders to separate public model names from
+  provider metadata in Markdown tables. Internal JSON still preserves
+  `provider/model/prompt` keys for reproducibility, but the demo no longer
+  presents a provider such as Tuzi as if it were the model name.
+- Added category-specific ranking sections for completion reliability, static
+  technical score, dynamic task score, average total tokens, and average
+  latency. Quality metrics are ranked higher-is-better; raw efficiency metrics
+  are ranked lower-is-better.
+- Basis: `notes/leaderboard_design.md` requires category-specific rankings and
+  cost-performance views because users may prioritize visual quality,
+  functionality, or efficiency differently. The implementation uses existing
+  generated metadata and evaluation reports only; no new generation, judging,
+  or thesis claim was introduced.

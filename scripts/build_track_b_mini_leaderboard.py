@@ -124,6 +124,10 @@ def artifact_result(item_dir: Path, run_dir: Path):
     if visual:
         screenshot_coverage = visual.get("screenshot_coverage")
         static_visual_status = "pending_rubric_scoring"
+    vscore = read_json(run_dir / "standard_screenshots" / "visual_score.json")
+    if vscore and vscore.get("static_visual_score") is not None:
+        static_visual_score = vscore["static_visual_score"]
+        static_visual_status = "scored_lb_judge_v1"
 
     efficiency_score = None
     efficiency_status = "raw_only_no_usd_reference"
@@ -194,6 +198,22 @@ def model_key(metadata):
     return f"{provider}/{model}/{prompt}"
 
 
+def split_model_key(key: str):
+    parts = key.split("/", 2)
+    if len(parts) != 3:
+        return {
+            "provider": "unknown-provider",
+            "model_name": key,
+            "prompt_id": "unknown-prompt",
+        }
+    provider, model_name, prompt_id = parts
+    return {
+        "provider": provider,
+        "model_name": model_name,
+        "prompt_id": prompt_id,
+    }
+
+
 def ineligibility_reasons(gate_score, finish_reason, dynamic_required, dynamic_available):
     reasons = []
     if not gate_score["passed"]:
@@ -223,6 +243,7 @@ def aggregate_model_rows(artifacts, include_ineligible=False):
 
     rows = []
     for model, group in sorted(grouped.items()):
+        model_parts = split_model_key(model)
         eligible = [item for item in group if item["eligible_for_leaderboard"]]
         failed = [item for item in group if not item["eligible_for_leaderboard"]]
         scoring_group = eligible if eligible else group
@@ -233,6 +254,7 @@ def aggregate_model_rows(artifacts, include_ineligible=False):
         )
         rows.append({
             "model": model,
+            **model_parts,
             "artifact_count": len(group),
             "eligible_artifact_count": len(eligible),
             "failed_artifact_count": len(failed),
@@ -265,6 +287,34 @@ def aggregate_model_rows(artifacts, include_ineligible=False):
     return rows
 
 
+def category_rankings(rows):
+    specs = [
+        ("completion_reliability", lambda row: row["completion_reliability"], True, "higher_is_better"),
+        ("static_technical", lambda row: row["static_technical_score"], True, "higher_is_better"),
+        ("dynamic", lambda row: row["dynamic_score"], True, "higher_is_better"),
+        ("average_total_tokens", lambda row: row["average_total_tokens"], False, "lower_is_better"),
+        ("average_latency_seconds", lambda row: row["average_latency_seconds"], False, "lower_is_better"),
+    ]
+    output = {}
+    for label, getter, reverse, direction in specs:
+        ranked = [row for row in rows if getter(row) is not None]
+        ranked.sort(key=getter, reverse=reverse)
+        output[label] = [
+            {
+                "rank": index,
+                "model_key": row["model"],
+                "model_name": row["model_name"],
+                "provider": row["provider"],
+                "prompt_id": row["prompt_id"],
+                "value": getter(row),
+                "direction": direction,
+            }
+            for index, row in enumerate(ranked, start=1)
+        ]
+    output["overall"] = []
+    return output
+
+
 def format_score(value):
     if isinstance(value, (int, float)):
         return f"{value:.3f}"
@@ -277,7 +327,28 @@ def format_number(value):
     return "n/a"
 
 
+def ranking_table(title, rows, value_label):
+    lines = [
+        f"### {title}",
+        "",
+        f"| Rank | Model | Provider | {value_label} |",
+        "| ---: | --- | --- | ---: |",
+    ]
+    for row in rows:
+        value = format_number(row["value"]) if value_label in {"Tokens", "Seconds"} else format_score(row["value"])
+        lines.append(
+            "| {rank} | `{model}` | `{provider}` | {value} |".format(
+                rank=row["rank"],
+                model=row["model_name"],
+                provider=row["provider"],
+                value=value,
+            )
+        )
+    return lines
+
+
 def leaderboard_markdown(model_rows, prompt_id, provider_failure_count):
+    rankings = category_rankings(model_rows)
     mixed_prompt = not prompt_id
     lines = [
         "# Track B Mini Leaderboard" if not mixed_prompt else "# Track B Mixed-Prompt Pipeline Summary",
@@ -288,14 +359,16 @@ def leaderboard_markdown(model_rows, prompt_id, provider_failure_count):
         "",
         f"Provider failures recorded: {provider_failure_count}",
         "",
-        "| Rank | Model | Attempted | Eligible | Failed | Completion reliability | Static Technical | Static Visual | Dynamic | Efficiency | Overall | Avg prompt tokens | Avg completion tokens | Avg total tokens | Avg latency (s) | Cost status |",
-        "| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Rank | Model | Provider | Prompt | Attempted | Eligible | Failed | Completion reliability | Static Technical | Static Visual | Dynamic | Efficiency | Overall | Avg prompt tokens | Avg completion tokens | Avg total tokens | Avg latency (s) | Cost status |",
+        "| ---: | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for row in model_rows:
         lines.append(
-            "| {rank} | {model} | {attempted} | {eligible} | {failed} | {reliability} | {static_technical} | {static_visual} | {dynamic} | {efficiency} | {overall} | {prompt_tokens} | {completion_tokens} | {tokens} | {latency} | {cost_status} |".format(
+            "| {rank} | `{model}` | `{provider}` | `{prompt}` | {attempted} | {eligible} | {failed} | {reliability} | {static_technical} | {static_visual} | {dynamic} | {efficiency} | {overall} | {prompt_tokens} | {completion_tokens} | {tokens} | {latency} | {cost_status} |".format(
                 rank=row["rank"],
-                model=row["model"],
+                model=row["model_name"],
+                provider=row["provider"],
+                prompt=row["prompt_id"],
                 attempted=row["artifact_count"],
                 eligible=row["eligible_artifact_count"],
                 failed=row["failed_artifact_count"],
@@ -321,15 +394,31 @@ def leaderboard_markdown(model_rows, prompt_id, provider_failure_count):
             "",
             "Failure summary:",
             "",
-            "| Model | Ineligibility reasons |",
-            "| --- | --- |",
+            "| Model | Provider | Ineligibility reasons |",
+            "| --- | --- | --- |",
         ])
         for row in failed_rows:
             reasons = ", ".join(
                 f"{reason}: {count}"
                 for reason, count in sorted(row["ineligibility_reason_counts"].items())
             )
-            lines.append(f"| {row['model']} | {reasons} |")
+            lines.append(f"| `{row['model_name']}` | `{row['provider']}` | {reasons} |")
+    lines.extend([
+        "",
+        "## Category Rankings",
+        "",
+        "Each ranking uses the same model rows above. Quality metrics are higher-is-better; raw efficiency metrics are lower-is-better.",
+        "",
+    ])
+    lines.extend(ranking_table("Completion reliability", rankings["completion_reliability"], "Value"))
+    lines.extend([""])
+    lines.extend(ranking_table("Static technical", rankings["static_technical"], "Score"))
+    lines.extend([""])
+    lines.extend(ranking_table("Dynamic task", rankings["dynamic"], "Score"))
+    lines.extend([""])
+    lines.extend(ranking_table("Average total tokens", rankings["average_total_tokens"], "Tokens"))
+    lines.extend([""])
+    lines.extend(ranking_table("Average latency", rankings["average_latency_seconds"], "Seconds"))
     lines.extend([
         "",
         "Notes:",
@@ -405,6 +494,7 @@ def main():
         "aggregation_note": "Artifact-level scores are aggregated into model-level leaderboard rows. Ineligible artifacts are excluded from score means.",
         "provider_failure_count": len(provider_failures),
         "models": model_rows,
+        "category_rankings": category_rankings(model_rows),
     }
     artifact_path.write_text(json.dumps(artifact_payload, indent=2), encoding="utf-8")
     model_path.write_text(json.dumps(model_payload, indent=2), encoding="utf-8")

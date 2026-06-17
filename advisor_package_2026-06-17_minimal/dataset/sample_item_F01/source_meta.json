@@ -1,0 +1,25 @@
+{
+  "normalized_at": "2026-05-21T23:17:50.591482",
+  "item_id": "F01_1daycloud",
+  "source_dataset": "zai-org/Vision2Web",
+  "source_config": "frontend",
+  "source_level": "Level 2",
+  "source_task_name": "1daycloud",
+  "source_license": "CC-BY-NC-SA-4.0",
+  "raw_dir": "data\\track_b\\vision2web_raw\\frontend\\1daycloud",
+  "workflow_steps": 7,
+  "num_test_cases": 6,
+  "resources_count": 35,
+  "prototypes": [
+    "academy.jpg",
+    "clickapp.jpg",
+    "contact.jpg",
+    "digital_cards.jpg",
+    "home.jpg",
+    "services.jpg"
+  ],
+  "use_for_static": true,
+  "use_for_dynamic": true,
+  "copied_prototypes": true,
+  "copied_resources": true
+}

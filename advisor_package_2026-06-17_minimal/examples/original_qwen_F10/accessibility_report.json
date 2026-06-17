@@ -1,0 +1,50 @@
+{
+  "item": "F10_gourmania",
+  "run": "gwdg_qwen36_35b_v9_smoke",
+  "accessibility_score": 0.9259,
+  "pass_nodes": 225,
+  "violation_nodes": 18,
+  "violations_by_severity": {
+    "critical": 0,
+    "serious": 18,
+    "moderate": 0,
+    "minor": 0
+  },
+  "violated_rules": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 18
+    }
+  ],
+  "color_contrast_violation_nodes": 18,
+  "passed_rule_count": 19,
+  "passed_rules": [
+    "aria-allowed-attr",
+    "aria-conditional-attr",
+    "aria-hidden-body",
+    "aria-prohibited-attr",
+    "aria-valid-attr-value",
+    "aria-valid-attr",
+    "avoid-inline-spacing",
+    "button-name",
+    "bypass",
+    "color-contrast",
+    "document-title",
+    "html-has-lang",
+    "html-lang-valid",
+    "image-alt",
+    "link-name",
+    "list",
+    "listitem",
+    "meta-viewport",
+    "nested-interactive"
+  ],
+  "incomplete_rules": [
+    {
+      "id": "color-contrast",
+      "nodes": 5
+    }
+  ],
+  "inapplicable_rule_count": 43
+}

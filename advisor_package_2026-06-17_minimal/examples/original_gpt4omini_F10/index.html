@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmania</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header, footer { background: #f8f8f8; padding: 10px; text-align: center; }
+        nav { margin: 10px 0; }
+        nav a { margin: 0 15px; text-decoration: none; color: #333; }
+        section { padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; }
+        .recipe { cursor: pointer; }
+        .footer-links { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Norene Gilletz's Gourmania</h1>
+        <nav>
+            <a data-route-target="homepage" onclick="showPage('homepage')">HOME</a>
+            <a data-route-target="recipe_detail" onclick="showPage('recipe_detail')">RECIPES</a>
+            <a data-route-target="cookbooks" onclick="showPage('cookbooks')">COOKBOOKS</a>
+            <a data-route-target="videos" onclick="showPage('videos')">MEDIA</a>
+            <a data-route-target="culinary_solutions" onclick="showPage('culinary_solutions')">WHAT WE DO</a>
+            <a data-route-target="tips" onclick="showPage('tips')">TIPS</a>
+        </nav>
+    </header>
+
+    <section id="homepage" data-track-route>
+        <h1>Welcome to Gourmania!</h1>
+        <p>Food that's good for you should taste good!</p>
+        <h2>Featured Cookbooks</h2>
+        <div class="card">The Brain Boosting Diet</div>
+        <div class="card">Healthy Helpings</div>
+        <div class="card">The Silver Platter</div>
+        <h2>Favourite Holiday Recipes</h2>
+        <div class="recipe" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">Gefilte Fish</div>
+        <div class="recipe" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">Hamentaschen</div>
+        <div class="recipe" data-route-target="recipe_detail" onclick="showPage('recipe_detail')">Challah</div>
+    </section>
+
+    <section id="cookbooks" data-track-route>
+        <h1>My Cookbooks</h1>
+        <p>Explore Norene's cookbooks.</p>
+        <div class="card">The Food Processor Bible</div>
+        <div class="card">The Brain Boosting Diet</div>
+        <div class="card">Healthy Helpings</div>
+    </section>
+
+    <section id="culinary_solutions" data-track-route>
+        <h1>Culinary Solutions</h1>
+        <div class="card">Food Articles</div>
+        <div class="card">Cookbook Editing and Indexing</div>
+        <div class="card">Food Photography</div>
+    </section>
+
+    <section id="recipe_detail" data-track-route>
+        <h1>GEFILTE FISH 1</h1>
+        <p>Ingredients: 2 lbs fish fillets, 4 medium onions, 4 tsp salt, etc.</p>
+        <p>Instructions: Reserve the head, skin, and bones from the fish...</p>
+    </section>
+
+    <section id="tips" data-track-route>
+        <h1>Tips</h1>
+        <div class="card">Too Much Batter?</div>
+        <div class="card">Sodi-Yum!</div>
+        <div class="card">Lemon Aid</div>
+    </section>
+
+    <section id="videos" data-track-route>
+        <h1>Videos</h1>
+        <div class="card">Panic-Free Passover Cooking Demo</div>
+        <div class="card">Cooking Demo at Fruit of the Land</div>
+        <div class="card">Classic Cheese Noodle Kugel</div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://www.amazon.com">Amazon</a>
+            <a href="https://www.amazon.ca">Amazon Canada</a>
+            <a href="https://www.chapters.indigo.ca">Indigo</a>
+        </div>
+        <p>All images and recipes © 2020 Norene Gilletz unless otherwise noted.</p>
+    </footer>
+
+    <script>
+        window.__TRACK_B_ROUTES = ["homepage", "cookbooks", "culinary_solutions", "recipe_detail", "tips", "videos"];
+        function showPage(routeId) {
+            if (!window.__TRACK_B_ROUTES.includes(routeId)) return;
+            document.querySelectorAll('[data-track-route]').forEach(function(section) {
+                section.hidden = section.id !== routeId;
+            });
+            document.querySelectorAll('[data-route-target]').forEach(function(link) {
+                link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');
+            });
+            if (history.replaceState) history.replaceState(null, '', '#' + routeId);
+            setTimeout(function() { window.scrollTo(0, 0); }, 0);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];
+            showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);
+        });
+    </script>
+</body>
+</html>

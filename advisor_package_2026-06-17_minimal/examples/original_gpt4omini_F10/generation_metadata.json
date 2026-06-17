@@ -1,0 +1,143 @@
+{
+  "prompt_id": "TB-GEN-v9",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "base_url": "https://api.chatanywhere.tech/v1/chat/completions",
+  "temperature": 0.2,
+  "max_tokens": 20000,
+  "started_at": "2026-06-04T18:18:06.545143+02:00",
+  "elapsed_seconds": 102.95,
+  "response_metadata": {
+    "id": "chatcmpl-Dn554o3U9RAHUAzlpGnrUb98rU4E2",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 213249,
+      "completion_tokens": 1351,
+      "total_tokens": 214600,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0
+      }
+    }
+  },
+  "item_id": "F10_gourmania",
+  "source_meta": {
+    "normalized_at": "2026-05-21T23:17:58.374229",
+    "item_id": "F10_gourmania",
+    "source_dataset": "zai-org/Vision2Web",
+    "source_config": "frontend",
+    "source_level": "Level 2",
+    "source_task_name": "gourmania",
+    "source_license": "CC-BY-NC-SA-4.0",
+    "raw_dir": "data\\track_b\\vision2web_raw\\frontend\\gourmania",
+    "workflow_steps": 6,
+    "num_test_cases": 4,
+    "resources_count": 50,
+    "prototypes": [
+      "cookbooks.jpg",
+      "culinary_solutions.jpg",
+      "homepage.jpg",
+      "recipe_detail.jpg",
+      "tips.jpg",
+      "videos.jpg"
+    ],
+    "use_for_static": true,
+    "use_for_dynamic": true,
+    "copied_prototypes": true,
+    "copied_resources": true
+  },
+  "system_prompt": "You are a senior frontend engineer building a benchmark submission for a GUI evaluation study.\nCreate a polished, working website implementation that can be opened directly from a local index.html file.\n",
+  "user_prompt": "Prompt ID: TB-GEN-v9\n\nBuild a minimal complete single-file HTML implementation for the Track B GUI item below.\n\nHard requirements:\n- Return exactly one complete HTML document ending with </html>.\n- Include inline CSS and JavaScript only. No build step, backend, network access, external CDN, or markdown.\n- Local assets must be referenced as ../../resources/<subpath>.\n- Use the prototype screenshots for overall structure and visual cues, but produce a minimal benchmark implementation.\n- Primary viewport is desktop: 1365px and 1920px. Mobile quality is not a hard gate.\n- Implement every route in the route contract as a <section id=\"...\" data-track-route>.\n- Include window.__TRACK_B_ROUTES exactly as given and a showPage(routeId) handler before </body>.\n\nMandatory workflow controls:\n- The following exact workflow click labels were extracted from the workflow checks. Every label below must appear as visible text inside an <a> or <button> element:\n- COOKBOOKS\n- FAVOURITE HOLIDAY RECIPES\n- Gefilte Fish\n- MEDIA\n- WHAT WE DO\n- Never use <div>, <span>, <li>, or other inert elements for workflow-required click labels.\n- Every workflow control must include data-route-target=\"<route_id>\" and onclick=\"showPage('<route_id>')\".\n- If a click target is a feature phrase such as \"GitLab Duo\", use that feature phrase as the visible label.\n- Choose the route target from the route contract that best matches the label and workflow validation.\n- Secondary navigation items may be visible non-functional placeholders only if they are not listed in the extracted workflow click labels.\n\nStrict compactness limits:\n- Use one shared header and one shared footer only.\n- For each route, use at most one h1, one short paragraph, one compact card/list, and one optional tiny table.\n- Use at most 3 cards per route, 3 bullets per list, and 3 rows per table.\n- Do not copy long requirement text. Use short labels and short summaries.\n- Avoid decorative animations, large CSS frameworks, inline SVG art, exhaustive menus, and long repeated sections.\n- If output budget feels tight, remove visual detail first. Never omit routes, workflow controls, JavaScript, or closing tags.\n\nRoute contract:\n- Create <section id=\"homepage\" data-track-route> for prototype homepage.jpg.\n- Create <section id=\"cookbooks\" data-track-route> for prototype cookbooks.jpg.\n- Create <section id=\"culinary_solutions\" data-track-route> for prototype culinary_solutions.jpg.\n- Create <section id=\"recipe_detail\" data-track-route> for prototype recipe_detail.jpg.\n- Create <section id=\"tips\" data-track-route> for prototype tips.jpg.\n- Create <section id=\"videos\" data-track-route> for prototype videos.jpg.\n\nRequired JavaScript:\n<script>\nwindow.__TRACK_B_ROUTES = [\"homepage\", \"cookbooks\", \"culinary_solutions\", \"recipe_detail\", \"tips\", \"videos\"];\nfunction showPage(routeId) {\n  if (!window.__TRACK_B_ROUTES.includes(routeId)) return;\n  document.querySelectorAll('[data-track-route]').forEach(function(section) {\n    section.hidden = section.id !== routeId;\n  });\n  document.querySelectorAll('[data-route-target]').forEach(function(link) {\n    link.setAttribute('aria-current', link.dataset.routeTarget === routeId ? 'page' : 'false');\n  });\n  if (history.replaceState) history.replaceState(null, '', '#' + routeId);\n  setTimeout(function() { window.scrollTo(0, 0); }, 0);\n}\ndocument.addEventListener('DOMContentLoaded', function() {\n  var initial = location.hash ? location.hash.slice(1) : window.__TRACK_B_ROUTES[0];\n  showPage(window.__TRACK_B_ROUTES.includes(initial) ? initial : window.__TRACK_B_ROUTES[0]);\n});\n</script>\n\nItem ID: F10_gourmania\nSource task: gourmania\nSource level: Level 2\nUse for dynamic validation: True\n\nNormalized requirement:\n# Requirement\n\nSource task: `gourmania`\n\nThe generated interface should implement the following Vision2Web Level 2 frontend requirement.\n\nI want to build a Gourmania culinary website. When someone opens the site, the first thing they see is a homepage with a welcoming banner, featured cookbooks including \"The Brain Boosting Diet\", \"Healthy Helpings\", and \"The Silver Platter\", and sections for \"What's Cooking\", \"Favourite Holiday Recipes\", \"Recipe Categories\", and \"Browse Videos\". The homepage displays favourite holiday recipes with images showing dishes like Gefilte Fish, Hamentaschen, Challah, and other recipes. Each recipe image on the homepage is clickable. If I click on a recipe image (such as Gefilte Fish), it takes me to the detailed recipe page showing ingredients, step-by-step instructions, and information about which cookbooks feature this recipe.\n\nAt the top of every page, there is a main navigation menu with links: \"HOME\", \"RECIPES\", \"COOKBOOKS\", \"MY FOOD LINE\", \"MEDIA\", \"WHAT WE DO\", and \"NEWSLETTER\". From the homepage, if I click on \"COOKBOOKS\" in the navigation menu, it takes me to the cookbooks page titled \"MY COOKBOOKS\" where I can see all of Norene's cookbooks displayed with their cover images, including titles like \"The Food Processor Bible\", \"The Brain Boosting Diet\", \"The Healthy Jewish Kitchen\", \"Healthy Helpings\", \"The Silver Platter\", and others.\n\nFrom any page, I can click \"MEDIA\" in the navigation menu to access the videos page, which showcases cooking demonstrations organized into tabs: \"ALL\", \"MY VIDEOS\", and \"RECOMMENDED\". The videos include demonstrations like \"Panic-Free Passover Cooking Demo\", \"Cooking Demo at Fruit of the Land – Tabbouleh Salad\", \"The Best Classic Cheese Noodle Kugel | JOY of KOSHER with Norene Gilletz\", and \"Norene Gilletz on Studio 4 with Host Fanny Kiefer\". Each video has a thumbnail with a play button and links to video content.\n\nThe navigation menu does not have a standalone \"Tips\" link. Instead, to access tips, I need to click \"WHAT WE DO\" in the navigation menu, which takes me to a page titled \"CULINARY SOLUTIONS\" displaying professional services offered in a grid layout, including: Food Articles, Cookbook Editing and Indexing, Food Photography, Recipe Makeovers, Food Styling, Recipe Development, Food Consultants, and Nutrient Analysis / Food Labels.\n\nAll pages include links at the bottom to purchase books from Amazon, Amazon Canada (amazon.ca), and Indigo. The footer also displays social media icons for Facebook, Twitter, Instagram, and YouTube. Each page has a \"NEWSLETTER\" link in the navigation menu where users can subscribe to receive updates about cookbooks, recipes, and events.\n\n\nWorkflow checks:\n[\n  {\n    \"depends_on\": [],\n    \"index\": 0,\n    \"summary\": \"Navigation menu functionality testing including access to Cookbooks, Media, What We Do pages, and recipe detail page from the homepage\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click \\\"COOKBOOKS\\\" in the navigation menu\"\n        ],\n        \"validations\": [\n          \"The page navigates to the cookbooks page\",\n          \"The page displays the heading \\\"MY COOKBOOKS\\\"\",\n          \"A grid of cookbook cover images is displayed on the page\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Navigate back using the browser back button\",\n          \"Click \\\"MEDIA\\\" in the navigation menu\"\n        ],\n        \"validations\": [\n          \"The page navigates to the videos page\",\n          \"Video content thumbnails with play buttons are displayed on the page\",\n          \"The MEDIA tab in the navigation menu is highlighted or active\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Navigate back using the browser back button\",\n          \"Click \\\"WHAT WE DO\\\" in the navigation menu\"\n        ],\n        \"validations\": [\n          \"The page navigates to the culinary solutions page\",\n          \"The page displays the heading \\\"CULINARY SOLUTIONS\\\"\",\n          \"Multiple service category cards are displayed on the page\"\n        ]\n      },\n      {\n        \"objective\": \"Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Navigate back using the browser back button\",\n          \"Click the recipe card named \\\"Gefilte Fish\\\" in the \\\"FAVOURITE HOLIDAY RECIPES\\\" section\"\n        ],\n        \"validations\": [\n          \"The page navigates to the recipe detail page\",\n          \"The page displays the recipe title \\\"GEFILTE FISH 1\\\"\",\n          \"Recipe ingredients and instructions are displayed on the page\"\n        ]\n      }\n    ],\n    \"prototype\": {\n      \"homepage\": {\n        \"fullpage\": true,\n        \"idx\": 0\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 1,\n    \"summary\": \"Cookbooks page navigation testing to verify successful access to the cookbooks collection page\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the COOKBOOKS navigation menu item successfully navigates to the cookbooks page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click \\\"COOKBOOKS\\\" in the navigation menu\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"cookbooks\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 2,\n    \"summary\": \"Media page navigation testing to verify successful access to the videos and media content page\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the MEDIA navigation menu item successfully navigates to the videos page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click \\\"MEDIA\\\" in the navigation menu\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"videos\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 3,\n    \"summary\": \"Culinary solutions page navigation testing to verify successful access to the services and solutions overview page\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking the WHAT WE DO navigation menu item successfully navigates to the culinary solutions page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click \\\"WHAT WE DO\\\" in the navigation menu\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"culinary_solutions\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 4,\n    \"summary\": \"Recipe detail page navigation testing to verify successful access to individual recipe content from the homepage\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [\n      {\n        \"objective\": \"Verify that clicking a recipe card in the FAVOURITE HOLIDAY RECIPES section successfully navigates to the recipe detail page, demonstrating a positive test scenario.\",\n        \"actions\": [\n          \"Click the recipe card named \\\"Gefilte Fish\\\" in the \\\"FAVOURITE HOLIDAY RECIPES\\\" section\"\n        ],\n        \"validations\": []\n      }\n    ],\n    \"prototype\": {\n      \"recipe_detail\": {\n        \"fullpage\": true,\n        \"idx\": 1\n      }\n    }\n  },\n  {\n    \"depends_on\": [],\n    \"index\": 5,\n    \"summary\": \"Tips page display testing to verify the tips page content is correctly rendered\",\n    \"resolution\": {\n      \"width\": 1920,\n      \"height\": 1080\n    },\n    \"content\": [],\n    \"prototype\": {\n      \"tips\": {\n        \"fullpage\": true,\n        \"idx\": 0\n      }\n    }\n  }\n]\n\nAvailable local resource paths:\n- ../../resources/images/71j3SPHul9L-280x350.jpg\n- ../../resources/images/a_ca_logo_C-300x105.jpg\n- ../../resources/images/amazon-logo_transparent-300x80.jpg\n- ../../resources/images/assets_video-play.jpg\n- ../../resources/images/beans-280x280.jpg\n- ../../resources/images/beefwrappedbread-280x280.jpg\n- ../../resources/images/bestnoodle-320x180.jpg\n- ../../resources/images/brisket-635x378-280x280.jpg\n- ../../resources/images/butternutsoup-280x280.jpg\n- ../../resources/images/canstockphoto22547641-1140x480.jpg\n- ../../resources/images/canstockphoto22547641-280x280.jpg\n- ../../resources/images/canstockphoto23075624-280x280.jpg\n- ../../resources/images/canstockphoto23622555-280x280.jpg\n- ../../resources/images/canstockphoto41972495-280x280.jpg\n- ../../resources/images/canstockphoto5706430-280x280.jpg\n- ../../resources/images/challah-280x280.jpg\n- ../../resources/images/chapters-indigo-logo-medium-300x109.jpg\n- ../../resources/images/cheesecake-280x280.jpg\n- ../../resources/images/chicken-280x280.jpg\n- ../../resources/images/ColonHealth-280x345.jpg\n- ../../resources/images/FoodProcessor-254x350.jpg\n- ../../resources/images/FoodProcessorBible.jpg\n- ../../resources/images/footer-logo.jpg\n- ../../resources/images/FrequentFiberCookbook.jpg\n- ../../resources/images/fruitoftheland-320x180.jpg\n- ../../resources/images/gefelte-fish-byjohn-uher.jpg\n- ../../resources/images/GourmaniaLogo.jpg\n- ../../resources/images/HealthyHelpings.jpg\n- ../../resources/images/kreplach-280x280.jpg\n- ../../resources/images/LowIodine-280x346.jpg\n- ../../resources/images/MealleaniYumm-271x350.jpg\n- ../../resources/images/microways.jpg\n- ../../resources/images/muffintin-280x280.jpg\n- ../../resources/images/Norene_00_2018-mp3-image-150x150.jpg\n- ../../resources/images/NorenesHealthyKitchen.jpg\n- ../../resources/images/Panicfreedemo-320x180.jpg\n- ../../resources/images/pattern_1-e1508965919155.jpg\n- ../../resources/images/pattern_2-e1509128537578.jpg\n- ../../resources/images/PCOS-269x350.jpg\n- ../../resources/images/pinnapplebanner-1140x560.jpg\n- ../../resources/images/placesetting-1140x560.jpg\n- ../../resources/images/placesettingyellow-1140x560.jpg\n- ../../resources/images/plate-150x150.jpg\n- ../../resources/images/plate.jpg\n- ../../resources/images/poultry-1140x560.jpg\n- ../../resources/images/Salads-280x280.jpg\n- ../../resources/images/SecondHelpings-267x350.jpg\n- ../../resources/images/silver-platter-280x348.jpg\n- ../../resources/images/SilverPlatter-SimpleTo.jpg\n- ../../resources/images/studio4-320x180.jpg\n\nPrototype screenshots are attached after this text in this order:\n- homepage.jpg\n- cookbooks.jpg\n- culinary_solutions.jpg\n- recipe_detail.jpg\n- tips.jpg\n- videos.jpg\n",
+  "workflow_controls": [
+    {
+      "visible_text": "COOKBOOKS",
+      "route_id": "cookbooks",
+      "context": "Click \"COOKBOOKS\" in the navigation menu"
+    },
+    {
+      "visible_text": "MEDIA",
+      "route_id": "videos",
+      "context": "Click \"MEDIA\" in the navigation menu"
+    },
+    {
+      "visible_text": "WHAT WE DO",
+      "route_id": "culinary_solutions",
+      "context": "Click \"WHAT WE DO\" in the navigation menu"
+    },
+    {
+      "visible_text": "Gefilte Fish",
+      "route_id": "recipe_detail",
+      "context": "Click the recipe card named \"Gefilte Fish\" in the \"FAVOURITE HOLIDAY RECIPES\" section"
+    }
+  ],
+  "prototype_files": [
+    "prototypes/homepage.jpg",
+    "prototypes/cookbooks.jpg",
+    "prototypes/culinary_solutions.jpg",
+    "prototypes/recipe_detail.jpg",
+    "prototypes/tips.jpg",
+    "prototypes/videos.jpg"
+  ],
+  "resource_paths_in_prompt": [
+    "images/71j3SPHul9L-280x350.jpg",
+    "images/a_ca_logo_C-300x105.jpg",
+    "images/amazon-logo_transparent-300x80.jpg",
+    "images/assets_video-play.jpg",
+    "images/beans-280x280.jpg",
+    "images/beefwrappedbread-280x280.jpg",
+    "images/bestnoodle-320x180.jpg",
+    "images/brisket-635x378-280x280.jpg",
+    "images/butternutsoup-280x280.jpg",
+    "images/canstockphoto22547641-1140x480.jpg",
+    "images/canstockphoto22547641-280x280.jpg",
+    "images/canstockphoto23075624-280x280.jpg",
+    "images/canstockphoto23622555-280x280.jpg",
+    "images/canstockphoto41972495-280x280.jpg",
+    "images/canstockphoto5706430-280x280.jpg",
+    "images/challah-280x280.jpg",
+    "images/chapters-indigo-logo-medium-300x109.jpg",
+    "images/cheesecake-280x280.jpg",
+    "images/chicken-280x280.jpg",
+    "images/ColonHealth-280x345.jpg",
+    "images/FoodProcessor-254x350.jpg",
+    "images/FoodProcessorBible.jpg",
+    "images/footer-logo.jpg",
+    "images/FrequentFiberCookbook.jpg",
+    "images/fruitoftheland-320x180.jpg",
+    "images/gefelte-fish-byjohn-uher.jpg",
+    "images/GourmaniaLogo.jpg",
+    "images/HealthyHelpings.jpg",
+    "images/kreplach-280x280.jpg",
+    "images/LowIodine-280x346.jpg",
+    "images/MealleaniYumm-271x350.jpg",
+    "images/microways.jpg",
+    "images/muffintin-280x280.jpg",
+    "images/Norene_00_2018-mp3-image-150x150.jpg",
+    "images/NorenesHealthyKitchen.jpg",
+    "images/Panicfreedemo-320x180.jpg",
+    "images/pattern_1-e1508965919155.jpg",
+    "images/pattern_2-e1509128537578.jpg",
+    "images/PCOS-269x350.jpg",
+    "images/pinnapplebanner-1140x560.jpg",
+    "images/placesetting-1140x560.jpg",
+    "images/placesettingyellow-1140x560.jpg",
+    "images/plate-150x150.jpg",
+    "images/plate.jpg",
+    "images/poultry-1140x560.jpg",
+    "images/Salads-280x280.jpg",
+    "images/SecondHelpings-267x350.jpg",
+    "images/silver-platter-280x348.jpg",
+    "images/SilverPlatter-SimpleTo.jpg",
+    "images/studio4-320x180.jpg"
+  ],
+  "output_files": {
+    "html": "index.html",
+    "raw_response": "raw_response.txt",
+    "metadata": "generation_metadata.json"
+  }
+}

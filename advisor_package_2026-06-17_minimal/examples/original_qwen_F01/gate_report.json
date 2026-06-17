@@ -1,0 +1,70 @@
+{
+  "item_id": "F01_1daycloud",
+  "run": "gwdg_qwen36_35b_v9_smoke",
+  "html": "D:\\master_thesis\\data\\track_b\\items\\F01_1daycloud\\generated\\gwdg_qwen36_35b_v9_smoke\\index.html",
+  "passed": true,
+  "failed_error_count": 0,
+  "failed_warning_count": 1,
+  "checks": [
+    {
+      "level": "error",
+      "name": "complete_doctype_html",
+      "passed": true,
+      "detail": "Document should include doctype and html root."
+    },
+    {
+      "level": "error",
+      "name": "closed_body_html",
+      "passed": true,
+      "detail": "Document should close body and html tags."
+    },
+    {
+      "level": "error",
+      "name": "closed_style_script",
+      "passed": true,
+      "detail": "Style and script tags should not be truncated."
+    },
+    {
+      "level": "error",
+      "name": "not_token_truncated",
+      "passed": true,
+      "detail": "Provider stop/finish reason: 'stop'."
+    },
+    {
+      "level": "error",
+      "name": "onclick_functions_defined",
+      "passed": true,
+      "detail": "Missing onclick function definitions: []."
+    },
+    {
+      "level": "error",
+      "name": "onclick_routes_exist",
+      "passed": true,
+      "detail": "showPage route ids without matching id attributes: []."
+    },
+    {
+      "level": "warning",
+      "name": "track_b_routes_self_test",
+      "passed": true,
+      "detail": "Generated page should expose window.__TRACK_B_ROUTES for cheap route introspection."
+    },
+    {
+      "level": "error",
+      "name": "workflow_clickable_labels_present",
+      "passed": true,
+      "detail": "Workflow click labels not found as <a> or <button>: []."
+    },
+    {
+      "level": "error",
+      "name": "workflow_clickables_not_inert",
+      "passed": true,
+      "detail": "Workflow click labels found only as inert controls: []."
+    },
+    {
+      "level": "warning",
+      "name": "semantic_workflow_click_labels_present",
+      "passed": false,
+      "detail": "Semantic workflow click descriptions not found as exact <a> or <button> text: ['logo at the top of the page']."
+    }
+  ]
+}

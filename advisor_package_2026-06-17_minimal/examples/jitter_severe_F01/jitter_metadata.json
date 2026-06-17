@@ -1,0 +1,7 @@
+{
+  "source_run": "gwdg_qwen36_35b_v9_smoke",
+  "jitter_severity": "severe",
+  "jitter_version": "JITTER-SEVERE-v1",
+  "purpose": "visual-judge discriminative-validity check (known quality ordering)",
+  "ground_truth": "original > mild > severe"
+}

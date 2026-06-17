@@ -1,0 +1,5 @@
+Supplementary project repository:
+https://github.com/842169963/GUI-benchmark.git
+
+The zip package should be treated as the self-contained review package. The
+GitHub link is only a supplement if the supervisor wants to inspect more files.

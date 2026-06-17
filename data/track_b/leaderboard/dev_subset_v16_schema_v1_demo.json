@@ -1,6 +1,6 @@
 {
   "leaderboard_schema_version": "track-b-leaderboard-v1",
-  "generated_at": "2026-06-15T14:40:53.134593+00:00",
+  "generated_at": "2026-06-15T22:01:54.642873+00:00",
   "scope": {
     "prompt_id": "TB-GEN-v16",
     "input_profile": "compact",
@@ -589,6 +589,9 @@
   "model_results": [
     {
       "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+      "provider": "gwdg-openai",
+      "model_name": "qwen3.6-35b-a3b",
+      "prompt_id": "TB-GEN-v16",
       "attempted_items": [
         "F01_1daycloud",
         "F03_about_gitlab",
@@ -637,11 +640,16 @@
         "completion_reliability_rank": 1,
         "overall_rank": null,
         "static_technical_rank": 1,
-        "dynamic_rank": 1
+        "dynamic_rank": 1,
+        "total_tokens_rank": 1,
+        "latency_rank": 1
       }
     },
     {
       "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+      "provider": "gwdg-openai",
+      "model_name": "qwen3-omni-30b-a3b-instruct",
+      "prompt_id": "TB-GEN-v16",
       "attempted_items": [
         "F01_1daycloud",
         "F03_about_gitlab",
@@ -697,7 +705,9 @@
         "completion_reliability_rank": 2,
         "overall_rank": null,
         "static_technical_rank": 2,
-        "dynamic_rank": 2
+        "dynamic_rank": 2,
+        "total_tokens_rank": 2,
+        "latency_rank": 2
       }
     }
   ],
@@ -706,36 +716,100 @@
       {
         "rank": 1,
         "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
-        "score": 1.0
+        "model_name": "qwen3.6-35b-a3b",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 1.0,
+        "direction": "higher_is_better"
       },
       {
         "rank": 2,
         "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
-        "score": 0.6666666666666666
+        "model_name": "qwen3-omni-30b-a3b-instruct",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 0.6666666666666666,
+        "direction": "higher_is_better"
       }
     ],
     "static_technical": [
       {
         "rank": 1,
         "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
-        "score": 0.9538461538461539
+        "model_name": "qwen3.6-35b-a3b",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 0.9538461538461539,
+        "direction": "higher_is_better"
       },
       {
         "rank": 2,
         "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
-        "score": 0.8461538461538463
+        "model_name": "qwen3-omni-30b-a3b-instruct",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 0.8461538461538463,
+        "direction": "higher_is_better"
       }
     ],
     "dynamic": [
       {
         "rank": 1,
         "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
-        "score": 0.5583333333333333
+        "model_name": "qwen3.6-35b-a3b",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 0.5583333333333333,
+        "direction": "higher_is_better"
       },
       {
         "rank": 2,
         "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
-        "score": 0.5
+        "model_name": "qwen3-omni-30b-a3b-instruct",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 0.5,
+        "direction": "higher_is_better"
+      }
+    ],
+    "average_total_tokens": [
+      {
+        "rank": 1,
+        "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+        "model_name": "qwen3.6-35b-a3b",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 39314.2,
+        "direction": "lower_is_better"
+      },
+      {
+        "rank": 2,
+        "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+        "model_name": "qwen3-omni-30b-a3b-instruct",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 44846.666666666664,
+        "direction": "lower_is_better"
+      }
+    ],
+    "average_latency_seconds": [
+      {
+        "rank": 1,
+        "model_key": "gwdg-openai/qwen3.6-35b-a3b/TB-GEN-v16",
+        "model_name": "qwen3.6-35b-a3b",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 146.742,
+        "direction": "lower_is_better"
+      },
+      {
+        "rank": 2,
+        "model_key": "gwdg-openai/qwen3-omni-30b-a3b-instruct/TB-GEN-v16",
+        "model_name": "qwen3-omni-30b-a3b-instruct",
+        "provider": "gwdg-openai",
+        "prompt_id": "TB-GEN-v16",
+        "value": 175.66333333333333,
+        "direction": "lower_is_better"
       }
     ],
     "overall": []
